@@ -32,7 +32,7 @@ const Trust = () => {
           className="trust-header"
           title={
             <>
-              A developer you can trust.{' '}
+              A team  you can trust.{' '}
               <span>Real projects. Reliable delivery.</span>
             </>
           }

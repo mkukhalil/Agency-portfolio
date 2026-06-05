@@ -1,62 +1,62 @@
 export const faqs = [
   {
     id: 1,
-    question: "What's the difference between monthly support and a project?",
+    question: 'What kind of projects do you build?',
     answer:
-      'Monthly support is best when you need a steady design and frontend partner for landing pages, product screens, experiments, and polish. A project is a fixed scope with a clear deliverable, timeline, and handoff.',
+      'We build business websites, landing pages, full-stack web apps, dashboards, CRM tools, POS systems, APIs, databases, and custom business systems. If the project helps a business manage leads, customers, sales, inventory, reporting, or workflows, it is a strong fit.',
   },
   {
     id: 2,
-    question: 'What counts as "one active request at a time"?',
+    question: 'Do you work as a small team or individual freelancers?',
     answer:
-      'It means one focused request moves through design or build before the next starts. That could be a landing section, a product flow, a dashboard state, or a responsive QA pass.',
+      'We work as a small full-stack studio. Clients communicate directly with the people building the product, so decisions stay clear, feedback moves faster, and there are no unnecessary agency layers.',
   },
   {
     id: 3,
-    question: 'How does communication work during a project?',
+    question: 'How much does a project usually cost?',
     answer:
-      'Communication can happen through email, Slack, Linear, Notion, or whichever workspace already fits your team. I share regular updates, Figma links, preview builds, and short notes when decisions are needed.',
+      'Pricing depends on scope, features, timeline, number of screens, backend complexity, and integrations. As a general guide, starter websites begin around $300, full-stack apps around $900, and custom business systems like CRM or POS tools around $1500.',
   },
   {
     id: 4,
-    question: 'How do revisions work?',
+    question: 'Can you design and build the complete product?',
     answer:
-      'Revision rounds are included inside the agreed scope. The goal is to keep feedback consolidated, move quickly, and refine until the direction is strong enough to launch.',
+      'Yes. We can handle the full flow from planning and UI direction to frontend, backend, database, authentication, APIs, deployment, and final handoff. For existing designs, we can also focus only on development.',
   },
   {
     id: 5,
-    question: 'Can I pause or cancel monthly support?',
+    question: 'What technologies do you use?',
     answer:
-      'Yes. Monthly collaboration is flexible. You can pause before the next cycle if priorities shift, then resume when there is meaningful work ready.',
+      'Our main stack includes React, Vite, Laravel, PHP, JavaScript, MySQL, PostgreSQL, Tailwind CSS, Docker basics, and modern deployment platforms like Vercel and Cloudflare Pages.',
   },
   {
     id: 6,
-    question: 'Can you design and build?',
+    question: 'How long does a typical project take?',
     answer:
-      'Yes. I can handle the design direction in Figma and implement the frontend in React/Vite or adapt the work for a no-code build when that is the better fit.',
+      'A simple landing page or portfolio can usually take 1 to 2 weeks. A full-stack app, dashboard, CRM, or POS system usually takes longer and is broken into milestones after the scope is clear.',
   },
   {
     id: 7,
     question: 'What do you need before starting?',
     answer:
-      'A clear goal, any existing brand assets, examples of what you like or dislike, and the practical constraints: timeline, budget, platform, and who will maintain the work after launch.',
+      'We need your project goal, required features, example websites or apps you like, brand assets if available, preferred timeline, budget range, and any existing content, workflows, or business rules.',
   },
   {
     id: 8,
-    question: 'Do you work with startups?',
+    question: 'Do you provide deployment and launch support?',
     answer:
-      'Yes. Startup work is a strong fit because the process is lean: clarify the offer, shape the interface, build what matters, and avoid adding complexity before the product needs it.',
+      'Yes. We can help deploy the frontend, backend, and database depending on the project. We also check responsiveness, basic performance, production environment setup, and final launch readiness.',
   },
   {
     id: 9,
-    question: 'How much does a typical project cost?',
+    question: 'Can you improve or continue an existing project?',
     answer:
-      'It depends on scope. A focused landing page or portfolio usually starts around $3,000. Larger product interfaces, dashboards, or design-and-build work are scoped after the requirements are clear.',
+      'Yes. We can review an existing codebase, fix UI issues, improve responsiveness, add new features, connect APIs, clean up backend logic, or continue development from the current stage.',
   },
   {
     id: 10,
-    question: 'How fast will I receive designs?',
+    question: 'How do revisions and feedback work?',
     answer:
-      'Small tasks can usually move in 2 to 5 business days. Larger websites or product flows are broken into milestones so each direction can be reviewed before the next part is built.',
+      'Revisions are handled inside the agreed scope. We prefer clear milestone-based feedback so changes are organized, decisions are documented, and the project keeps moving without confusion.',
   },
 ];

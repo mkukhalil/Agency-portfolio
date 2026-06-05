@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X } from 'lucide-react';
-import { Container } from '../../ui/Container';
-import { SectionHeading } from '../../ui/SectionHeading';
+import { ChevronDown } from 'lucide-react';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import './FAQ.css';
 
@@ -23,11 +21,13 @@ const FAQItem = ({ faq, isOpen, toggleOpen }) => {
         onClick={toggleOpen}
       >
         <span>{faq.question}</span>
-        <span className="faq-icon">
-          {isOpen ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+
+        <span className="faq-icon" aria-hidden>
+          <ChevronDown size={18} strokeWidth={2.4} />
         </span>
       </button>
-      <AnimatePresence>
+
+      <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             id={answerId}
@@ -36,7 +36,7 @@ const FAQItem = ({ faq, isOpen, toggleOpen }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="faq-answer-container"
           >
             <div className="faq-answer">{faq.answer}</div>
@@ -55,31 +55,39 @@ const FAQ = () => {
   };
 
   return (
-    <Container as="section" className="section container">
-      <SectionHeading
-        className="faq-header"
-        title="Frequently Asked Questions"
-      />
+    <section id="faq" className="section faq-section">
+      <div className="faq-container">
+        <motion.div
+          className="faq-heading-wrap"
+          variants={FADE_UP}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT_CONFIG}
+          custom={{ y: 18 }}
+        >
+          <h2 className="faq-title">Frequently Asked Questions</h2>
+        </motion.div>
 
-      <div className="faq-list">
-        {faqs.map((faq, index) => (
-          <motion.div
-            key={faq.id}
-            variants={FADE_UP}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT_CONFIG}
-            custom={{ delay: index * 0.05 }}
-          >
-            <FAQItem
-              faq={faq}
-              isOpen={openId === faq.id}
-              toggleOpen={() => toggleOpen(faq.id)}
-            />
-          </motion.div>
-        ))}
+        <div className="faq-list">
+          {faqs.map((faq, index) => (
+            <motion.div
+              key={faq.id}
+              variants={FADE_UP}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT_CONFIG}
+              custom={{ delay: index * 0.035, y: 18 }}
+            >
+              <FAQItem
+                faq={faq}
+                isOpen={openId === faq.id}
+                toggleOpen={() => toggleOpen(faq.id)}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </Container>
+    </section>
   );
 };
 
