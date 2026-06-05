@@ -1,0 +1,57 @@
+:root {
+  /* =========================================
+     1. Color Palette
+     ========================================= */
+  --bg-color: #050505;
+  --card-bg: #151515;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(5, 5, 5, 0.5);
+
+  /* Alpha Colors (Semantic Whites) */
+  --white-a02: rgba(255, 255, 255, 0.02);
+  --white-a03: rgba(255, 255, 255, 0.03);
+  --white-a04: rgba(255, 255, 255, 0.04);
+  --white-a05: rgba(255, 255, 255, 0.05);
+  --white-a06: rgba(255, 255, 255, 0.06);
+  --white-a08: rgba(255, 255, 255, 0.08);
+  --white-a10: rgba(255, 255, 255, 0.1);
+  --white-a22: rgba(255, 255, 255, 0.22);
+  --white-a36: rgba(255, 255, 255, 0.36);
+  --white-a80: rgba(255, 255, 255, 0.8);
+
+  /* =========================================
+     2. Typography Fonts
+     ========================================= */
+  --font-sans: "Switzer Regular", system-ui, -apple-system, sans-serif;
+  --font-heading: "Switzer Medium", system-ui, -apple-system, sans-serif;
+  --font-serif: "Instrument Serif", serif;
+
+  /* =========================================
+     3. Spacing & Border Radii
+     ========================================= */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* =========================================
+     4. Transitions & Motion Easing
+     ========================================= */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  --transition-cubic: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* =========================================
+     5. Layering (Z-Index Hierarchy)
+     ========================================= */
+  --z-mask: 1;
+  --z-bg: 2;
+  --z-foreground: 3;
+  --z-nav: 100;
+  --z-drawer-overlay: 110;
+  --z-drawer: 120;
+  --z-dropdown: 210;
+}

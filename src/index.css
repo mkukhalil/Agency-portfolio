@@ -1,0 +1,232 @@
+@import "./styles/tokens.css";
+
+/* Extracted fonts for the authorized reference visual system */
+@font-face {
+  font-family: "Switzer Medium";
+  src: url("https://framerusercontent.com/assets/ZuxgRWcbOzLJ9BaP7VEUtPsugA.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500
+}
+
+@font-face {
+  font-family: "Switzer Regular";
+  src: url("https://framerusercontent.com/assets/TFbCCMACTX44EWzG1gSMdiTrudc.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400
+}
+
+@font-face {
+  font-family: "Switzer Bold";
+  src: url("https://framerusercontent.com/assets/4GSjcFO8LyfcubfHlDdcgG7Sec.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700
+}
+
+@font-face {
+  font-family: "PP Neue Montreal Medium";
+  src: url("https://framerusercontent.com/assets/6uIfYl8bnz9kOy3KOuV7PxhFPhA.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500
+}
+
+@font-face {
+  font-family: "PP Neue Montreal Bold";
+  src: url("https://framerusercontent.com/assets/wa1QQCb6cXOn2xBXS059rEsCfsc.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7M.woff2) format('woff2');
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+button {
+  font-family: var(--font-sans);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+.section {
+  padding: 8rem 0;
+}
+
+main {
+  overflow: hidden;
+}
+
+/* Base headings */
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 100%;
+  font-size: clamp(3rem, 8vw, 98px);
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 5vw, 64px);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+p {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+
+.italic-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Common Components */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  background: var(--white-a05);
+  border: 1px solid var(--white-a10);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 32px;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  color: var(--bg-color);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 16px;
+  transition: transform var(--transition-base), opacity var(--transition-base);
+  letter-spacing: -0.02em;
+}
+
+.cta-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 4px;
+}
+
+/* Highlighted Text */
+.highlight-text {
+  color: var(--text-primary);
+  display: inline-block;
+  position: relative;
+}
+
+/* Lenis */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
