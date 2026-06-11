@@ -4,22 +4,22 @@ import { cn } from '../../../../utils/cn';
 export const NavbarDrawer = ({ isOpen, onClose }) => {
   return (
     <>
-      <div 
-        className={cn('nav-drawer-overlay', isOpen && 'open')} 
-        aria-hidden={!isOpen} 
-        onClick={onClose} 
+      <div
+        className={cn('nav-drawer-overlay', isOpen && 'open')}
+        aria-hidden={!isOpen}
+        onClick={onClose}
       />
-      <aside 
-        id="mobile-navigation" 
-        className={cn('nav-drawer', isOpen && 'open')} 
-        aria-hidden={!isOpen} 
+      <aside
+        id="mobile-navigation"
+        className={cn('nav-drawer', isOpen && 'open')}
+        aria-hidden={!isOpen}
         aria-label="Mobile navigation"
       >
         <div className="nav-drawer-inner">
-          <button 
-            type="button" 
-            className="nav-drawer-close" 
-            aria-label="Close menu" 
+          <button
+            type="button"
+            className="nav-drawer-close"
+            aria-label="Close menu"
             onClick={onClose}
           >
             Close

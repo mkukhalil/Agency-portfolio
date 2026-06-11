@@ -50,7 +50,7 @@ const Footer = () => {
           <p>
             {new Date().getFullYear()}
             {' '}
-            Khalil Studio, All rights reserved
+            Nukt , All rights reserved
           </p>
           <div className="footer-legal">
             <a href="mailto:hello@khalil.studio?subject=Project%20terms">Terms</a>
@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
         </div>
       </Container>
-      <div className="footer-brand" aria-hidden>KHALIL</div>
+      <div className="footer-brand" aria-hidden>NUKT</div>
     </footer>
   );
 };
