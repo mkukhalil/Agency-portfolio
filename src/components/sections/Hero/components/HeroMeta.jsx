@@ -11,7 +11,7 @@ export const HeroMeta = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.1 }}
     >
-      <span className="hero__tagline">Designer &amp; Full Stack developer</span>
+      <span className="hero__tagline">Designer &amp; Full Stack Agency</span>
       <div className="hero__availability">
         <span className="hero__sun" aria-hidden>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
