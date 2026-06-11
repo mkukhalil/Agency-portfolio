@@ -1,6 +1,4 @@
 import { useRef } from 'react';
-import { Grid } from '../../layout/Grid';
-import { Container } from '../../ui/Container';
 import { HeroBackground } from './components/HeroBackground';
 import { HeroMask } from './components/HeroMask';
 import { HeroMeta } from './components/HeroMeta';
@@ -15,12 +13,12 @@ export function Hero() {
       <HeroMask />
       <HeroBackground />
 
-      <Container className="hero__shell container">
-        <Grid className="hero__grid">
+      <div className="hero__shell">
+        <div className="hero__grid">
           <HeroMeta />
           <HeroTitle />
-        </Grid>
-      </Container>
+        </div>
+      </div>
     </section>
   );
 }

@@ -2,6 +2,11 @@
    1. Base Section
    ========================================= */
 .hero {
+  --site-shell-max: 1360px;
+  --site-gutter: 24px;
+  --site-mobile-inner-gutter: 12px;
+  --hero-gutter: var(--site-gutter);
+
   position: relative;
   min-height: clamp(640px, 100svh, 820px);
   display: flex;
@@ -15,13 +20,12 @@
 }
 
 /* =========================================
-   2. Layer 1: Moving Background Shader iframe
+   2. Moving Background Shader
    ========================================= */
 .hero__gradient {
   position: absolute;
   inset: 0;
   z-index: 1;
-  flex: none;
   pointer-events: none;
   opacity: 1;
 }
@@ -36,9 +40,8 @@
 }
 
 /* =========================================
-   3. Layer 2: NUKT Mask Text
-   Desktop keeps your approved look.
-   Mobile uses safer responsive sizing below.
+   3. NUKT Mask Text
+   Desktop keeps your current approved look.
    ========================================= */
 .hero__mask {
   position: absolute;
@@ -72,18 +75,21 @@
 }
 
 /* =========================================
-   4. Layer 3: Foreground Content
+   4. Foreground Content
+   Matches Navbar Shell
    ========================================= */
 .hero__shell {
   position: relative;
   z-index: 3;
-  max-width: 1440px;
   width: 100%;
+  max-width: var(--site-shell-max);
+  margin-inline: auto;
+  padding-inline: var(--hero-gutter);
 }
 
 .hero__grid {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(300px, 520px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 520px);
   align-items: start;
   width: 100%;
 }
@@ -118,24 +124,41 @@
   white-space: nowrap;
 }
 
-.hero__availability>span:not(.hero__sun) {
+.hero__time,
+.hero__location {
   opacity: 0.95;
 }
 
-.hero__sun {
-  width: 14px;
-  height: 14px;
+.hero__statusIcon {
+  width: 16px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
+  color: #ffffff;
+}
+
+.hero__statusIcon--day {
   animation: heroSunSpin 8s linear infinite;
 }
 
-.hero__sunDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: #fff;
+.hero__sunIcon {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.hero__sleepIcon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  transform: translateY(1px);
+}
+
+.hero__statusIcon--night {
+  width: 20px;
+  height: 20px;
 }
 
 .hero__title {
@@ -190,19 +213,15 @@
     gap: 0;
   }
 
-  /*
-    On mobile, we visually follow the Midu layout:
-    title first, meta row below it.
-  */
   .hero__title {
     order: 1;
     grid-column: auto;
     width: min(64vw, 15rem);
-    max-width: calc(100vw - 2rem);
+    max-width: calc(100vw - (var(--hero-gutter) * 2));
     justify-self: end;
     text-align: left;
     margin-top: clamp(5rem, 17svh, 8rem);
-    margin-right: clamp(0rem, 2vw, 0.75rem);
+    margin-right: 0;
     padding-right: 0;
     font-size: clamp(1.95rem, 7.7vw, 2.9rem);
     line-height: 0.94;
@@ -286,6 +305,16 @@
   }
 }
 
+/*
+   Navbar mobile has 24px outer padding plus 12px inner container padding.
+   This matches the mobile logo/menu horizontal rhythm.
+*/
+@media (max-width: 600px) {
+  .hero {
+    --hero-gutter: calc(var(--site-gutter) + var(--site-mobile-inner-gutter));
+  }
+}
+
 /* Small phones */
 @media (max-width: 390px) {
   .hero {
@@ -311,6 +340,10 @@
 
 /* Very small phones */
 @media (max-width: 340px) {
+  .hero {
+    --hero-gutter: 1.25rem;
+  }
+
   .hero__title {
     width: min(68vw, 11.5rem);
     font-size: 1.52rem;
