@@ -5,21 +5,25 @@ const NAV_ITEMS = [
   {
     id: 'home',
     label: 'Home',
+    desc: 'Back to top',
     target: 'top',
   },
   {
     id: 'projects',
     label: 'Projects',
+    desc: 'Selected work',
     target: 'projects',
   },
   {
     id: 'services',
     label: 'Our Services',
+    desc: 'Tools and services',
     target: 'tools',
   },
   {
     id: 'pricing',
     label: 'Pricing',
+    desc: 'Project packages',
     target: 'pricing',
   },
 ];
@@ -80,9 +84,12 @@ const scrollToTarget = (target, onClose) => {
 export const NavbarDrawer = ({ isOpen, onClose }) => {
   return (
     <>
-      <div
+      <button
+        type="button"
         className={cn('nav-drawer-overlay', isOpen && 'open')}
+        aria-label="Close navigation menu"
         aria-hidden={!isOpen}
+        tabIndex={isOpen ? 0 : -1}
         onClick={onClose}
       />
 
@@ -91,52 +98,78 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
         className={cn('nav-drawer', isOpen && 'open')}
         aria-hidden={!isOpen}
         aria-label="Mobile navigation"
+        aria-modal="true"
+        role="dialog"
       >
         <div className="nav-drawer-inner">
-          <button
-            type="button"
-            className="nav-drawer-close"
-            aria-label="Close menu"
-            onClick={onClose}
-          >
-            Close
-          </button>
+          <div className="nav-drawer-top">
+            <div>
+              <p className="nav-drawer-kicker">Studio Menu</p>
+              <h2 className="nav-drawer-brand">NUKT</h2>
+            </div>
+
+            <button
+              type="button"
+              className="nav-drawer-close"
+              aria-label="Close menu"
+              onClick={onClose}
+            >
+              Close
+            </button>
+          </div>
+
+          <div className="nav-drawer-status">
+            <span className="status-dot" aria-hidden />
+            <span>Open for selected projects</span>
+          </div>
 
           <button
             type="button"
             className="nav-drawer-cta"
             onClick={() => scrollToTarget('contact', onClose)}
           >
-            Get in touch
+            Start a project
           </button>
 
-          <p className="nav-drawer-label">Explore</p>
-
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="nav-drawer-link"
-              onClick={() => scrollToTarget(item.target, onClose)}
-            >
-              {item.label}
-            </button>
-          ))}
-
-          <p className="nav-drawer-label nav-drawer-label-social">Socials</p>
-
-          {SOCIAL_LINKS.filter((social) => social.name !== 'The X').map(
-            (social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noreferrer noopener"
+          <div className="nav-drawer-links" aria-label="Page sections">
+            {NAV_ITEMS.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                className="nav-drawer-link"
+                onClick={() => scrollToTarget(item.target, onClose)}
               >
-                {social.name}
-              </a>
-            )
-          )}
+                <span className="nav-drawer-link-index">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+
+                <span className="nav-drawer-link-copy">
+                  <span className="nav-drawer-link-label">{item.label}</span>
+                  <span className="nav-drawer-link-desc">{item.desc}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="nav-drawer-footer">
+            <p className="nav-drawer-label">Socials</p>
+
+            <div className="nav-drawer-socials">
+              {SOCIAL_LINKS.filter((social) => social.name !== 'The X').map(
+                (social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="nav-drawer-social-link"
+                  >
+                    {social.name}
+                  </a>
+                )
+              )}
+            </div>
+          </div>
         </div>
       </aside>
     </>

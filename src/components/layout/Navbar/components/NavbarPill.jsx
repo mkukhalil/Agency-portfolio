@@ -81,21 +81,52 @@ const scrollToTarget = (target, closeMenu) => {
   closeMenu();
 };
 
-export const NavbarPill = ({ isOpen, setOpen, menuRef }) => {
-  const closeMenu = () => setOpen(false);
+export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
+  const closeMenu = () => {
+    setOpen(false);
+  };
+
+  const openDesktopMenu = (event) => {
+    if (isMobileNav) return;
+    if (event.pointerType && event.pointerType !== 'mouse') return;
+
+    setOpen(true);
+  };
+
+  const closeDesktopMenu = (event) => {
+    if (isMobileNav) return;
+    if (event.pointerType && event.pointerType !== 'mouse') return;
+
+    setOpen(false);
+  };
+
+  const handleBlur = (event) => {
+    if (isMobileNav) return;
+
+    const nextFocusedElement = event.relatedTarget;
+
+    if (!event.currentTarget.contains(nextFocusedElement)) {
+      setOpen(false);
+    }
+  };
 
   return (
     <div
       ref={menuRef}
       className={cn('nav-menu-shell', isOpen && 'open')}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onPointerEnter={openDesktopMenu}
+      onPointerLeave={closeDesktopMenu}
+      onFocusCapture={() => {
+        if (!isMobileNav) setOpen(true);
+      }}
+      onBlurCapture={handleBlur}
     >
       <button
         type="button"
         className="nav-pill"
         aria-expanded={isOpen}
-        aria-controls="site-menu"
+        aria-controls={isMobileNav ? 'mobile-navigation' : 'site-menu'}
+        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
         onClick={() => setOpen((open) => !open)}
       >
         <span className="nav-pill-left">
@@ -106,54 +137,55 @@ export const NavbarPill = ({ isOpen, setOpen, menuRef }) => {
             <span />
           </span>
 
-          <span className="nav-pill-text">Menu</span>
+          <span className="nav-pill-labelStack" aria-hidden="true">
+            <span className="nav-pill-text nav-pill-text--menu">Menu</span>
+            <span className="nav-pill-text nav-pill-text--brand">NUKT</span>
+          </span>
         </span>
 
         <span className="nav-pill-right">
           <span className="nav-pill-availability-inline">
-            2/5 <span className="nav-pill-availability-sub">slots for May</span>
+            Open <span className="nav-pill-availability-sub">for projects</span>
           </span>
         </span>
       </button>
 
-      <div id="site-menu" className="nav-menu-panel" aria-hidden={!isOpen}>
-        <div className="menu-panel-header">
-          <div className="menu-panel-brand">NUKT</div>
+      {!isMobileNav && (
+        <div id="site-menu" className="nav-menu-panel" aria-hidden={!isOpen}>
+          <div className="menu-items">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="menu-item"
+                onClick={() => scrollToTarget(item.target, closeMenu)}
+              >
+                <div className="menu-thumb" aria-hidden />
+
+                <div className="menu-item-text">
+                  <div className="menu-item-label">{item.label}</div>
+                  <div className="menu-item-desc">{item.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="menu-panel-footer">
+            <div className="menu-panel-section-label">Social media</div>
+
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                {social.name}
+              </a>
+            ))}
+          </div>
         </div>
-
-        <div className="menu-items">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="menu-item"
-              onClick={() => scrollToTarget(item.target, closeMenu)}
-            >
-              <div className="menu-thumb" aria-hidden />
-
-              <div className="menu-item-text">
-                <div className="menu-item-label">{item.label}</div>
-                <div className="menu-item-desc">{item.desc}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <div className="menu-panel-footer">
-          <div className="menu-panel-section-label">Social media</div>
-
-          {SOCIAL_LINKS.map((social) => (
-            <a
-              key={social.name}
-              href={social.href}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              {social.name}
-            </a>
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 };

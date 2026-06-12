@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavbarLogo } from './components/NavbarLogo';
 import { NavbarPill } from './components/NavbarPill';
 import { NavbarCTA } from './components/NavbarCTA';
@@ -6,76 +6,135 @@ import { NavbarDrawer } from './components/NavbarDrawer';
 import { cn } from '../../../utils/cn';
 import './Navbar.css';
 
+const MOBILE_NAV_QUERY = '(max-width: 899px)';
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [contrast, setContrast] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(false);
+
   const menuRef = useRef(null);
 
-  // Scroll detection
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const mediaQuery = window.matchMedia(MOBILE_NAV_QUERY);
+
+    const updateNavMode = () => {
+      setIsMobileNav(mediaQuery.matches);
+      setMenuOpen(false);
+    };
+
+    updateNavMode();
+
+    mediaQuery.addEventListener('change', updateNavMode);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateNavMode);
+    };
   }, []);
 
-  // Contrast detection (Intersection Observer)
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const target = document.querySelector('.tools-brand-section');
+
     if (!target) return undefined;
 
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => setContrast(entry.isIntersecting));
-    }, { threshold: 0.15 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setContrast(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
 
-    obs.observe(target);
-    return () => obs.disconnect();
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
-  // Click outside and Escape key handlers
   useEffect(() => {
-    const onPointerDown = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const handlePointerDown = (event) => {
+      if (isMobileNav) return;
+
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     };
 
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') setMenuOpen(false);
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
     };
 
-    document.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isMobileNav]);
+
+  useEffect(() => {
+    if (!isMobileNav || !menuOpen) return undefined;
+
+    const originalOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isMobileNav, menuOpen]);
 
   return (
     <>
-      <nav className={cn('navbar', scrolled && 'scrolled')}>
+      <nav
+        className={cn(
+          'navbar',
+          scrolled && 'scrolled',
+          menuOpen && 'menu-open'
+        )}
+        aria-label="Primary navigation"
+      >
         <div className="navbar-container">
           <div className="nav-row">
-            {/* Logo */}
             <div className="nav-col nav-col--left">
-              <NavbarLogo
-                contrast={contrast}
-                onClick={() => setMenuOpen(false)}
-              />
+              <NavbarLogo contrast={contrast} onClick={closeMenu} />
             </div>
 
-            {/* Pill Menu (Desktop & Mobile trigger) */}
             <div className="nav-col nav-col--center">
               <NavbarPill
                 isOpen={menuOpen}
                 setOpen={setMenuOpen}
                 menuRef={menuRef}
+                isMobileNav={isMobileNav}
               />
             </div>
 
-            {/* Desktop CTA */}
             <div className="nav-col nav-col--right">
               <NavbarCTA contrast={contrast} />
             </div>
@@ -83,11 +142,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
-      <NavbarDrawer
-        isOpen={menuOpen}
-        onClose={() => setMenuOpen(false)}
-      />
+      <NavbarDrawer isOpen={isMobileNav && menuOpen} onClose={closeMenu} />
     </>
   );
 };
