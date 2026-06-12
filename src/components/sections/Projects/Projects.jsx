@@ -13,14 +13,11 @@ const Projects = () => {
     <Container as="section" id="projects" className="section projects-section container">
       <SectionHeading
         className="section-header"
-        title={<>My highlights. <span>Recent projects I&apos;m proud of.</span></>}
+        title={<>Our highlights. <span>Recent work We&apos;re proud of.</span></>}
       >
         <div className="section-header-copy">
           <p className="section-subtitle">
-            I work with founders, creators, and product teams to launch digital experiences that look sharp and hold together technically.
-          </p>
-          <p className="section-subtitle section-subtitle-tight">
-            Placeholder directions for Khalil&apos;s portfolio, ready to swap with live work.
+            We work with founders, creators, and product teams to launch digital experiences that look sharp and hold together technically.
           </p>
         </div>
       </SectionHeading>

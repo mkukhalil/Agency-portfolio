@@ -1,4 +1,3 @@
-import { SOCIAL_LINKS } from '../../../../data/navigation';
 import { cn } from '../../../../utils/cn';
 
 const NAV_ITEMS = [
@@ -152,38 +151,36 @@ export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
 
       {!isMobileNav && (
         <div id="site-menu" className="nav-menu-panel" aria-hidden={!isOpen}>
+          <div className="menu-panel-header">
+            <span className="menu-panel-kicker">Navigate</span>
+            <span className="menu-panel-brand">NUKT</span>
+          </div>
+
           <div className="menu-items">
-            {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.map((item, index) => (
               <button
                 key={item.id}
                 type="button"
                 className="menu-item"
                 onClick={() => scrollToTarget(item.target, closeMenu)}
               >
-                <div className="menu-thumb" aria-hidden />
+                <span className="menu-item-index">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
 
-                <div className="menu-item-text">
-                  <div className="menu-item-label">{item.label}</div>
-                  <div className="menu-item-desc">{item.desc}</div>
-                </div>
+                <span className="menu-item-copy">
+                  <span className="menu-item-label">{item.label}</span>
+                  <span className="menu-item-desc">{item.desc}</span>
+                </span>
+
+                <span className="menu-item-arrow" aria-hidden>
+                  →
+                </span>
               </button>
             ))}
           </div>
 
-          <div className="menu-panel-footer">
-            <div className="menu-panel-section-label">Social media</div>
 
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {social.name}
-              </a>
-            ))}
-          </div>
         </div>
       )}
     </div>

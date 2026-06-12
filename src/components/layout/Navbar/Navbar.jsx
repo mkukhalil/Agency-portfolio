@@ -29,7 +29,6 @@ const Navbar = () => {
     };
 
     updateNavMode();
-
     mediaQuery.addEventListener('change', updateNavMode);
 
     return () => {
@@ -102,7 +101,6 @@ const Navbar = () => {
     if (!isMobileNav || !menuOpen) return undefined;
 
     const originalOverflow = document.body.style.overflow;
-
     document.body.style.overflow = 'hidden';
 
     return () => {
@@ -136,7 +134,7 @@ const Navbar = () => {
             </div>
 
             <div className="nav-col nav-col--right">
-              <NavbarCTA contrast={contrast} />
+              <NavbarCTA contrast={contrast} onClick={closeMenu} />
             </div>
           </div>
         </div>

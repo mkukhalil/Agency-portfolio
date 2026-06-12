@@ -24,7 +24,7 @@ const ToolsTicker = () => {
             viewport={{ once: true, margin: '-80px' }}
             custom={{ y: 18 }}
           >
-            My tools &
+            Our  tools &
           </motion.h2>
 
           <motion.div
@@ -74,16 +74,6 @@ const ToolsTicker = () => {
           viewport={{ once: true, margin: '-80px' }}
           custom={{ delay: 0.18, y: 16 }}
         >
-          <p className="tools-brand-copy">
-            I build clean full-stack products with modern frontend, backend,
-            database, authentication, and deployment tools. From idea to launch,
-            I focus on useful, reliable, and polished web experiences.
-          </p>
-
-          <a href="#services" className="tools-cta-link">
-            <ArrowUpRight className="tools-cta-icon" aria-hidden />
-            See how I work
-          </a>
         </motion.div>
       </Container>
     </section>

@@ -1,11 +1,14 @@
 .about-section {
   position: relative;
+  overflow: hidden;
   padding-top: clamp(8rem, 14vw, 13rem);
   padding-bottom: clamp(8rem, 14vw, 13rem);
-  overflow: hidden;
 }
 
-/* Full-width section, clean centered inner container */
+/* =========================================
+   1. Container
+   ========================================= */
+
 .about-container {
   width: 100%;
   padding-left: clamp(1rem, 4vw, 4rem);
@@ -17,6 +20,10 @@
   max-width: 1240px;
   margin: 0 auto;
 }
+
+/* =========================================
+   2. Heading
+   ========================================= */
 
 .about-eyebrow {
   width: fit-content;
@@ -33,26 +40,32 @@
 .about-text {
   max-width: 980px;
   margin: 0 auto;
+  color: var(--text-primary);
   font-size: clamp(3rem, 6.4vw, 6.4rem);
   line-height: 0.92;
   text-align: center;
   overflow-wrap: break-word;
   font-weight: 500;
   letter-spacing: -0.07em;
-  color: var(--text-primary);
 }
 
 /* =========================================
-   Main Layout
+   3. Layout
    ========================================= */
 
 .about-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
   width: 100%;
   max-width: 1160px;
   margin: clamp(4.5rem, 8vw, 7rem) auto 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.about-side {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
 @media (min-width: 900px) {
@@ -63,7 +76,7 @@
 }
 
 /* =========================================
-   Shared Premium Card Styling
+   4. Shared Pricing-Style Cards
    ========================================= */
 
 .about-copy-card,
@@ -71,27 +84,28 @@
 .about-capabilities-card {
   position: relative;
   overflow: hidden;
-  border-radius: 28px;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
   background:
-    radial-gradient(80% 76% at 100% 0%,
-      rgba(255, 255, 255, 0.12),
-      transparent 48%),
-    radial-gradient(90% 90% at 0% 100%,
-      rgba(255, 68, 47, 0.28),
-      transparent 60%),
-    radial-gradient(78% 78% at 92% 92%,
-      rgba(255, 125, 78, 0.2),
-      transparent 58%),
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.07),
-      rgba(255, 255, 255, 0.026) 42%,
-      rgba(255, 255, 255, 0.048)),
-    #151515;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  box-shadow:
-    0 30px 95px rgba(0, 0, 0, 0.42),
-    0 0 85px rgba(255, 69, 47, 0.075),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    radial-gradient(circle at 100% 0%,
+      rgba(255, 255, 255, 0.045),
+      transparent 38%),
+    var(--card-bg);
+  box-shadow: none;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+/* Slight featured treatment for the larger copy card */
+.about-copy-card {
+  background:
+    radial-gradient(circle at 88% 0%,
+      rgba(255, 125, 78, 0.14),
+      transparent 36%),
+    #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .about-copy-card::before,
@@ -102,12 +116,10 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(125deg,
-      rgba(255, 255, 255, 0.12),
-      transparent 26%,
-      transparent 68%,
-      rgba(255, 255, 255, 0.05));
-  opacity: 0.65;
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.035),
+      transparent 34%);
+  opacity: 0.85;
 }
 
 .about-copy-card::after,
@@ -115,19 +127,24 @@
 .about-capabilities-card::after {
   content: '';
   position: absolute;
-  width: 30rem;
-  height: 30rem;
-  right: -13rem;
-  bottom: -14rem;
+  right: -6rem;
+  top: -6rem;
+  width: 15rem;
+  height: 15rem;
   border-radius: 999px;
+  pointer-events: none;
   background:
     radial-gradient(circle,
-      rgba(255, 72, 47, 0.34) 0%,
-      rgba(255, 72, 47, 0.18) 34%,
-      transparent 70%);
-  filter: blur(30px);
-  pointer-events: none;
-  opacity: 1;
+      rgba(255, 125, 78, 0.13) 0%,
+      rgba(255, 72, 47, 0.07) 36%,
+      transparent 68%);
+  filter: blur(18px);
+  opacity: 0.75;
+}
+
+.about-stats-card::after,
+.about-capabilities-card::after {
+  opacity: 0.45;
 }
 
 .about-copy-card>*,
@@ -137,8 +154,15 @@
   z-index: 1;
 }
 
+.about-copy-card:hover,
+.about-stats-card:hover,
+.about-capabilities-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 /* =========================================
-   Main Copy Card
+   5. Main Copy Card
    ========================================= */
 
 .about-copy-card {
@@ -169,28 +193,29 @@
 }
 
 .about-link {
+  width: fit-content;
   margin-top: 2rem;
   display: inline-flex;
   align-items: center;
-  width: fit-content;
-  color: var(--text-primary);
-  background:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.13),
-      rgba(255, 255, 255, 0.06));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-full);
   padding: 12px 18px;
-  font-weight: 500;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-color);
   font-size: 0.95rem;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.075),
-    0 12px 36px rgba(0, 0, 0, 0.22);
+  font-weight: 500;
   transition:
     transform var(--transition-base),
-    opacity var(--transition-base),
     background var(--transition-base),
-    border-color var(--transition-base);
+    border-color var(--transition-base),
+    opacity var(--transition-base);
+}
+
+.about-link:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-primary);
 }
 
 .about-link-icon {
@@ -200,29 +225,13 @@
   transition: transform var(--transition-base);
 }
 
-.about-link:hover {
-  opacity: 0.92;
-  transform: translateY(-2px);
-  background:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.17),
-      rgba(255, 255, 255, 0.08));
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
 .about-link:hover .about-link-icon {
   transform: translate(3px, -3px);
 }
 
 /* =========================================
-   Side Cards
+   6. Stats Card
    ========================================= */
-
-.about-side {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
 
 .about-stats-card {
   min-height: 270px;
@@ -238,7 +247,7 @@
   justify-content: space-between;
   gap: 1.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.095);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .about-stat:last-child {
@@ -248,22 +257,25 @@
 
 .about-stat span {
   max-width: 230px;
-  font-family: var(--font-heading);
   color: #ffffff;
+  font-family: var(--font-heading);
   font-size: clamp(1.9rem, 2.6vw, 3rem);
   line-height: 0.9;
   letter-spacing: -0.08em;
   font-weight: 600;
-  text-shadow: 0 12px 44px rgba(255, 255, 255, 0.08);
 }
 
 .about-stat p {
   max-width: 145px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 0.98rem;
   line-height: 1.15;
   text-align: right;
 }
+
+/* =========================================
+   7. Capabilities Card
+   ========================================= */
 
 .about-capabilities-card {
   min-height: 230px;
@@ -271,9 +283,9 @@
 }
 
 .about-card-label {
-  color: rgba(255, 255, 255, 0.64);
-  font-size: 0.98rem;
   margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
 }
 
 .about-capabilities {
@@ -283,53 +295,38 @@
 }
 
 .about-capabilities span {
+  width: fit-content;
   display: inline-flex;
   align-items: center;
-  width: fit-content;
   padding: 0.72rem 1rem;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.9);
   background:
     radial-gradient(circle at 100% 0%,
-      rgba(255, 125, 78, 0.14),
+      rgba(255, 125, 78, 0.08),
       transparent 42%),
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.11),
-      rgba(255, 255, 255, 0.045));
-  border: 1px solid rgba(255, 255, 255, 0.125);
+    rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   font-size: 0.94rem;
   line-height: 1;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    0 8px 28px rgba(0, 0, 0, 0.2);
-}
-
-/* =========================================
-   Hover Polish
-   ========================================= */
-
-.about-copy-card,
-.about-stats-card,
-.about-capabilities-card {
   transition:
-    transform 0.32s ease,
-    border-color 0.32s ease,
-    box-shadow 0.32s ease;
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
 }
 
-.about-copy-card:hover,
-.about-stats-card:hover,
-.about-capabilities-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.17);
-  box-shadow:
-    0 36px 110px rgba(0, 0, 0, 0.45),
-    0 0 95px rgba(255, 69, 47, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+.about-capabilities span:hover {
+  transform: translateY(-2px);
+  background:
+    radial-gradient(circle at 100% 0%,
+      rgba(255, 125, 78, 0.12),
+      transparent 42%),
+    rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 /* =========================================
-   Responsive
+   8. Responsive
    ========================================= */
 
 @media (max-width: 899px) {
@@ -364,8 +361,8 @@
   .about-copy-card,
   .about-stats-card,
   .about-capabilities-card {
-    border-radius: 22px;
     padding: 1.4rem;
+    border-radius: 20px;
   }
 
   .about-subtext-primary {
@@ -378,7 +375,26 @@
   }
 
   .about-stat p {
-    text-align: left;
     max-width: 100%;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .about-copy-card,
+  .about-stats-card,
+  .about-capabilities-card,
+  .about-link,
+  .about-link-icon,
+  .about-capabilities span {
+    transition: none;
+  }
+
+  .about-copy-card:hover,
+  .about-stats-card:hover,
+  .about-capabilities-card:hover,
+  .about-capabilities span:hover {
+    transform: none;
   }
 }

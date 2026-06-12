@@ -1,4 +1,3 @@
-import { SOCIAL_LINKS } from '../../../../data/navigation';
 import { cn } from '../../../../utils/cn';
 
 const NAV_ITEMS = [
@@ -104,7 +103,7 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
         <div className="nav-drawer-inner">
           <div className="nav-drawer-top">
             <div>
-              <p className="nav-drawer-kicker">Studio Menu</p>
+
               <h2 className="nav-drawer-brand">NUKT</h2>
             </div>
 
@@ -116,11 +115,6 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
             >
               Close
             </button>
-          </div>
-
-          <div className="nav-drawer-status">
-            <span className="status-dot" aria-hidden />
-            <span>Open for selected projects</span>
           </div>
 
           <button
@@ -149,26 +143,6 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
                 </span>
               </button>
             ))}
-          </div>
-
-          <div className="nav-drawer-footer">
-            <p className="nav-drawer-label">Socials</p>
-
-            <div className="nav-drawer-socials">
-              {SOCIAL_LINKS.filter((social) => social.name !== 'The X').map(
-                (social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="nav-drawer-social-link"
-                  >
-                    {social.name}
-                  </a>
-                )
-              )}
-            </div>
           </div>
         </div>
       </aside>

@@ -90,6 +90,7 @@
 .logo-link,
 .nav-pill,
 .menu-item,
+.nav-cta,
 .nav-drawer-overlay,
 .nav-drawer-close,
 .nav-drawer-cta,
@@ -110,6 +111,7 @@
 .logo-link,
 .nav-pill,
 .menu-item,
+.nav-cta,
 .nav-drawer-overlay,
 .nav-drawer-close,
 .nav-drawer-cta,
@@ -300,19 +302,19 @@
   top: calc(100% + 10px);
   left: 50%;
   z-index: var(--z-dropdown);
-  width: min(420px, calc(100vw - 2rem));
-  max-width: 560px;
+  width: min(390px, calc(100vw - 2rem));
   padding: 14px;
-  border-radius: 18px;
+  border-radius: 20px;
   background:
-    radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.055), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(255, 125, 78, 0.105), transparent 36%),
+    radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.045), transparent 34%),
     rgba(6, 6, 6, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.065);
   box-shadow:
     0 18px 60px rgba(0, 0, 0, 0.68),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   opacity: 0;
   pointer-events: none;
   transform: translateX(-50%) translateY(8px) scale(0.98);
@@ -332,9 +334,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 6px 12px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 8px 8px 14px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.menu-panel-kicker {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 .menu-panel-brand {
@@ -346,96 +355,84 @@
 }
 
 .menu-panel-note {
-  margin-top: 3px;
-  color: var(--text-secondary);
+  margin-top: 10px;
+  padding: 12px 8px 4px;
+  color: rgba(255, 255, 255, 0.42);
   font-size: 12px;
+  line-height: 1.4;
+  border-top: 1px dashed rgba(255, 255, 255, 0.045);
 }
 
 .menu-items {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .menu-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 14px;
-  padding: 14px;
+  padding: 15px 10px;
   border-radius: 14px;
   color: var(--text-primary);
   text-decoration: none;
   transition:
     background 180ms ease,
     transform 200ms ease,
-    box-shadow 200ms ease;
+    color 180ms ease;
 }
 
 .menu-item:hover,
 .menu-item:focus-visible {
-  background: rgba(255, 255, 255, 0.035);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.48);
-}
-
-.menu-thumb {
-  width: 86px;
-  height: 60px;
-  flex-shrink: 0;
-  border-radius: 12px;
   background:
-    radial-gradient(circle at 75% 20%, rgba(255, 255, 255, 0.16), transparent 34%),
-    linear-gradient(135deg, #262626, #101010);
-  border: 1px solid rgba(255, 255, 255, 0.045);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    radial-gradient(circle at 100% 0%, rgba(255, 125, 78, 0.08), transparent 42%),
+    rgba(255, 255, 255, 0.035);
+  transform: translateX(3px);
 }
 
-.menu-item-text {
+.menu-item-index {
+  color: var(--text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.menu-item-copy {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .menu-item-label {
   font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-size: 1.2rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.045em;
 }
 
 .menu-item-desc {
-  margin-top: 4px;
   color: var(--text-secondary);
   font-size: 13px;
 }
 
-.menu-panel-footer {
-  margin-top: 12px;
-  padding-top: 10px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.04);
-}
-
-.menu-panel-section-label {
-  margin-right: 6px;
+.menu-item-arrow {
   color: var(--text-secondary);
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-.menu-panel-footer a {
-  color: var(--text-primary);
-  font-size: 13px;
-  text-decoration: none;
-  opacity: 0.72;
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: translateX(-6px);
   transition:
-    opacity 0.2s ease,
-    color 0.2s ease;
+    opacity 180ms ease,
+    transform 180ms ease,
+    color 180ms ease;
 }
 
-.menu-panel-footer a:hover {
+.menu-item:hover .menu-item-arrow,
+.menu-item:focus-visible .menu-item-arrow {
   opacity: 1;
+  transform: translateX(0);
+  color: var(--text-primary);
 }
 
 /* =========================================
@@ -514,7 +511,7 @@
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
   right: 12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
+
   z-index: var(--z-drawer);
   width: min(390px, calc(100vw - 24px));
   padding: 18px;
@@ -592,19 +589,6 @@
   color: var(--text-primary);
   border-color: rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.055);
-}
-
-.nav-drawer-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  padding: 8px 11px;
-  border-radius: 9999px;
-  color: rgba(255, 255, 255, 0.78);
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.055);
-  font-size: 13px;
 }
 
 .nav-drawer-cta {
@@ -687,38 +671,11 @@
 }
 
 .nav-drawer-label {
-  margin: 0 0 10px;
+  margin: 0;
   color: var(--text-secondary);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-}
-
-.nav-drawer-socials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.nav-drawer-social-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 8px 11px;
-  border-radius: 9999px;
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.055);
-  font-size: 13px;
-  text-decoration: none;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.nav-drawer-social-link:hover {
-  background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* =========================================
@@ -731,8 +688,7 @@
 .nav-cta:focus-visible,
 .nav-drawer-close:focus-visible,
 .nav-drawer-cta:focus-visible,
-.nav-drawer-link:focus-visible,
-.nav-drawer-social-link:focus-visible {
+.nav-drawer-link:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.12);
   outline-offset: 4px;
 }
@@ -881,11 +837,15 @@
 @media (prefers-reduced-motion: reduce) {
 
   .navbar,
+  .logo,
+  .nav-menu-shell,
+  .nav-right,
   .nav-pill,
   .nav-pill-icon,
   .nav-pill-text,
   .nav-menu-panel,
   .menu-item,
+  .menu-item-arrow,
   .nav-drawer-overlay,
   .nav-drawer,
   .nav-drawer-link,
