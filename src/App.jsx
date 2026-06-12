@@ -10,8 +10,19 @@ import Trust from './components/sections/Trust/Trust';
 import Pricing from './components/sections/Pricing/Pricing';
 import FAQ from './components/sections/FAQ/FAQ';
 import Footer from './components/layout/Footer/Footer';
+import Terms from './pages/legal/Terms';
+import Privacy from './pages/legal/Privacy';
 
 function App() {
+  const pathname = window.location.pathname;
+
+  if (pathname === '/terms') {
+    return <Terms />;
+  }
+
+  if (pathname === '/privacy') {
+    return <Privacy />;
+  }
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

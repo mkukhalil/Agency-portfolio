@@ -108,7 +108,7 @@ const Trust = () => {
                     </span>
                   </span>
 
-                  <span className="testimonial-logo">Khalil</span>
+                  <span className="testimonial-logo">nukt</span>
                 </figcaption>
               </motion.div>
             </AnimatePresence>

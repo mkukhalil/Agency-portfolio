@@ -2,29 +2,29 @@ export const testimonials = [
   {
     id: 1,
     quote:
-      'Khalil turned a rough product idea into an interface that felt clear, premium, and ready for real users.',
-    name: 'Startup Founder',
-    role: 'SaaS Platform',
+      'We needed the website to explain our automation services in a simple way. The final result felt clean, organized, and much easier to present to potential clients.',
+    name: 'Client feedback',
+    role: 'Fluix Automation',
   },
   {
     id: 2,
     quote:
-      'The strongest part was the mix of design taste and frontend judgment. The handoff was already half-built in his head.',
-    name: 'Product Lead',
-    role: 'Fintech App',
+      'The work was handled with patience and clear communication. Small details were adjusted properly, and the site started to look more trustworthy and professional.',
+    name: 'Client feedback',
+    role: 'Visa consultancy website',
   },
   {
     id: 3,
     quote:
-      'Fast, thoughtful, and precise with feedback. Khalil made the landing page feel more confident without adding noise.',
-    name: 'Creative Director',
-    role: 'Brand Launch',
+      'The dashboard was structured in a practical way. It made the data easier to manage and gave the project a cleaner direction compared to where it started.',
+    name: 'Project feedback',
+    role: 'CRM Dashboard',
   },
   {
     id: 4,
     quote:
-      'He gave structure to a messy set of requirements and shipped responsive screens that worked across the product.',
-    name: 'Engineering Manager',
-    role: 'Internal Tooling',
+      'The POS system made daily billing and product management easier for our shop. It was built around the way we actually work, not just as a generic system.',
+    name: 'Business owner',
+    role: 'Sohail Traders',
   },
 ];

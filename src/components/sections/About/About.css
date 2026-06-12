@@ -261,7 +261,6 @@
   font-family: var(--font-heading);
   font-size: clamp(1.9rem, 2.6vw, 3rem);
   line-height: 0.9;
-  letter-spacing: -0.08em;
   font-weight: 600;
 }
 

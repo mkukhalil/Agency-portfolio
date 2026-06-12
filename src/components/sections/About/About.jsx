@@ -66,7 +66,7 @@ const About = () => {
               custom={{ delay: 0.12, y: 24 }}
             >
               <p className="about-subtext about-subtext-primary">
-                We help businesses turn ideas into useful digital products —
+                We help businesses turn ideas into useful digital products,
                 from service websites and landing pages to CRM tools, POS
                 systems, dashboards, APIs, and custom web applications.
               </p>
