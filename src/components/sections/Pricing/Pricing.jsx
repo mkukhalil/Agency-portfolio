@@ -57,7 +57,7 @@ const pricingPlans = [
 
 const Pricing = () => {
   return (
-    <section id="gradient-visible" className="section pricing-section-khalil">
+    <section id="pricing" className="section pricing-section-khalil">
       <div className="pricing-inner">
         <SectionHeading
           className="pricing-header"

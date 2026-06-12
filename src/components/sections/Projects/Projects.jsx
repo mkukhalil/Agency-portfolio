@@ -10,7 +10,7 @@ import { projects } from '../../../data/projects';
 
 const Projects = () => {
   return (
-    <Container as="section" id="work" className="section projects-section container">
+    <Container as="section" id="projects" className="section projects-section container">
       <SectionHeading
         className="section-header"
         title={<>My highlights. <span>Recent projects I&apos;m proud of.</span></>}

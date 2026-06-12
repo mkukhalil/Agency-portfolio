@@ -9,7 +9,7 @@ import { tools } from '../../../data/tools';
 
 const ToolsTicker = () => {
   return (
-    <section
+    <section id="tools"
       className="tools-brand-section"
       aria-labelledby="tools-heading-top tools-heading-bottom"
     >
