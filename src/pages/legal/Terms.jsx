@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import './Legal.css';
 
 const termsSections = [
@@ -21,7 +22,6 @@ const termsSections = [
             'Any service provided by Nukt will usually be defined through a written proposal, quotation, statement of work, email confirmation, contract, invoice, or other agreed project document.',
             'The agreed scope may include deliverables, timelines, milestones, pricing, revision limits, third-party tools, support period, and responsibilities of each party. Work outside the agreed scope may require a separate estimate or approval.',
         ],
-        wide: true,
     },
     {
         title: '4. Client Responsibilities',
@@ -64,7 +64,6 @@ const termsSections = [
             'Unless otherwise agreed in writing, after full payment has been received, the client owns the final custom deliverables specifically created for the project.',
             'Nukt retains ownership of its pre-existing materials, internal tools, reusable code, frameworks, templates, workflows, know-how, libraries, and general technical knowledge used to create the project.',
         ],
-        wide: true,
     },
     {
         title: '10. Portfolio and Case Study Rights',
@@ -100,7 +99,6 @@ const termsSections = [
             'To the maximum extent permitted by law, Nukt will not be liable for indirect, incidental, special, consequential, or punitive damages, including loss of profits, revenue, data, business opportunities, goodwill, or service availability.',
             'Our total liability for any claim related to a project or service will not exceed the amount paid by the client to Nukt for the specific service giving rise to the claim.',
         ],
-        wide: true,
     },
     {
         title: '15. Termination',
@@ -118,25 +116,79 @@ const termsSections = [
     },
 ];
 
+const getScrollBehavior = () => {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+};
+
+const scrollToLegalSection = (id) => {
+    const section = document.getElementById(id);
+
+    if (!section) return;
+
+    const navbarOffset = 110;
+    const targetTop =
+        section.getBoundingClientRect().top + window.scrollY - navbarOffset;
+
+    window.scrollTo({
+        top: targetTop,
+        behavior: getScrollBehavior(),
+    });
+};
+
 const Terms = () => {
+    const sectionIds = useMemo(
+        () => termsSections.map((_, index) => `terms-${index + 1}`),
+        []
+    );
+
+    const [activeSection, setActiveSection] = useState(sectionIds[0]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visibleEntry = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visibleEntry) {
+                    setActiveSection(visibleEntry.target.id);
+                }
+            },
+            {
+                root: null,
+                rootMargin: '-22% 0px -62% 0px',
+                threshold: [0.15, 0.35, 0.55],
+            }
+        );
+
+        sectionIds.forEach((id) => {
+            const section = document.getElementById(id);
+
+            if (section) {
+                observer.observe(section);
+            }
+        });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [sectionIds]);
+
     return (
         <main className="legal-page">
             <div className="legal-shell">
-                <a className="legal-back" href="/">
-                    ← Back to home
-                </a>
-
                 <header className="legal-hero">
-                    <p className="legal-kicker">Legal</p>
+                    <a className="legal-back" href="/">
+                        ← Back to home
+                    </a>
 
-                    <h1 className="legal-title">
-                        Terms of Service <span>for working with Nukt.</span>
-                    </h1>
+                    <h1 className="legal-title">Terms and conditions</h1>
 
                     <p className="legal-intro">
-                        These Terms explain how our website, proposals, software design,
-                        development work, support, and related services are provided by Nukt.
-                        By using our website or working with us, you agree to these Terms.
+                        Please review our terms and conditions before using our website,
+                        requesting a proposal, or working with Nukt.
                     </p>
 
                     <div className="legal-meta">
@@ -145,34 +197,75 @@ const Terms = () => {
                     </div>
                 </header>
 
-                <section className="legal-grid" aria-label="Terms of Service sections">
-                    {termsSections.map((section) => (
-                        <article
-                            key={section.title}
-                            className={`legal-card ${section.wide ? 'legal-card-wide' : ''}`}
-                        >
-                            <h2>{section.title}</h2>
+                <section className="legal-document">
+                    <div className="legal-document-inner">
+                        <aside className="legal-toc" aria-label="Terms sections">
+                            <p className="legal-toc-label">Legal Terms</p>
 
-                            {section.body.map((paragraph) => (
-                                <p key={paragraph}>{paragraph}</p>
+                            <ol className="legal-toc-list">
+                                {termsSections.map((section, index) => {
+                                    const id = `terms-${index + 1}`;
+                                    const isActive = activeSection === id;
+
+                                    return (
+                                        <li key={section.title}>
+                                            <button
+                                                type="button"
+                                                className={`legal-toc-link ${isActive ? 'active' : ''}`}
+                                                onClick={() => scrollToLegalSection(id)}
+                                            >
+                                                {section.title}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ol>
+                        </aside>
+
+                        <article className="legal-content">
+                            <h2 className="legal-company">Nukt Studio</h2>
+
+                            {termsSections.map((section, index) => (
+                                <section
+                                    key={section.title}
+                                    id={`terms-${index + 1}`}
+                                    className="legal-section"
+                                >
+                                    <h2>{section.title}</h2>
+
+                                    {section.body?.map((paragraph) => (
+                                        <p key={paragraph}>{paragraph}</p>
+                                    ))}
+
+                                    {section.list && (
+                                        <ul>
+                                            {section.list.map((item) => (
+                                                <li key={item}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </section>
                             ))}
+
+                            <section className="legal-contact">
+                                <h2>Contact</h2>
+                                <p>
+                                    For questions about these Terms, contact Nukt at{' '}
+                                    <a href="mailto:contact@nukt.agency">
+                                        contact@nukt.agency
+                                    </a>
+                                    .
+                                </p>
+                            </section>
+
+                            <p className="legal-disclaimer">
+                                This page is provided for general business transparency and
+                                should be reviewed by a qualified legal professional before
+                                being used as a final legal agreement.
+                            </p>
                         </article>
-                    ))}
+                    </div>
                 </section>
-
-                <section className="legal-contact">
-                    <h2>Contact</h2>
-                    <p>
-                        For questions about these Terms, contact Nukt at{' '}
-                        <a href="mailto:contact@nukt.agency">contact@nukt.agency</a>.
-                    </p>
-                </section>
-
-                <p className="legal-disclaimer">
-                    This page is provided for general business transparency and should be
-                    reviewed by a qualified legal professional before being used as a final
-                    legal agreement.
-                </p>
             </div>
         </main>
     );

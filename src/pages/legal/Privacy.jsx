@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import './Legal.css';
 
 const privacySections = [
@@ -14,7 +15,6 @@ const privacySections = [
             'We may collect information you provide directly, such as your name, email address, phone number, company name, project details, budget range, business requirements, messages, files, documents, billing details, and any other information you choose to share.',
             'We may also collect limited technical information such as IP address, browser type, device type, operating system, pages visited, approximate location, referring website, and website performance data.',
         ],
-        wide: true,
     },
     {
         title: '3. How We Use Information',
@@ -42,7 +42,9 @@ const privacySections = [
     },
     {
         title: '6. How We Share Information',
-        body: ['We do not sell personal information. We may share information only when necessary with:'],
+        body: [
+            'We do not sell personal information. We may share information only when necessary with:',
+        ],
         list: [
             'Team members, contractors, or service providers helping us deliver services.',
             'Hosting providers, cloud platforms, email providers, analytics tools, payment processors, or project management tools.',
@@ -50,7 +52,6 @@ const privacySections = [
             'Authorities or regulators when required by law.',
             'Another party if required to protect rights, safety, security, or legal claims.',
         ],
-        wide: true,
     },
     {
         title: '7. Client Data',
@@ -82,7 +83,9 @@ const privacySections = [
     },
     {
         title: '11. Your Privacy Rights',
-        body: ['Depending on your location, you may have rights regarding your personal information, including the right to:'],
+        body: [
+            'Depending on your location, you may have rights regarding your personal information, including the right to:',
+        ],
         list: [
             'Request access to the personal information we hold about you.',
             'Request correction or deletion of your information.',
@@ -91,7 +94,6 @@ const privacySections = [
             'Withdraw consent where processing is based on consent.',
             'Opt out of certain data sharing or marketing communications where applicable.',
         ],
-        wide: true,
     },
     {
         title: '12. Marketing Communications',
@@ -116,25 +118,79 @@ const privacySections = [
     },
 ];
 
+const getScrollBehavior = () => {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+};
+
+const scrollToLegalSection = (id) => {
+    const section = document.getElementById(id);
+
+    if (!section) return;
+
+    const navbarOffset = 110;
+    const targetTop =
+        section.getBoundingClientRect().top + window.scrollY - navbarOffset;
+
+    window.scrollTo({
+        top: targetTop,
+        behavior: getScrollBehavior(),
+    });
+};
+
 const Privacy = () => {
+    const sectionIds = useMemo(
+        () => privacySections.map((_, index) => `privacy-${index + 1}`),
+        []
+    );
+
+    const [activeSection, setActiveSection] = useState(sectionIds[0]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visibleEntry = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visibleEntry) {
+                    setActiveSection(visibleEntry.target.id);
+                }
+            },
+            {
+                root: null,
+                rootMargin: '-22% 0px -62% 0px',
+                threshold: [0.15, 0.35, 0.55],
+            }
+        );
+
+        sectionIds.forEach((id) => {
+            const section = document.getElementById(id);
+
+            if (section) {
+                observer.observe(section);
+            }
+        });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [sectionIds]);
+
     return (
         <main className="legal-page">
             <div className="legal-shell">
-                <a className="legal-back" href="/">
-                    ← Back to home
-                </a>
-
                 <header className="legal-hero">
-                    <p className="legal-kicker">Privacy</p>
+                    <a className="legal-back" href="/">
+                        ← Back to home
+                    </a>
 
-                    <h1 className="legal-title">
-                        Privacy Policy <span>for visitors and clients.</span>
-                    </h1>
+                    <h1 className="legal-title">Privacy policy</h1>
 
                     <p className="legal-intro">
-                        Nukt respects your privacy. This policy explains how we collect,
-                        use, store, protect, and share information when you visit our
-                        website, contact us, request a quote, or work with us.
+                        This policy explains how Nukt collects, uses, protects, and handles
+                        information when you visit our website, contact us, or work with us.
                     </p>
 
                     <div className="legal-meta">
@@ -143,42 +199,75 @@ const Privacy = () => {
                     </div>
                 </header>
 
-                <section className="legal-grid" aria-label="Privacy Policy sections">
-                    {privacySections.map((section) => (
-                        <article
-                            key={section.title}
-                            className={`legal-card ${section.wide ? 'legal-card-wide' : ''}`}
-                        >
-                            <h2>{section.title}</h2>
+                <section className="legal-document">
+                    <div className="legal-document-inner">
+                        <aside className="legal-toc" aria-label="Privacy sections">
+                            <p className="legal-toc-label">Privacy Policy</p>
 
-                            {section.body?.map((paragraph) => (
-                                <p key={paragraph}>{paragraph}</p>
+                            <ol className="legal-toc-list">
+                                {privacySections.map((section, index) => {
+                                    const id = `privacy-${index + 1}`;
+                                    const isActive = activeSection === id;
+
+                                    return (
+                                        <li key={section.title}>
+                                            <button
+                                                type="button"
+                                                className={`legal-toc-link ${isActive ? 'active' : ''}`}
+                                                onClick={() => scrollToLegalSection(id)}
+                                            >
+                                                {section.title}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ol>
+                        </aside>
+
+                        <article className="legal-content">
+                            <h2 className="legal-company">Nukt Studio</h2>
+
+                            {privacySections.map((section, index) => (
+                                <section
+                                    key={section.title}
+                                    id={`privacy-${index + 1}`}
+                                    className="legal-section"
+                                >
+                                    <h2>{section.title}</h2>
+
+                                    {section.body?.map((paragraph) => (
+                                        <p key={paragraph}>{paragraph}</p>
+                                    ))}
+
+                                    {section.list && (
+                                        <ul>
+                                            {section.list.map((item) => (
+                                                <li key={item}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </section>
                             ))}
 
-                            {section.list && (
-                                <ul>
-                                    {section.list.map((item) => (
-                                        <li key={item}>{item}</li>
-                                    ))}
-                                </ul>
-                            )}
+                            <section className="legal-contact">
+                                <h2>Contact</h2>
+                                <p>
+                                    For privacy questions or data requests, contact Nukt at{' '}
+                                    <a href="mailto:contact@nukt.agency">
+                                        contact@nukt.agency
+                                    </a>
+                                    .
+                                </p>
+                            </section>
+
+                            <p className="legal-disclaimer">
+                                This page is provided for general business transparency and
+                                should be reviewed by a qualified legal professional before
+                                being used as a final privacy policy.
+                            </p>
                         </article>
-                    ))}
+                    </div>
                 </section>
-
-                <section className="legal-contact">
-                    <h2>Contact</h2>
-                    <p>
-                        For privacy questions or data requests, contact Nukt at{' '}
-                        <a href="mailto:contact@nukt.agency">contact@nukt.agency</a>.
-                    </p>
-                </section>
-
-                <p className="legal-disclaimer">
-                    This page is provided for general business transparency and should be
-                    reviewed by a qualified legal professional before being used as a final
-                    privacy policy.
-                </p>
             </div>
         </main>
     );
