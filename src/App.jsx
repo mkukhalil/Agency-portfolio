@@ -12,18 +12,19 @@ import FAQ from './components/sections/FAQ/FAQ';
 import Footer from './components/layout/Footer/Footer';
 import Terms from './pages/legal/Terms';
 import Privacy from './pages/legal/Privacy';
+import ContactModal from './components/contact/ContactModal';
 
 function App() {
   const pathname = window.location.pathname;
+  const isTermsPage = pathname === '/terms';
+  const isPrivacyPage = pathname === '/privacy';
+  const isLegalPage = isTermsPage || isPrivacyPage;
 
-  if (pathname === '/terms') {
-    return <Terms />;
-  }
-
-  if (pathname === '/privacy') {
-    return <Privacy />;
-  }
   useEffect(() => {
+    if (isLegalPage) {
+      return undefined;
+    }
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
@@ -32,7 +33,7 @@ function App() {
 
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       direction: 'vertical',
       gestureDirection: 'vertical',
       smooth: true,
@@ -55,11 +56,20 @@ function App() {
       cancelAnimationFrame(frameId);
       lenis.destroy();
     };
-  }, []);
+  }, [isLegalPage]);
+
+  if (isTermsPage) {
+    return <Terms />;
+  }
+
+  if (isPrivacyPage) {
+    return <Privacy />;
+  }
 
   return (
     <div className="app-container">
       <Navbar />
+
       <main>
         <Hero />
         <About />
@@ -70,7 +80,10 @@ function App() {
         <Pricing />
         <FAQ />
       </main>
+
       <Footer />
+
+      <ContactModal />
     </div>
   );
 }

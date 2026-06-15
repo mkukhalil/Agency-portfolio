@@ -5,23 +5,30 @@ import { Button } from '../../ui/Button';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import './Footer.css';
 
+const getScrollBehavior = () => {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 'auto'
+    : 'smooth';
+};
+
+const cleanUrlHash = () => {
+  window.history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}${window.location.search}`
+  );
+};
+
 const scrollToSection = (event, targetId) => {
   event.preventDefault();
 
   if (targetId === 'top') {
     window.scrollTo({
       top: 0,
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'auto'
-        : 'smooth',
+      behavior: getScrollBehavior(),
     });
 
-    window.history.replaceState(
-      null,
-      '',
-      `${window.location.pathname}${window.location.search}`
-    );
-
+    cleanUrlHash();
     return;
   }
 
@@ -33,16 +40,15 @@ const scrollToSection = (event, targetId) => {
 
   window.scrollTo({
     top: targetTop,
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ? 'auto'
-      : 'smooth',
+    behavior: getScrollBehavior(),
   });
 
-  window.history.replaceState(
-    null,
-    '',
-    `${window.location.pathname}${window.location.search}`
-  );
+  cleanUrlHash();
+};
+
+const openContactModal = (event) => {
+  event.preventDefault();
+  window.dispatchEvent(new Event('open-contact-modal'));
 };
 
 const Footer = () => {
@@ -67,8 +73,9 @@ const Footer = () => {
           <div className="footer-links-container">
             <Button
               as="a"
-              href="mailto:contact@nukt.agency"
+              href="#contact"
               className="footer-cta-button"
+              onClick={openContactModal}
             >
               Get in touch
               <ArrowRight className="footer-cta-icon" aria-hidden />
@@ -122,7 +129,11 @@ const Footer = () => {
                   Privacy
                 </a>
 
-                <a href="mailto:contact@nukt.agency" className="footer-link">
+                <a
+                  href="#contact"
+                  className="footer-link"
+                  onClick={openContactModal}
+                >
                   Contact
                 </a>
               </div>
