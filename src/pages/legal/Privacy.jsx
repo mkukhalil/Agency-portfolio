@@ -253,8 +253,8 @@ const Privacy = () => {
                                 <h2>Contact</h2>
                                 <p>
                                     For privacy questions or data requests, contact Nukt at{' '}
-                                    <a href="mailto:contact@nukt.agency">
-                                        contact@nukt.agency
+                                    <a href="mailto:contact.nukt@gmail.com">
+                                        contact.nukt@gmail.com
                                     </a>
                                     .
                                 </p>

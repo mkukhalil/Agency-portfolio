@@ -524,10 +524,7 @@ const ContactModal = () => {
                                             )}
                                         </button>
 
-                                        <p className="contact-form-note">
-                                            No spam. No pressure. Just a clear reply about how we can
-                                            help.
-                                        </p>
+
                                     </>
                                 )}
                             </form>
