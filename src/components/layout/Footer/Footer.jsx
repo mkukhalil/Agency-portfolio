@@ -3,57 +3,13 @@ import { ArrowRight } from 'lucide-react';
 import { Container } from '../../ui/Container';
 import { Button } from '../../ui/Button';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
+import { openContactModal } from '../../../utils/contact';
+import { handleSectionLinkClick } from '../../../utils/scroll';
 import './Footer.css';
-
-const getScrollBehavior = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 'auto'
-    : 'smooth';
-};
-
-const cleanUrlHash = () => {
-  window.history.replaceState(
-    null,
-    '',
-    `${window.location.pathname}${window.location.search}`
-  );
-};
-
-const scrollToSection = (event, targetId) => {
-  event.preventDefault();
-
-  if (targetId === 'top') {
-    window.scrollTo({
-      top: 0,
-      behavior: getScrollBehavior(),
-    });
-
-    cleanUrlHash();
-    return;
-  }
-
-  const section = document.getElementById(targetId);
-
-  if (!section) return;
-
-  const targetTop = section.getBoundingClientRect().top + window.scrollY - 88;
-
-  window.scrollTo({
-    top: targetTop,
-    behavior: getScrollBehavior(),
-  });
-
-  cleanUrlHash();
-};
-
-const openContactModal = (event) => {
-  event.preventDefault();
-  window.dispatchEvent(new Event('open-contact-modal'));
-};
 
 const Footer = () => {
   return (
-    <footer id="contact" className="footer section container">
+    <footer id="contact" className="footer section site-container">
       <Container>
         <p className="footer-location">Available worldwide</p>
 
@@ -88,7 +44,7 @@ const Footer = () => {
                 <a
                   href="/"
                   className="footer-link"
-                  onClick={(event) => scrollToSection(event, 'top')}
+                  onClick={(event) => handleSectionLinkClick(event, 'top')}
                 >
                   Home
                 </a>
@@ -96,7 +52,7 @@ const Footer = () => {
                 <a
                   href="#projects"
                   className="footer-link"
-                  onClick={(event) => scrollToSection(event, 'projects')}
+                  onClick={(event) => handleSectionLinkClick(event, 'projects')}
                 >
                   Projects
                 </a>
@@ -104,7 +60,7 @@ const Footer = () => {
                 <a
                   href="#tools"
                   className="footer-link"
-                  onClick={(event) => scrollToSection(event, 'tools')}
+                  onClick={(event) => handleSectionLinkClick(event, 'tools')}
                 >
                   Services
                 </a>
@@ -112,7 +68,7 @@ const Footer = () => {
                 <a
                   href="#pricing"
                   className="footer-link"
-                  onClick={(event) => scrollToSection(event, 'pricing')}
+                  onClick={(event) => handleSectionLinkClick(event, 'pricing')}
                 >
                   Pricing
                 </a>

@@ -10,13 +10,13 @@ import { projects } from '../../../data/projects';
 
 const Projects = () => {
   return (
-    <Container as="section" id="projects" className="section projects-section container">
+    <Container as="section" id="projects" className="section projects-section">
       <SectionHeading
-        className="section-header"
+        className="projects-header"
         title={<>Our highlights. <span>Recent work We&apos;re proud of.</span></>}
       >
-        <div className="section-header-copy">
-          <p className="section-subtitle">
+        <div className="projects-header-copy">
+          <p className="projects-subtitle">
             We work with founders, creators, and product teams to launch digital experiences that look sharp and hold together technically.
           </p>
         </div>
@@ -41,6 +41,10 @@ const Projects = () => {
                     src={project.image}
                     alt={`${project.title} preview`}
                     className="project-preview-image"
+                    width={project.imageWidth}
+                    height={project.imageHeight}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="project-image-shade" />
                 </>
@@ -61,7 +65,7 @@ const Projects = () => {
 
               <div className="project-labels">
                 {project.labels.map((label) => (
-                  <span key={label} className="label">
+                  <span key={label} className="project-label">
                     {label}
                   </span>
                 ))}

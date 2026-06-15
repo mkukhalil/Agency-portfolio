@@ -1,9 +1,6 @@
 import { Sparkle } from 'lucide-react';
+import { openContactModal } from '../../../../utils/contact';
 import { cn } from '../../../../utils/cn';
-
-const openContactModal = () => {
-  window.dispatchEvent(new Event('open-contact-modal'));
-};
 
 export const NavbarCTA = ({ contrast, onClick }) => {
   const handleClick = () => {

@@ -2,31 +2,8 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Card } from '../../ui/Card';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
+import { aboutCapabilities, aboutStats } from '../../../data/about';
 import './About.css';
-
-const aboutStats = [
-  {
-    value: 'Small Team',
-    label: 'Direct collaboration',
-  },
-  {
-    value: 'Real Work',
-    label: 'Client and business projects',
-  },
-  {
-    value: 'Full-stack',
-    label: 'Design to deployment',
-  },
-];
-
-const aboutCapabilities = [
-  'Business websites',
-  'CRM dashboards',
-  'POS systems',
-  'Full-stack apps',
-  'APIs & databases',
-  'Deployment support',
-];
 
 const About = () => {
   return (

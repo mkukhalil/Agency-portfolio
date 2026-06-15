@@ -1,32 +1,9 @@
+import { scrollToTop } from '../../../../utils/scroll';
 import { cn } from '../../../../utils/cn';
-
-const getScrollBehavior = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 'auto'
-    : 'smooth';
-};
-
-const cleanUrlHash = () => {
-  window.history.replaceState(
-    null,
-    '',
-    `${window.location.pathname}${window.location.search}`
-  );
-};
-
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: getScrollBehavior(),
-  });
-
-  cleanUrlHash();
-};
 
 export const NavbarLogo = ({ contrast, onClick }) => {
   const handleClick = () => {
-    scrollToTop();
-    onClick?.();
+    scrollToTop({ onComplete: onClick });
   };
 
   return (

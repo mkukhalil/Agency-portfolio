@@ -11,42 +11,52 @@ import dockerIcon from '../assets/tools/docker.svg';
 
 export const tools = [
   {
+    slug: 'react',
     label: 'React',
     icon: reactIcon,
   },
   {
+    slug: 'laravel',
     label: 'Laravel',
     icon: laravelIcon,
   },
   {
+    slug: 'javascript',
     label: 'JavaScript',
     icon: javascriptIcon,
   },
   {
+    slug: 'php',
     label: 'PHP',
     icon: phpIcon,
   },
   {
+    slug: 'postgresql',
     label: 'PostgreSQL',
     icon: postgresqlIcon,
   },
   {
+    slug: 'mysql',
     label: 'MySQL',
     icon: mysqlIcon,
   },
   {
+    slug: 'tailwind-css',
     label: 'Tailwind CSS',
     icon: tailwindIcon,
   },
   {
+    slug: 'vite',
     label: 'Vite',
     icon: viteIcon,
   },
   {
+    slug: 'figma',
     label: 'Figma',
     icon: figmaIcon,
   },
   {
+    slug: 'docker',
     label: 'Docker',
     icon: dockerIcon,
   },

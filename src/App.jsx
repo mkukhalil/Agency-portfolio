@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import Lenis from 'lenis';
+import { lazy, Suspense, useEffect } from 'react';
 import Navbar from './components/layout/Navbar/Navbar';
 import Hero from './components/sections/Hero/Hero';
 import About from './components/sections/About/About';
@@ -10,9 +9,10 @@ import Trust from './components/sections/Trust/Trust';
 import Pricing from './components/sections/Pricing/Pricing';
 import FAQ from './components/sections/FAQ/FAQ';
 import Footer from './components/layout/Footer/Footer';
-import Terms from './pages/legal/Terms';
-import Privacy from './pages/legal/Privacy';
 import ContactModal from './components/contact/ContactModal';
+
+const Terms = lazy(() => import('./pages/legal/Terms'));
+const Privacy = lazy(() => import('./pages/legal/Privacy'));
 
 function App() {
   const pathname = window.location.pathname;
@@ -31,39 +31,64 @@ function App() {
       return undefined;
     }
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
+    let cancelled = false;
     let frameId;
+    let lenis;
 
-    function raf(time) {
-      lenis.raf(time);
+    const startSmoothScroll = async () => {
+      const { default: Lenis } = await import('lenis');
+
+      if (cancelled) {
+        return;
+      }
+
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        frameId = requestAnimationFrame(raf);
+      }
+
       frameId = requestAnimationFrame(raf);
-    }
+    };
 
-    frameId = requestAnimationFrame(raf);
+    startSmoothScroll();
 
     return () => {
-      cancelAnimationFrame(frameId);
-      lenis.destroy();
+      cancelled = true;
+
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
+      lenis?.destroy();
     };
   }, [isLegalPage]);
 
   if (isTermsPage) {
-    return <Terms />;
+    return (
+      <Suspense fallback={null}>
+        <Terms />
+      </Suspense>
+    );
   }
 
   if (isPrivacyPage) {
-    return <Privacy />;
+    return (
+      <Suspense fallback={null}>
+        <Privacy />
+      </Suspense>
+    );
   }
 
   return (

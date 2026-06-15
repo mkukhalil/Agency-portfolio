@@ -1,7 +1,8 @@
-import fluixAutomationImage from '../assets/projects/fluix-automation.png';
-import visaBridgeThumbnail from '../assets/projects/visabridge-thumbnail.png';
-import crmThumbnail from '../assets/projects/crm-thumbnail.png';
-import posThumbnail from '../assets/projects/pos-thumbnail.png';
+import fluixAutomationImage from '../assets/projects/fluix-automation.webp';
+import visaBridgeThumbnail from '../assets/projects/visabridge-thumbnail.webp';
+import crmThumbnail from '../assets/projects/crm-thumbnail.webp';
+import posThumbnail from '../assets/projects/pos-thumbnail.webp';
+
 export const projects = [
   {
     id: 1,
@@ -14,6 +15,8 @@ export const projects = [
     cta: 'Visit Website',
     accent: 'yellow',
     image: visaBridgeThumbnail,
+    imageWidth: 1254,
+    imageHeight: 1254,
   },
   {
     id: 2,
@@ -26,6 +29,8 @@ export const projects = [
     cta: 'Visit Website',
     accent: 'orange',
     image: fluixAutomationImage,
+    imageWidth: 1254,
+    imageHeight: 1254,
   },
   {
     id: 3,
@@ -38,6 +43,8 @@ export const projects = [
     cta: 'Check Demo of POS',
     accent: 'pink',
     image: posThumbnail,
+    imageWidth: 1254,
+    imageHeight: 1254,
   },
   {
     id: 4,
@@ -50,5 +57,7 @@ export const projects = [
     cta: 'Check Demo of CRM',
     accent: 'red',
     image: crmThumbnail,
+    imageWidth: 1401,
+    imageHeight: 1024,
   },
 ];

@@ -1,0 +1,17 @@
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/animations/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/hero-mask.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/nukt.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

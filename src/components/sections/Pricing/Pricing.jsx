@@ -4,56 +4,8 @@ import { SectionHeading } from '../../ui/SectionHeading';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
 import { FADE_UP, FADE_IN, VIEWPORT_CONFIG } from '../../../lib/animations';
+import { pricingPlans } from '../../../data/pricing';
 import './Pricing.css';
-
-const pricingPlans = [
-  {
-    id: 1,
-    label: 'Starter Website',
-    price: '$300',
-    period: 'starting from',
-    description:
-      'For landing pages, portfolios, business websites, and service websites that need a clean, professional online presence.',
-    features: [
-      'Responsive landing page or business website',
-      'Modern UI with clean sections and strong CTA',
-      'Contact form and basic lead capture setup',
-      'Basic SEO structure and performance cleanup',
-      'Deployment support',
-    ],
-  },
-  {
-    id: 2,
-    label: 'Full-Stack App',
-    price: '$900',
-    period: 'starting from',
-    highlighted: true,
-    description:
-      'For dashboards, platforms, authentication systems, APIs, databases, and complete web applications.',
-    features: [
-      'React frontend and Laravel backend',
-      'Database structure and REST API development',
-      'Authentication and protected routes',
-      'Dashboard or admin panel interface',
-      'Deployment and production-ready handoff',
-    ],
-  },
-  {
-    id: 3,
-    label: 'Business System',
-    price: '$1500',
-    period: 'starting from',
-    description:
-      'For custom CRM, POS, inventory, billing, reporting, sales, and internal business workflow systems.',
-    features: [
-      'Custom CRM, POS, or internal business tool',
-      'Sales, inventory, billing, or customer modules',
-      'Admin dashboard and role-based workflows',
-      'Reports, filters, records, and business logic',
-      'Built around your exact business process',
-    ],
-  },
-];
 
 const Pricing = () => {
   return (
@@ -77,24 +29,24 @@ const Pricing = () => {
                 viewport={VIEWPORT_CONFIG}
                 custom={{ delay: index * 0.08, y: 24 }}
               >
-                <div className="card-top card-top-compact">
+                <div className="pricing-card-top pricing-card-top-compact">
                   <p className="plan-tier-label">{plan.label}</p>
 
                   <div className="plan-price">
-                    <span className="amount">{plan.price}</span>
-                    <span className="period">{plan.period}</span>
+                    <span className="plan-price-amount">{plan.price}</span>
+                    <span className="plan-price-period">{plan.period}</span>
                   </div>
 
                   <p className="plan-desc">{plan.description}</p>
                 </div>
 
-                <div className="card-features">
-                  <p className="includes-label">What’s included:</p>
+                <div className="pricing-card-features">
+                  <p className="pricing-includes-label">What’s included:</p>
 
                   <ul>
                     {plan.features.map((feature) => (
                       <li key={feature}>
-                        <Check className="feature-icon" aria-hidden />
+                        <Check className="pricing-feature-icon" aria-hidden />
                         {feature}
                       </li>
                     ))}
@@ -104,7 +56,7 @@ const Pricing = () => {
                 <Button
                   as="a"
                   href="#contact"
-                  className={`full-width ${plan.highlighted ? 'highlighted-btn' : ''}`}
+                  className={`full-width ${plan.highlighted ? 'pricing-highlighted-btn' : ''}`}
                 >
                   Discuss this project
                 </Button>

@@ -1,84 +1,6 @@
+import { PRIMARY_NAV_ITEMS } from '../../../../data/navigation';
+import { scrollToTarget } from '../../../../utils/scroll';
 import { cn } from '../../../../utils/cn';
-
-const NAV_ITEMS = [
-  {
-    id: 'home',
-    label: 'Home',
-    desc: 'Back to top',
-    target: 'top',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    desc: 'Selected work',
-    target: 'projects',
-  },
-  {
-    id: 'services',
-    label: 'Our Services',
-    desc: 'Tools and services',
-    target: 'tools',
-  },
-  {
-    id: 'pricing',
-    label: 'Pricing',
-    desc: 'Project packages',
-    target: 'pricing',
-  },
-];
-
-const getScrollBehavior = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 'auto'
-    : 'smooth';
-};
-
-const getNavbarOffset = () => {
-  const navbar = document.querySelector('.navbar');
-
-  if (!navbar) return 88;
-
-  return navbar.getBoundingClientRect().height + 16;
-};
-
-const cleanUrlHash = () => {
-  window.history.replaceState(
-    null,
-    '',
-    `${window.location.pathname}${window.location.search}`
-  );
-};
-
-const scrollToTarget = (target, onClose) => {
-  if (target === 'top') {
-    window.scrollTo({
-      top: 0,
-      behavior: getScrollBehavior(),
-    });
-
-    cleanUrlHash();
-    onClose();
-    return;
-  }
-
-  const section = document.getElementById(target);
-
-  if (!section) {
-    onClose();
-    return;
-  }
-
-  const targetTop =
-    section.getBoundingClientRect().top + window.scrollY - getNavbarOffset();
-
-  window.scrollTo({
-    top: targetTop,
-    behavior: getScrollBehavior(),
-  });
-
-  cleanUrlHash();
-  onClose();
-};
 
 export const NavbarDrawer = ({ isOpen, onClose }) => {
   return (
@@ -120,18 +42,18 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
           <button
             type="button"
             className="nav-drawer-cta"
-            onClick={() => scrollToTarget('contact', onClose)}
+            onClick={() => scrollToTarget('contact', { onComplete: onClose })}
           >
             Start a project
           </button>
 
           <div className="nav-drawer-links" aria-label="Page sections">
-            {NAV_ITEMS.map((item, index) => (
+            {PRIMARY_NAV_ITEMS.map((item, index) => (
               <button
                 key={item.id}
                 type="button"
                 className="nav-drawer-link"
-                onClick={() => scrollToTarget(item.target, onClose)}
+                onClick={() => scrollToTarget(item.target, { onComplete: onClose })}
               >
                 <span className="nav-drawer-link-index">
                   {String(index + 1).padStart(2, '0')}
@@ -139,7 +61,7 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
 
                 <span className="nav-drawer-link-copy">
                   <span className="nav-drawer-link-label">{item.label}</span>
-                  <span className="nav-drawer-link-desc">{item.desc}</span>
+                  <span className="nav-drawer-link-desc">{item.mobileDesc}</span>
                 </span>
               </button>
             ))}

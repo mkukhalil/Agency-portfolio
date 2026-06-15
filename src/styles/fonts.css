@@ -1,0 +1,51 @@
+/*
+  Font loading is kept separate from the global reset so future optimization
+  work can self-host or preload these files without touching layout styles.
+*/
+@font-face {
+  font-family: "Switzer Medium";
+  src: url("https://framerusercontent.com/assets/ZuxgRWcbOzLJ9BaP7VEUtPsugA.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Switzer Regular";
+  src: url("https://framerusercontent.com/assets/TFbCCMACTX44EWzG1gSMdiTrudc.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Switzer Bold";
+  src: url("https://framerusercontent.com/assets/4GSjcFO8LyfcubfHlDdcgG7Sec.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal Medium";
+  src: url("https://framerusercontent.com/assets/6uIfYl8bnz9kOy3KOuV7PxhFPhA.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal Bold";
+  src: url("https://framerusercontent.com/assets/wa1QQCb6cXOn2xBXS059rEsCfsc.woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7M.woff2") format("woff2");
+}

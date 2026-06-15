@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { usePakistanTime } from '../../../../hooks/usePakistanTime';
+
+const DotLottieReact = lazy(() =>
+  import('@lottiefiles/dotlottie-react').then((module) => ({
+    default: module.DotLottieReact,
+  }))
+);
 
 const PAKISTAN_TIMEZONE = 'Asia/Karachi';
 const NIGHT_START_HOUR = 22;
@@ -48,12 +53,14 @@ const AvailabilityIcon = ({ isNight }) => {
         aria-label="Away at night"
         title="Away at night"
       >
-        <DotLottieReact
-          src="/animations/sleep.lottie"
-          loop
-          autoplay
-          className="hero__sleepIcon"
-        />
+        <Suspense fallback={<span className="hero__sleepIcon" aria-hidden />}>
+          <DotLottieReact
+            src="/animations/sleep.lottie"
+            loop
+            autoplay
+            className="hero__sleepIcon"
+          />
+        </Suspense>
       </span>
     );
   }

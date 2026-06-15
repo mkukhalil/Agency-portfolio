@@ -24,23 +24,6 @@
   }
 }
 
-.services-header {
-  position: sticky;
-  top: 8rem;
-  align-self: start;
-}
-
-.services-header h2 {
-  max-width: 500px;
-}
-
-.section-subtitle {
-  color: var(--text-secondary);
-  font-size: 1.25rem;
-  margin-top: 2rem;
-  line-height: 1.6;
-}
-
 .services-list {
   display: grid;
   grid-template-columns: 1fr;

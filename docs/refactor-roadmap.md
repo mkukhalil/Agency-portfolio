@@ -84,3 +84,17 @@ One section at a time.
 - semantic HTML
 - responsive consistency
 - interaction refinement
+---
+
+# Completed Phase 4 — Performance-safe cleanup
+
+Completed without changing the visual design or the contact email flow:
+- Removed unused 3D/shader dependencies.
+- Converted project screenshots from large PNG files to WebP.
+- Resized the favicon image from a full 1024px PNG to a favicon-sized PNG.
+- Added explicit dimensions and lazy loading to project preview images.
+- Lazy-loaded Terms and Privacy pages.
+- Dynamically imported Lenis smooth scrolling.
+- Dynamically imported the sleep Lottie component only when needed.
+- Added Cloudflare Pages `_headers` for long-term asset caching and basic security headers.
+- Split Vite vendor chunks for better caching.

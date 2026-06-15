@@ -8,12 +8,19 @@ import './Navbar.css';
 
 const MOBILE_NAV_QUERY = '(max-width: 899px)';
 
+const CONTRAST_SECTION_SELECTORS = [
+  '.tools-brand-section',
+  '.services-section-khalil',
+  '#services',
+];
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [contrast, setContrast] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
 
+  const navRef = useRef(null);
   const menuRef = useRef(null);
 
   const closeMenu = () => {
@@ -51,25 +58,55 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const target = document.querySelector('.tools-brand-section');
+    let frameId = null;
 
-    if (!target) return undefined;
+    const getContrastSections = () =>
+      CONTRAST_SECTION_SELECTORS.flatMap((selector) =>
+        Array.from(document.querySelectorAll(selector))
+      ).filter(Boolean);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setContrast(entry.isIntersecting);
-        });
-      },
-      {
-        threshold: 0.15,
-      }
-    );
+    const updateContrast = () => {
+      frameId = null;
 
-    observer.observe(target);
+      const navRect = navRef.current?.getBoundingClientRect();
+
+      /*
+        We check the point where the fixed logo/CTA visually sit.
+        If that point is over Tools or Services, navbar side elements turn black.
+        Otherwise they stay white.
+      */
+      const sampleY = navRect
+        ? navRect.top + Math.min(navRect.height * 0.55, 56)
+        : 56;
+
+      const isOverContrastSection = getContrastSections().some((section) => {
+        const rect = section.getBoundingClientRect();
+
+        return rect.top <= sampleY && rect.bottom >= sampleY;
+      });
+
+      setContrast(isOverContrastSection);
+    };
+
+    const requestContrastUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateContrast);
+    };
+
+    requestContrastUpdate();
+
+    window.addEventListener('scroll', requestContrastUpdate, { passive: true });
+    window.addEventListener('resize', requestContrastUpdate);
+    window.addEventListener('orientationchange', requestContrastUpdate);
 
     return () => {
-      observer.disconnect();
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      window.removeEventListener('scroll', requestContrastUpdate);
+      window.removeEventListener('resize', requestContrastUpdate);
+      window.removeEventListener('orientationchange', requestContrastUpdate);
     };
   }, []);
 
@@ -111,10 +148,12 @@ const Navbar = () => {
   return (
     <>
       <nav
+        ref={navRef}
         className={cn(
           'navbar',
           scrolled && 'scrolled',
-          menuOpen && 'menu-open'
+          menuOpen && 'menu-open',
+          contrast && 'surface-contrast'
         )}
         aria-label="Primary navigation"
       >

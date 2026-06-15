@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
 import { Container } from '../../ui/Container';
 import { FADE_UP } from '../../../lib/animations';
 import './ToolsTicker.css';

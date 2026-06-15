@@ -268,7 +268,7 @@
 
   .hero__mask {
     top: auto;
-    bottom: calc(env(safe-area-inset-bottom) + 0.45rem);
+    bottom: calc(env(safe-area-inset-bottom) + clamp(1.6rem, 4.5svh, 2.8rem));
     font-size: clamp(6.8rem, 36vw, 14rem);
     transform: translateX(-50%) scaleX(1.02);
     letter-spacing: 0.005em;
@@ -298,7 +298,7 @@
   }
 
   .hero__mask {
-    bottom: calc(env(safe-area-inset-bottom) + 0.35rem);
+    bottom: calc(env(safe-area-inset-bottom) + clamp(1.75rem, 5svh, 2.9rem));
     font-size: clamp(6.2rem, 34vw, 9.5rem);
     transform: translateX(-50%) scaleX(1.01);
     opacity: 0.86;
@@ -334,7 +334,7 @@
 
   .hero__mask {
     font-size: clamp(5.8rem, 33vw, 8.2rem);
-    bottom: calc(env(safe-area-inset-bottom) + 0.3rem);
+    bottom: calc(env(safe-area-inset-bottom) + clamp(1.65rem, 5svh, 2.5rem));
   }
 }
 
@@ -351,6 +351,7 @@
 
   .hero__mask {
     font-size: clamp(5.2rem, 32vw, 7.5rem);
+    bottom: calc(env(safe-area-inset-bottom) + 1.45rem);
   }
 }
 

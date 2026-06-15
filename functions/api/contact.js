@@ -90,7 +90,7 @@ export async function onRequestPost({ request, env }) {
             success: true,
             message: 'Message sent successfully.',
         });
-    } catch (error) {
+    } catch {
         return Response.json(
             { success: false, error: 'Something went wrong.' },
             { status: 500 }

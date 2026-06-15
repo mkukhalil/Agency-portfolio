@@ -1,7 +1,36 @@
-export const MENU_ITEMS = [
-  { id: 'home', label: 'Home', href: '#hero', desc: 'Intro & featured work' },
-  { id: 'pricing', label: 'Pricing', href: '#gradient-visible', desc: 'Project scope & rates' },
-  { id: 'how', label: 'How we work', href: '#how-we-work', desc: 'Process & collaboration' },
+export const PRIMARY_NAV_ITEMS = [
+  {
+    id: 'home',
+    label: 'Home',
+    desktopDesc: 'Back to the top',
+    mobileDesc: 'Back to top',
+    target: 'top',
+    href: '/',
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    desktopDesc: 'Selected work and builds',
+    mobileDesc: 'Selected work',
+    target: 'projects',
+    href: '#projects',
+  },
+  {
+    id: 'services',
+    label: 'Our Services',
+    desktopDesc: 'What we design and build',
+    mobileDesc: 'Tools and services',
+    target: 'tools',
+    href: '#tools',
+  },
+  {
+    id: 'pricing',
+    label: 'Pricing',
+    desktopDesc: 'Plans and project options',
+    mobileDesc: 'Project packages',
+    target: 'pricing',
+    href: '#pricing',
+  },
 ];
 
 export const SOCIAL_LINKS = [

@@ -130,17 +130,17 @@
    ========================================= */
 
 .logo {
-  color: var(--text-primary);
+  color: #ffffff;
   font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.04em;
-  transition: color 0.3s ease;
+  transition: color 0.24s ease;
   animation: navReveal 0.85s cubic-bezier(0.12, 0.23, 0.39, 1) 0.18s both;
 }
 
 .logo.contrast {
-  color: #000;
+  color: #050505;
 }
 
 .logo-link {
@@ -449,34 +449,38 @@
   gap: 10px;
   padding: 13px 22px;
   border-radius: 9999px;
-  border: 1px solid var(--border-color);
-  color: var(--bg-color);
-  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: #050505;
+  background: #ffffff;
   font-family: var(--font-heading);
   font-size: 14px;
   font-weight: 500;
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    background 0.24s ease,
+    border-color 0.24s ease,
+    color 0.24s ease,
+    box-shadow 0.24s ease,
+    transform 0.24s ease;
 }
 
 .nav-cta:hover {
-  color: var(--bg-color);
+  color: #050505;
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.48);
 }
 
 .nav-cta.contrast {
-  background: #000;
-  color: #fff !important;
-  border-color: rgba(0, 0, 0, 0.08);
+  background: #050505;
+  color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
 }
 
 .nav-cta.contrast:hover {
-  background: #fff;
-  color: #000 !important;
-  border-color: rgba(0, 0, 0, 0.12);
+  background: #171717;
+  color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.26);
+  transform: translateY(-1px);
 }
 
 .nav-cta-icon {

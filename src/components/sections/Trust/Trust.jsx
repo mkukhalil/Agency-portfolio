@@ -26,7 +26,7 @@ const Trust = () => {
   if (!activeTestimonial) return null;
 
   return (
-    <Container as="section" id="trust" className="section trust-section container">
+    <Container as="section" id="trust" className="section trust-section">
       <div className="trust-layout">
         <SectionHeading
           className="trust-header"

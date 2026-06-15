@@ -1,0 +1,66 @@
+.badge,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+
+.badge {
+  padding: 8px 16px;
+  border: 1px solid var(--white-a10);
+  background: var(--white-a05);
+  font-size: 14px;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: var(--radius-full);
+  padding: 18px 32px;
+  background: var(--text-primary);
+  color: var(--bg-color);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  transition:
+    transform var(--transition-base),
+    opacity var(--transition-base),
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.cta-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.card-primitive {
+  position: relative;
+}
+
+.surface-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card-gradient);
+}
+
+.glass-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+}
+
+.section-header-primitive {
+  position: relative;
+}
+
+.section-subtitle-primitive {
+  color: var(--text-secondary);
+}

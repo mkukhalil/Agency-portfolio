@@ -1,84 +1,6 @@
+import { PRIMARY_NAV_ITEMS } from '../../../../data/navigation';
+import { scrollToTarget } from '../../../../utils/scroll';
 import { cn } from '../../../../utils/cn';
-
-const NAV_ITEMS = [
-  {
-    id: 'home',
-    label: 'Home',
-    desc: 'Back to the top',
-    target: 'top',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    desc: 'Selected work and builds',
-    target: 'projects',
-  },
-  {
-    id: 'services',
-    label: 'Our Services',
-    desc: 'What we design and build',
-    target: 'tools',
-  },
-  {
-    id: 'pricing',
-    label: 'Pricing',
-    desc: 'Plans and project options',
-    target: 'pricing',
-  },
-];
-
-const getScrollBehavior = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 'auto'
-    : 'smooth';
-};
-
-const getNavbarOffset = () => {
-  const navbar = document.querySelector('.navbar');
-
-  if (!navbar) return 88;
-
-  return navbar.getBoundingClientRect().height + 16;
-};
-
-const cleanUrlHash = () => {
-  window.history.replaceState(
-    null,
-    '',
-    `${window.location.pathname}${window.location.search}`
-  );
-};
-
-const scrollToTarget = (target, closeMenu) => {
-  if (target === 'top') {
-    window.scrollTo({
-      top: 0,
-      behavior: getScrollBehavior(),
-    });
-
-    cleanUrlHash();
-    closeMenu();
-    return;
-  }
-
-  const section = document.getElementById(target);
-
-  if (!section) {
-    closeMenu();
-    return;
-  }
-
-  const targetTop =
-    section.getBoundingClientRect().top + window.scrollY - getNavbarOffset();
-
-  window.scrollTo({
-    top: targetTop,
-    behavior: getScrollBehavior(),
-  });
-
-  cleanUrlHash();
-  closeMenu();
-};
 
 export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
   const closeMenu = () => {
@@ -157,12 +79,12 @@ export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
           </div>
 
           <div className="menu-items">
-            {NAV_ITEMS.map((item, index) => (
+            {PRIMARY_NAV_ITEMS.map((item, index) => (
               <button
                 key={item.id}
                 type="button"
                 className="menu-item"
-                onClick={() => scrollToTarget(item.target, closeMenu)}
+                onClick={() => scrollToTarget(item.target, { onComplete: closeMenu })}
               >
                 <span className="menu-item-index">
                   {String(index + 1).padStart(2, '0')}
@@ -170,7 +92,7 @@ export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
 
                 <span className="menu-item-copy">
                   <span className="menu-item-label">{item.label}</span>
-                  <span className="menu-item-desc">{item.desc}</span>
+                  <span className="menu-item-desc">{item.desktopDesc}</span>
                 </span>
 
                 <span className="menu-item-arrow" aria-hidden>
