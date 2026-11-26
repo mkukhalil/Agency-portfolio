@@ -121,7 +121,7 @@ export const seoAeo = {
       {
         title: `Ongoing · from $${seoAeoPricing.monthly}/month`,
         description:
-          'Continuous SEO and AEO work after the foundation: content updates, new schema, technical monitoring, and regular visibility checks.',
+          'Every month: 2 SEO-optimized pages or articles, schema and on-page updates for new content, technical health check and fixes, and a report on Google rankings, traffic and AI citations (ChatGPT, Perplexity, AI Overviews). Cancel anytime.',
       },
     ],
   },
