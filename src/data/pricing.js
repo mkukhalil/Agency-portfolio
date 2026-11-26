@@ -1,3 +1,10 @@
+/** SEO & AEO prices, shared by the pricing card, FAQ, service page, and JSON-LD. */
+export const seoAeoPricing = {
+  currency: 'USD',
+  foundation: 699,
+  monthly: 599,
+};
+
 export const pricingPlans = [
   {
     id: 'starter-website',
@@ -51,6 +58,25 @@ export const pricingPlans = [
       'Built around your exact business process',
     ],
     cta: 'Plan this system',
+    highlighted: false,
+  },
+  {
+    id: 'seo-aeo-foundation',
+    label: 'SEO & AEO Foundation',
+    price: `$${seoAeoPricing.foundation}`,
+    period: 'one-time',
+    description:
+      `Get found on Google and cited by AI search. Ongoing SEO & AEO from $${seoAeoPricing.monthly}/month.`,
+    features: [
+      'Technical SEO audit and fixes',
+      'Schema / structured data',
+      'On-page optimization (up to 10 pages)',
+      'Search Console, sitemap & Google Business Profile setup',
+      'AI crawler access & llms.txt',
+      'Before/after AI visibility report',
+      'Delivered in 2–3 weeks',
+    ],
+    cta: 'Get your SEO audit',
     highlighted: false,
   },
 ];

@@ -15,6 +15,22 @@ const organization = () => ({
   // TODO: add sameAs with the real LinkedIn / Behance / GitHub / X profile URLs.
 });
 
+/** schema.org Offer; monthly offers carry a per-month unit price. */
+const offer = ({ name, price, currency, perMonth }) => ({
+  '@type': 'Offer',
+  name,
+  price: String(price),
+  priceCurrency: currency,
+  ...(perMonth && {
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      price: String(price),
+      priceCurrency: currency,
+      unitCode: 'MON',
+    },
+  }),
+});
+
 const service = (meta, schema) => ({
   '@type': 'Service',
   name: schema.name,
@@ -23,6 +39,7 @@ const service = (meta, schema) => ({
   url: meta.canonical,
   provider: { '@id': ORGANIZATION_ID },
   areaServed: 'Worldwide',
+  ...(schema.offers && { offers: schema.offers.map(offer) }),
 });
 
 const faqPage = (meta, faqs) => ({

@@ -22,6 +22,7 @@ const SeoAeoService = () => (
     <DetailSection id="what-we-do" {...seoAeo.services} />
     <DetailSection id="process" {...seoAeo.process} numbered />
     <DetailSection id="deliverables" {...seoAeo.deliverables} />
+    <DetailSection id="pricing" {...seoAeo.pricing} />
     <FAQ items={seoAeo.faqs} title="SEO & AEO questions" />
     <PageCta {...seoAeo.cta} />
   </main>

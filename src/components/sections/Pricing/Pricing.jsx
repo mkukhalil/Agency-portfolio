@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { Link } from 'react-router';
 import { SectionHeading } from '../../ui/SectionHeading';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -91,11 +90,6 @@ const Pricing = () => {
               </p>
             </Card>
           </motion.div>
-
-          <p className="pricing-footnote">
-            Need ongoing SEO &amp; AEO?{' '}
-            <Link to="/services/seo-aeo">See our SEO &amp; AEO services</Link>
-          </p>
         </div>
       </div>
     </section>

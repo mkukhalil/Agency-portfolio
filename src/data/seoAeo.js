@@ -1,4 +1,5 @@
 import { faqs } from './faq';
+import { seoAeoPricing } from './pricing';
 
 const sharedFaqIds = [11, 12, 13];
 
@@ -108,6 +109,23 @@ export const seoAeo = {
     ],
   },
 
+  pricing: {
+    title: 'Pricing.',
+    subtitle: 'Start with a one-time foundation, then keep improving with an ongoing plan.',
+    items: [
+      {
+        title: `Foundation · $${seoAeoPricing.foundation} one-time`,
+        description:
+          'Technical audit and fixes, structured data, on-page optimization for up to 10 pages, Search Console and Google Business Profile setup, AI crawler access, and a before/after AI visibility report. Delivered in 2–3 weeks.',
+      },
+      {
+        title: `Ongoing · from $${seoAeoPricing.monthly}/month`,
+        description:
+          'Continuous SEO and AEO work after the foundation: content updates, new schema, technical monitoring, and regular visibility checks.',
+      },
+    ],
+  },
+
   faqs: [
     ...faqs.filter((faq) => sharedFaqIds.includes(faq.id)),
     {
@@ -125,6 +143,15 @@ export const seoAeo = {
   ],
 
   schema: {
+    offers: [
+      { name: 'SEO & AEO Foundation', price: seoAeoPricing.foundation, currency: seoAeoPricing.currency },
+      {
+        name: 'Ongoing SEO & AEO',
+        price: seoAeoPricing.monthly,
+        currency: seoAeoPricing.currency,
+        perMonth: true,
+      },
+    ],
     name: 'SEO & AEO Services',
     serviceType: 'Search Engine Optimization and Answer Engine Optimization',
     description:

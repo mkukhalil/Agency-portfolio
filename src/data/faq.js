@@ -1,3 +1,5 @@
+import { seoAeoPricing } from './pricing';
+
 export const faqs = [
   {
     id: 1,
@@ -15,7 +17,7 @@ export const faqs = [
     id: 3,
     question: 'How much does a project usually cost?',
     answer:
-      'Pricing depends on scope, features, timeline, number of screens, backend complexity, and integrations. As a general guide, starter websites start from $399, full-stack web apps from $1,199, and custom business systems like CRM or POS tools from $2,499.',
+      `Pricing depends on scope, features, timeline, number of screens, backend complexity, and integrations. As a general guide, starter websites start from $399, full-stack web apps from $1,199, and custom business systems like CRM or POS tools from $2,499. SEO & AEO starts with a one-time $${seoAeoPricing.foundation} foundation package, and ongoing SEO & AEO is available from $${seoAeoPricing.monthly}/month.`,
   },
   {
     id: 4,
