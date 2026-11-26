@@ -2,9 +2,9 @@
 
 # Project Identity
 
-This project is a high-fidelity recreation of the visual experience and interaction philosophy of midu.design.
+This project is the Nukt Agency website, built on Nukt's own editorial design system.
 
-The goal is NOT:
+Changes must stay within that system. The goal is NOT:
 - a redesign
 - a reinterpretation
 - a creative variation
@@ -62,7 +62,7 @@ NOT cleverness.
 
 ---
 
-# Clone Accuracy Rules
+# Design Consistency Rules
 
 Preserve:
 - layout rhythm

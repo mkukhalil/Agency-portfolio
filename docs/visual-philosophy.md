@@ -1,6 +1,6 @@
 # Visual Philosophy
 
-This project follows an editorial premium design language inspired by midu.design.
+This project follows Nukt's own editorial, premium design language.
 
 ---
 
