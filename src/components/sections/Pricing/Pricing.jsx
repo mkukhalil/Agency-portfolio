@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { Link } from 'react-router';
 import { SectionHeading } from '../../ui/SectionHeading';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -13,7 +14,7 @@ const Pricing = () => {
       <div className="pricing-inner">
         <SectionHeading
           className="pricing-header"
-          title="Choose what fits your project. From websites to business systems."
+          title="Simple pricing for serious digital products."
         />
 
         <div className="pricing-grid-khalil">
@@ -58,7 +59,7 @@ const Pricing = () => {
                   href="#contact"
                   className={`full-width ${plan.highlighted ? 'pricing-highlighted-btn' : ''}`}
                 >
-                  Discuss this project
+                  {plan.cta}
                 </Button>
               </Card>
             ))}
@@ -75,20 +76,26 @@ const Pricing = () => {
             <Card className="pricing-note pricing-note-large">
               <h4 className="pricing-note-title">Need clarity first?</h4>
               <p>
-                Start with a discovery sprint from <strong>$100–$200</strong>. I’ll help
+                Start with a discovery sprint from <strong>$100–$200</strong>. We’ll help
                 you define features, screens, database structure, API flow, timeline,
-                and a realistic project estimate.
+                and a realistic project estimate before development starts.
               </p>
             </Card>
 
             <Card className="pricing-note pricing-note-large">
-              <h4 className="pricing-note-title">Final price depends on scope</h4>
+              <h4 className="pricing-note-title">Start focused, grow in phases</h4>
               <p>
-                Pricing changes based on features, timeline, integrations, number of
-                screens, backend complexity, and deployment requirements.
+                Final pricing depends on scope, features, integrations, and timeline.
+                Every project can be delivered in phases so you can launch the most
+                important version first and improve from there.
               </p>
             </Card>
           </motion.div>
+
+          <p className="pricing-footnote">
+            Need ongoing SEO &amp; AEO?{' '}
+            <Link to="/services/seo-aeo">See our SEO &amp; AEO services</Link>
+          </p>
         </div>
       </div>
     </section>

@@ -15,7 +15,7 @@ export const faqs = [
     id: 3,
     question: 'How much does a project usually cost?',
     answer:
-      'Pricing depends on scope, features, timeline, number of screens, backend complexity, and integrations. As a general guide, starter websites begin around $300, full-stack apps around $900, and custom business systems like CRM or POS tools around $1500.',
+      'Pricing depends on scope, features, timeline, number of screens, backend complexity, and integrations. As a general guide, starter websites start from $399, full-stack web apps from $1,199, and custom business systems like CRM or POS tools from $2,499.',
   },
   {
     id: 4,

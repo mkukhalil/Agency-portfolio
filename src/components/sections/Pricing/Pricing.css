@@ -379,3 +379,15 @@
     font-size: 0.98rem;
   }
 }
+/* Inline pointer under the notes; shares the notes' text treatment. */
+.pricing-footnote {
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pricing-footnote a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
