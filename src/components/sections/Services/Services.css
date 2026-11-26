@@ -175,3 +175,15 @@
     max-width: 100%;
   }
 }
+/* Linked service: the whole card becomes the click target. */
+.service-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}

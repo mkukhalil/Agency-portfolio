@@ -78,7 +78,8 @@ const AvailabilityIcon = ({ isNight }) => {
 
 export const HeroMeta = () => {
   const pakistanTime = usePakistanTime();
-  const [isNight, setIsNight] = useState(() => isNightInPakistan());
+  // Resolved after mount so prerendered markup matches the first client render.
+  const [isNight, setIsNight] = useState(false);
 
   useEffect(() => {
     const updateStatus = () => {

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import { Container } from '../../ui/Container';
 import { Button } from '../../ui/Button';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
@@ -50,7 +51,7 @@ const Footer = () => {
                 </a>
 
                 <a
-                  href="#projects"
+                  href="/#projects"
                   className="footer-link"
                   onClick={(event) => handleSectionLinkClick(event, 'projects')}
                 >
@@ -58,7 +59,7 @@ const Footer = () => {
                 </a>
 
                 <a
-                  href="#tools"
+                  href="/#tools"
                   className="footer-link"
                   onClick={(event) => handleSectionLinkClick(event, 'tools')}
                 >
@@ -66,12 +67,16 @@ const Footer = () => {
                 </a>
 
                 <a
-                  href="#pricing"
+                  href="/#pricing"
                   className="footer-link"
                   onClick={(event) => handleSectionLinkClick(event, 'pricing')}
                 >
                   Pricing
                 </a>
+
+                <Link to="/services/seo-aeo" className="footer-link">
+                  SEO &amp; AEO
+                </Link>
               </div>
 
               <div className="footer-col">

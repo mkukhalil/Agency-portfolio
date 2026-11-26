@@ -1,0 +1,22 @@
+.page-cta {
+  display: grid;
+  justify-items: start;
+  gap: 1.5rem;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.page-cta h2 {
+  max-width: 640px;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.page-cta p {
+  max-width: 520px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}

@@ -44,6 +44,12 @@ export const scrollToTop = ({ onComplete } = {}) => {
 export const scrollToTarget = (target, { onComplete, offset = getNavbarOffset() } = {}) => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
+  // Section targets live on the home page; from inner pages, navigate there first.
+  if (window.location.pathname !== '/') {
+    window.location.assign(target === 'top' ? '/' : `/#${target}`);
+    return;
+  }
+
   if (target === 'top') {
     scrollToTop({ onComplete });
     return;

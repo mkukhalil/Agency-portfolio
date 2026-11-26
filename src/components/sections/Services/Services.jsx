@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
 import { Container } from '../../ui/Container';
 import { Card } from '../../ui/Card';
 import { FADE_SIDE, VIEWPORT_CONFIG } from '../../../lib/animations';
@@ -23,7 +24,15 @@ const Services = () => {
               custom={{ delay: index * 0.12, duration: 0.5, x: -20 }}
             >
               <div className="service-item-head">
-                <h3>{service.title}</h3>
+                <h3>
+                  {service.slug ? (
+                    <Link className="service-link" to={`/services/${service.slug}`}>
+                      {service.title}
+                    </Link>
+                  ) : (
+                    service.title
+                  )}
+                </h3>
               </div>
               <span className="service-info-pill">Info</span>
               <p>{service.description}</p>

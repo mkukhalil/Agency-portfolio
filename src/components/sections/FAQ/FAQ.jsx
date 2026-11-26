@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import './FAQ.css';
 
-import { faqs } from '../../../data/faq';
+import { faqs as defaultFaqs } from '../../../data/faq';
 
 const FAQItem = ({ faq, isOpen, toggleOpen }) => {
   const answerId = `faq-answer-${faq.id}`;
@@ -47,7 +47,7 @@ const FAQItem = ({ faq, isOpen, toggleOpen }) => {
   );
 };
 
-const FAQ = () => {
+const FAQ = ({ items = defaultFaqs, title = 'Frequently Asked Questions', id = 'faq' }) => {
   const [openId, setOpenId] = useState(null);
 
   const toggleOpen = (id) => {
@@ -55,7 +55,7 @@ const FAQ = () => {
   };
 
   return (
-    <section id="faq" className="section faq-section">
+    <section id={id} className="section faq-section">
       <div className="faq-container">
         <motion.div
           className="faq-heading-wrap"
@@ -65,11 +65,11 @@ const FAQ = () => {
           viewport={VIEWPORT_CONFIG}
           custom={{ y: 18 }}
         >
-          <h2 className="faq-title">Frequently Asked Questions</h2>
+          <h2 className="faq-title">{title}</h2>
         </motion.div>
 
         <div className="faq-list">
-          {faqs.map((faq, index) => (
+          {items.map((faq, index) => (
             <motion.div
               key={faq.id}
               variants={FADE_UP}

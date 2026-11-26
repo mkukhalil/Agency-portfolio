@@ -1,11 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
 import App from './App.jsx';
 import './styles/tailwind.css';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+const root = document.getElementById('root');
+
+const app = (
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
 );
+
+// Prerendered pages ship markup in #root and hydrate; the dev server renders fresh.
+if (root.hasChildNodes()) {
+  hydrateRoot(root, app);
+} else {
+  createRoot(root).render(app);
+}

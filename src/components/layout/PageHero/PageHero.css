@@ -1,0 +1,26 @@
+.page-hero {
+  min-height: auto;
+  padding-bottom: 0;
+}
+
+.page-hero .legal-hero {
+  margin-bottom: 0;
+}
+
+.page-hero .legal-intro {
+  max-width: 560px;
+}
+
+.page-hero-eyebrow {
+  margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+}
+
+.page-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.25rem;
+}
