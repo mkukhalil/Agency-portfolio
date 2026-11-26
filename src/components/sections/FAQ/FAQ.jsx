@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import './FAQ.css';
 
 import { faqs as defaultFaqs } from '../../../data/faq';
+
+const ANSWER_OPEN = { height: 'auto', opacity: 1 };
+const ANSWER_CLOSED = { height: 0, opacity: 0 };
 
 const FAQItem = ({ faq, isOpen, toggleOpen }) => {
   const answerId = `faq-answer-${faq.id}`;
@@ -27,22 +30,20 @@ const FAQItem = ({ faq, isOpen, toggleOpen }) => {
         </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={answerId}
-            role="region"
-            aria-labelledby={buttonId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="faq-answer-container"
-          >
-            <div className="faq-answer">{faq.answer}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Kept mounted while collapsed so answers ship in prerendered HTML. */}
+      <motion.div
+        id={answerId}
+        role="region"
+        aria-labelledby={buttonId}
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        initial={false}
+        animate={isOpen ? ANSWER_OPEN : ANSWER_CLOSED}
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        className="faq-answer-container"
+      >
+        <div className="faq-answer">{faq.answer}</div>
+      </motion.div>
     </div>
   );
 };
