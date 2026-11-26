@@ -1,4 +1,5 @@
 import { SITE } from '../data/seo';
+import { getStructuredData, serializeJsonLd } from './structuredData';
 
 /**
  * Head tags as plain descriptors, shared by the prerender script (HTML string)
@@ -28,6 +29,12 @@ export function getHeadTags(meta) {
     );
   }
 
+  tags.push({
+    tag: 'script',
+    attrs: { type: 'application/ld+json' },
+    content: serializeJsonLd(getStructuredData(meta)),
+  });
+
   return tags;
 }
 
@@ -36,11 +43,14 @@ const escapeHtml = (value) =>
 
 /** Serializes head metadata for prerendered HTML. */
 export function renderHeadHtml(meta) {
-  const tags = getHeadTags(meta).map(({ tag, attrs }) => {
+  const tags = getHeadTags(meta).map(({ tag, attrs, content }) => {
     const attrString = Object.entries(attrs)
       .map(([key, value]) => `${key}="${escapeHtml(value)}"`)
       .join(' ');
-    return `<${tag} data-head ${attrString} />`;
+
+    return content === undefined
+      ? `<${tag} data-head ${attrString} />`
+      : `<${tag} data-head ${attrString}>${content}</${tag}>`;
   });
 
   return [`<title>${escapeHtml(meta.title)}</title>`, ...tags].join('\n  ');

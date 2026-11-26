@@ -13,10 +13,11 @@ const HeadManager = () => {
 
     document.head.querySelectorAll('[data-head]').forEach((node) => node.remove());
 
-    getHeadTags(meta).forEach(({ tag, attrs }) => {
+    getHeadTags(meta).forEach(({ tag, attrs, content }) => {
       const node = document.createElement(tag);
       node.setAttribute('data-head', '');
       Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      if (content !== undefined) node.textContent = content;
       document.head.appendChild(node);
     });
   }, [pathname]);

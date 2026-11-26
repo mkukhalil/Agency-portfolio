@@ -17,7 +17,7 @@ const resolveMeta = (path) => {
       title: `${study.title} – Case Study | Nukt`,
       description: study.summary,
       noindex: study.noindex,
-      breadcrumb: [{ name: 'Work', path: '/#projects' }, { name: study.title }],
+      breadcrumb: study.title,
     };
   }
 

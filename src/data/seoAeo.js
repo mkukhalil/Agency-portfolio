@@ -124,6 +124,13 @@ export const seoAeo = {
     },
   ],
 
+  schema: {
+    name: 'SEO & AEO Services',
+    serviceType: 'Search Engine Optimization and Answer Engine Optimization',
+    description:
+      'Technical SEO, on-page SEO, schema and structured data, and Answer Engine Optimization for ChatGPT, Perplexity, and Google AI Overviews.',
+  },
+
   cta: {
     title: 'Ready to be found and cited?',
     text: 'Tell us about your site and goals. We will reply with a short assessment and next steps.',
