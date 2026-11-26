@@ -24,3 +24,6 @@ export async function render(url) {
 
   return streamToString(prelude);
 }
+
+export { getPageMeta } from './lib/pageMeta';
+export { renderHeadHtml } from './lib/headTags';

@@ -11,12 +11,13 @@ import { pathToFileURL } from 'node:url';
 const DIST = resolve('dist');
 const SSR_DIR = join(DIST, '.ssr');
 const ROOT_MARKER = '<div id="root"></div>';
+const HEAD_MARKER = '<!--app-head-->';
 
-const { render, routes } = await import(pathToFileURL(join(SSR_DIR, 'entry-server.js')).href);
+const { render, routes, getPageMeta, renderHeadHtml } = await import(pathToFileURL(join(SSR_DIR, 'entry-server.js')).href);
 const template = await readFile(join(DIST, 'index.html'), 'utf8');
 
-if (!template.includes(ROOT_MARKER)) {
-  throw new Error(`Template is missing ${ROOT_MARKER}`);
+for (const marker of [ROOT_MARKER, HEAD_MARKER]) {
+  if (!template.includes(marker)) throw new Error(`Template is missing ${marker}`);
 }
 
 // "/a/b" → "a/b.html" so Cloudflare Pages serves it without a trailing-slash redirect.
@@ -24,7 +25,9 @@ const outputPathFor = (route) => (route === '/' ? 'index.html' : `${route.slice(
 
 const writePage = async (url, file) => {
   const appHtml = await render(url);
-  const html = template.replace(ROOT_MARKER, `<div id="root">${appHtml}</div>`);
+  const html = template
+    .replace(HEAD_MARKER, renderHeadHtml(getPageMeta(url)))
+    .replace(ROOT_MARKER, `<div id="root">${appHtml}</div>`);
   const target = join(DIST, file);
 
   await mkdir(dirname(target), { recursive: true });
