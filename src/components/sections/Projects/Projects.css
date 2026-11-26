@@ -1,7 +1,8 @@
 .projects-section {
+  --projects-gap: 6rem;
   display: flex;
   flex-direction: column;
-  gap: 6rem;
+  gap: var(--projects-gap);
   padding-top: 10rem;
 }
 
@@ -288,6 +289,46 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
+/* Filter: the label pill, made interactive. */
+.project-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  /* Sit close to the grid it controls, not midway between heading and grid. */
+  margin-bottom: calc(2.5rem - var(--projects-gap));
+}
+
+.project-filter-option {
+  position: relative;
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+/* Larger invisible hit area; the pill keeps its visual size. */
+.project-filter-option::after {
+  content: '';
+  position: absolute;
+  inset: -0.5rem -0.2rem;
+}
+
+.project-filter-option:hover {
+  border-color: var(--white-a36);
+}
+
+.project-filter-option[aria-pressed="true"] {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg-color);
+}
+
+.project-card[hidden] {
+  display: none;
+}
+
 /* =========================================
    Project Text
    ========================================= */
@@ -407,7 +448,7 @@
 
 @media (max-width: 640px) {
   .projects-section {
-    gap: 4rem;
+    --projects-gap: 4rem;
     padding-top: 7rem;
   }
 

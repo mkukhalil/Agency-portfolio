@@ -109,6 +109,11 @@ export const seoAeo = {
     ],
   },
 
+  work: {
+    title: 'Recent SEO & AEO work.',
+    subtitle: 'Live sites we have optimized for search engines and AI assistants.',
+  },
+
   pricing: {
     title: 'Pricing.',
     subtitle: 'Start with a one-time foundation, then keep improving with an ongoing plan.',

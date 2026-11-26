@@ -3,6 +3,7 @@ import PageHero from '../../components/layout/PageHero/PageHero';
 import DetailSection from '../../components/sections/DetailSection/DetailSection';
 import PageCta from '../../components/sections/PageCta/PageCta';
 import FAQ from '../../components/sections/FAQ/FAQ';
+import Projects from '../../components/sections/Projects/Projects';
 import { Button } from '../../components/ui/Button';
 import { openContactModal } from '../../utils/contact';
 import { seoAeo } from '../../data/seoAeo';
@@ -22,6 +23,7 @@ const SeoAeoService = () => (
     <DetailSection id="what-we-do" {...seoAeo.services} />
     <DetailSection id="process" {...seoAeo.process} numbered />
     <DetailSection id="deliverables" {...seoAeo.deliverables} />
+    <Projects id="seo-work" category="seo" {...seoAeo.work} />
     <DetailSection id="pricing" {...seoAeo.pricing} />
     <FAQ items={seoAeo.faqs} title="SEO & AEO questions" />
     <PageCta {...seoAeo.cta} />
