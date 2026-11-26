@@ -40,4 +40,17 @@ for (const route of routes) {
 }
 
 await writePage('/404', '404.html');
+
+// Sitemap: every indexable route, using the same canonical URLs as the pages.
+const sitemapUrls = routes
+  .map((route) => getPageMeta(route))
+  .filter((meta) => meta.canonical && !meta.noindex)
+  .map((meta) => `  <url><loc>${meta.canonical}</loc></url>`);
+
+await writeFile(
+  join(DIST, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.join('\n')}\n</urlset>\n`,
+);
+console.log(`  sitemap.xml with ${sitemapUrls.length} URLs`);
+
 await rm(SSR_DIR, { recursive: true, force: true });

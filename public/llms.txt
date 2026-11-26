@@ -1,0 +1,32 @@
+# Nukt Agency
+
+> Nukt is a small design and full-stack development studio that also offers SEO and Answer Engine Optimization (AEO). We design and build websites, web apps, and custom business software, and make them easy for search engines and AI assistants to find, understand, and cite. We work with clients worldwide; the team is based in Pakistan.
+
+Clients work directly with the people building their product. Typical projects: business websites and landing pages, full-stack web apps, dashboards, CRM and POS systems, APIs, and SEO/AEO work on new or existing sites.
+
+## Services
+
+- [SEO & AEO](https://nukt.agency/services/seo-aeo): Technical SEO, on-page SEO, schema and structured data, and Answer Engine Optimization for ChatGPT, Perplexity, and Google AI Overviews.
+- UX/UI Design: Product flows, interface systems, and high-fidelity screens.
+- Frontend Development: Responsive React websites and landing pages.
+- Design Systems: Reusable components, layout rules, and interaction patterns.
+- Launch Support: Performance checks, responsive QA, deployment, and post-launch iteration.
+
+## Main pages
+
+- [Home](https://nukt.agency/): Selected work, services, pricing, and FAQ.
+- [SEO & AEO service](https://nukt.agency/services/seo-aeo): What we do, process, deliverables, and FAQ.
+
+## Stack
+
+React, Vite, Laravel, PHP, JavaScript, MySQL, PostgreSQL, Tailwind CSS, Docker, Vercel, and Cloudflare Pages.
+
+## Contact
+
+- Email: contact.nukt@gmail.com
+- Use the contact form on https://nukt.agency/ to start a project.
+
+## Optional
+
+- [Terms and Conditions](https://nukt.agency/terms)
+- [Privacy Policy](https://nukt.agency/privacy)
