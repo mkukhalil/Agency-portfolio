@@ -28,8 +28,11 @@ export default defineConfig(({ isSsrBuild }) => ({
             return 'vendor-lenis';
           }
 
+          // Lottie is only reached through a dynamic import (night-mode icon).
+          // Leaving it unassigned keeps it in that lazy chunk; a named vendor
+          // chunk here gets pulled into the entry graph and preloaded everywhere.
           if (id.includes('/@lottiefiles/')) {
-            return 'vendor-lottie';
+            return undefined;
           }
 
           return 'vendor';
