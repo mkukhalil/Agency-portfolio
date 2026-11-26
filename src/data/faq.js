@@ -59,4 +59,22 @@ export const faqs = [
     answer:
       'Revisions are handled inside the agreed scope. We prefer clear milestone-based feedback so changes are organized, decisions are documented, and the project keeps moving without confusion.',
   },
+  {
+    id: 11,
+    question: 'Do you offer SEO and AEO services?',
+    answer:
+      'Yes. We handle technical SEO, on-page SEO, schema and structured data, and Answer Engine Optimization (AEO). AEO means structuring your content so AI assistants like ChatGPT, Perplexity, and Google AI Overviews can understand it, trust it, and cite it in their answers.',
+  },
+  {
+    id: 12,
+    question: 'What is the difference between SEO and AEO?',
+    answer:
+      'SEO helps your pages rank in traditional search results. AEO helps your content get selected as the answer by AI-powered search and assistants. The two overlap: fast, crawlable pages, clear headings, direct answers, and valid structured data help with both.',
+  },
+  {
+    id: 13,
+    question: 'Can you add SEO and AEO to a site you did not build?',
+    answer:
+      'Yes. We start with an audit of crawlability, rendering, metadata, structured data, and content, then fix the issues in your existing codebase or CMS and document what changed.',
+  },
 ];

@@ -23,4 +23,11 @@ export const services = [
     description:
       'Performance checks, responsive QA, handoff assets, and iteration after launch so the work holds up in the browser.',
   },
+  {
+    id: 5,
+    slug: 'seo-aeo',
+    title: 'SEO & AEO',
+    description:
+      'Technical SEO, on-page structure, schema markup, and Answer Engine Optimization so your site is found on Google and cited by ChatGPT, Perplexity, and AI Overviews.',
+  },
 ];
