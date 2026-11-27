@@ -15,17 +15,20 @@ const DEFAULT_SUBTITLE =
   'We work with founders, creators, and product teams to launch digital experiences that look sharp and hold together technically.';
 
 /**
- * Work grid. With `category` it shows only that category, in full. Otherwise it
+ * Work grid. With `category` or `service` it shows only those projects, in full. Otherwise it
  * adds a filter and shows the first few cards with a "See more" toggle.
  * Filtered-out and collapsed cards stay in the markup (hidden) so crawlers see
  * every project.
  */
-const Projects = ({ id = 'projects', title = DEFAULT_TITLE, subtitle = DEFAULT_SUBTITLE, category }) => {
+const belongsTo = (project, { category, service }) =>
+  category ? project.category === category : project.services.includes(service);
+
+const Projects = ({ id = 'projects', title = DEFAULT_TITLE, subtitle = DEFAULT_SUBTITLE, category, service }) => {
   const [filter, setFilter] = useState('all');
   const [expanded, setExpanded] = useState(false);
 
-  const isFixed = Boolean(category);
-  const items = isFixed ? projects.filter((project) => project.category === category) : projects;
+  const isFixed = Boolean(category || service);
+  const items = isFixed ? projects.filter((project) => belongsTo(project, { category, service })) : projects;
   const matches = (project) => filter === 'all' || project.category === filter;
   const matchCount = items.filter(matches).length;
   const canCollapse = !isFixed && matchCount > COLLAPSED_COUNT;

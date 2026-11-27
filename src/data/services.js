@@ -1,30 +1,28 @@
+/** Home page service cards. Each slug has a page at /services/:slug (see servicePages.js). */
 export const services = [
   {
     id: 1,
-    title: 'UX/UI Design',
+    slug: 'web-design-development',
+    title: 'Web Design & Development',
     description:
-      'Product flows, interface systems, and high-fidelity screens shaped around clarity, conversion, and daily use.',
+      'Responsive business websites and landing pages, designed in Figma and built in React: clean UX, fast loads, SEO-ready from day one.',
   },
   {
     id: 2,
-    title: 'Frontend Development',
+    slug: 'web-app-development',
+    title: 'Full-Stack Web Apps',
     description:
-      'Responsive React websites and landing pages built with clean components, fluid motion, and production-ready polish.',
+      'Dashboards, portals and platforms: React frontend, Laravel backend, REST APIs, authentication and a structured database.',
   },
   {
     id: 3,
-    title: 'Design Systems',
+    slug: 'custom-crm-pos',
+    title: 'Custom Business Systems',
     description:
-      'Reusable components, layout rules, and interaction patterns that help products scale without losing consistency.',
+      'CRM, POS, inventory, billing and reporting tools built around how your business actually works, delivered in phases.',
   },
   {
     id: 4,
-    title: 'Launch Support',
-    description:
-      'Performance checks, responsive QA, handoff assets, and iteration after launch so the work holds up in the browser.',
-  },
-  {
-    id: 5,
     slug: 'seo-aeo',
     title: 'SEO & AEO',
     description:

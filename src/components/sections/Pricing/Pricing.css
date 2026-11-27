@@ -395,3 +395,35 @@
     font-size: 0.98rem;
   }
 }
+
+/* =========================================
+   Service page: single plan
+   ========================================= */
+
+.plan-section-body {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+.plan-section-card {
+  width: min(100%, 400px);
+}
+
+.plan-section-card .pricing-tier {
+  min-height: auto;
+}
+
+.plan-section-note {
+  max-width: 420px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 900px) {
+  .plan-section-body {
+    grid-template-columns: 400px minmax(0, 1fr);
+    gap: 3rem;
+  }
+}

@@ -1,15 +1,20 @@
+export const PRICING_CURRENCY = 'USD';
+
 /** SEO & AEO prices, shared by the pricing card, FAQ, service page, and JSON-LD. */
 export const seoAeoPricing = {
-  currency: 'USD',
+  currency: PRICING_CURRENCY,
   foundation: 699,
   monthly: 599,
 };
+
+const formatUsd = (amount) => `$${amount.toLocaleString('en-US')}`;
 
 export const pricingPlans = [
   {
     id: 'starter-website',
     label: 'Starter Website',
-    price: '$399',
+    amount: 399,
+    price: formatUsd(399),
     period: 'starting from',
     description:
       'For service businesses, portfolios, agencies, and startups that need a clean, responsive website that builds trust and captures leads.',
@@ -27,7 +32,8 @@ export const pricingPlans = [
   {
     id: 'full-stack-app',
     label: 'Full-Stack Web App',
-    price: '$1,199',
+    amount: 1199,
+    price: formatUsd(1199),
     period: 'starting from',
     description:
       'For businesses that need more than a website: dashboards, portals, authentication, APIs, databases, and complete web app workflows.',
@@ -45,7 +51,8 @@ export const pricingPlans = [
   {
     id: 'business-system',
     label: 'Business System',
-    price: '$2,499',
+    amount: 2499,
+    price: formatUsd(2499),
     period: 'starting from',
     description:
       'For businesses that want to replace manual work with a custom CRM, POS, inventory, billing, reporting, or internal workflow system.',
@@ -63,7 +70,8 @@ export const pricingPlans = [
   {
     id: 'seo-aeo-foundation',
     label: 'SEO & AEO Foundation',
-    price: `$${seoAeoPricing.foundation}`,
+    amount: seoAeoPricing.foundation,
+    price: formatUsd(seoAeoPricing.foundation),
     period: 'one-time',
     description:
       `Get found on Google and cited by AI search. Ongoing SEO & AEO from $${seoAeoPricing.monthly}/month.`,
@@ -80,3 +88,5 @@ export const pricingPlans = [
     highlighted: false,
   },
 ];
+
+export const getPricingPlan = (id) => pricingPlans.find((plan) => plan.id === id);

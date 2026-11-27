@@ -6,16 +6,15 @@ Clients work directly with the people building their product. Typical projects: 
 
 ## Services
 
-- [SEO & AEO](https://nukt.agency/services/seo-aeo): Technical SEO, on-page SEO, schema and structured data, and Answer Engine Optimization for ChatGPT, Perplexity, and Google AI Overviews.
-- UX/UI Design: Product flows, interface systems, and high-fidelity screens.
-- Frontend Development: Responsive React websites and landing pages.
-- Design Systems: Reusable components, layout rules, and interaction patterns.
-- Launch Support: Performance checks, responsive QA, deployment, and post-launch iteration.
+- [Web Design & Development](https://nukt.agency/services/web-design-development): Responsive business websites and landing pages, designed in Figma (UX/UI) and built in React, with an SEO-ready foundation. From $399.
+- [Full-Stack Web Apps](https://nukt.agency/services/web-app-development): Dashboards, portals, and platforms with a React frontend, Laravel backend, REST APIs, authentication, a structured database, and a design system. From $1,199.
+- [Custom Business Systems](https://nukt.agency/services/custom-crm-pos): Custom CRM, POS, inventory, billing, and reporting systems built around a business's own workflows, delivered in phases. From $2,499.
+- [SEO & AEO](https://nukt.agency/services/seo-aeo): Technical SEO, on-page SEO, schema and structured data, and Answer Engine Optimization for ChatGPT, Perplexity, and Google AI Overviews. $699 one-time foundation; ongoing from $599/month.
 
 ## Main pages
 
-- [Home](https://nukt.agency/): Selected work, services, pricing, and FAQ.
-- [SEO & AEO service](https://nukt.agency/services/seo-aeo): What we do, process, deliverables, and FAQ.
+- [Home](https://nukt.agency/): Selected work, services, pricing, testimonials, and FAQ.
+- Each service page above covers what we do, process, deliverables, relevant projects, pricing, and FAQ.
 
 ## Stack
 

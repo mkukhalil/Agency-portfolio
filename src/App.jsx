@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 import SiteLayout from './components/layout/SiteLayout';
 import HeadManager from './components/layout/HeadManager';
 import Home from './pages/Home';
-import SeoAeoService from './pages/services/SeoAeoService';
+import ServiceRoute from './pages/services/ServiceRoute';
 import CaseStudy from './pages/work/CaseStudy';
 import NotFound from './pages/NotFound';
 
@@ -17,7 +17,7 @@ const App = () => (
     <Routes>
       <Route element={<SiteLayout />}>
         <Route index element={<Home />} />
-        <Route path="services/seo-aeo" element={<SeoAeoService />} />
+        <Route path="services/:slug" element={<ServiceRoute />} />
         <Route path="work/:slug" element={<CaseStudy />} />
         <Route path="*" element={<NotFound />} />
       </Route>

@@ -6,6 +6,7 @@ import { Button } from '../../ui/Button';
 import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import { openContactModal } from '../../../utils/contact';
 import { handleSectionLinkClick } from '../../../utils/scroll';
+import { services } from '../../../data/services';
 import './Footer.css';
 
 const Footer = () => {
@@ -74,9 +75,11 @@ const Footer = () => {
                   Pricing
                 </a>
 
-                <Link to="/services/seo-aeo" className="footer-link">
-                  SEO &amp; AEO
-                </Link>
+                {services.map((service) => (
+                  <Link key={service.slug} to={`/services/${service.slug}`} className="footer-link">
+                    {service.title}
+                  </Link>
+                ))}
               </div>
 
               <div className="footer-col">

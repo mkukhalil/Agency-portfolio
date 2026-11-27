@@ -8,7 +8,10 @@ import rboAccountingThumbnail from '../assets/projects/rbo-accounting.webp';
 import qualifiedLeadsXThumbnail from '../assets/projects/qualifiedleadsx.webp';
 import sevenFigureStudioThumbnail from '../assets/projects/seven-figure-studio.webp';
 
-/** Filter options for the work grid; `id` matches each project's `category`. */
+/**
+ * Filter options for the work grid; `id` matches each project's `category`.
+ * Each project's `services` lists the service pages it appears on.
+ */
 export const projectCategories = [
   { id: 'all', label: 'All' },
   { id: 'development', label: 'Development' },
@@ -19,6 +22,7 @@ export const projects = [
   {
     id: 5,
     category: 'seo',
+    services: ['seo-aeo'],
     title: 'Brand Scaling',
     tags: 'DTC Ecommerce Agency · Technical SEO & AEO',
     description:
@@ -34,6 +38,7 @@ export const projects = [
   {
     id: 1,
     category: 'development',
+    services: ['web-design-development', 'web-app-development'],
     title: 'VisaBridge',
     tags: 'Immigration Platform · Full Stack Website',
     description:
@@ -49,6 +54,7 @@ export const projects = [
   {
     id: 6,
     category: 'seo',
+    services: ['seo-aeo', 'web-app-development'],
     title: 'Islamabad Best Furniture',
     tags: 'Furniture Retail · Full-Stack SEO & AEO',
     description:
@@ -64,6 +70,7 @@ export const projects = [
   {
     id: 3,
     category: 'development',
+    services: ['custom-crm-pos'],
     title: 'Sohail Traders POS',
     tags: 'POS System · Full Stack Business App',
     description:
@@ -79,6 +86,7 @@ export const projects = [
   {
     id: 8,
     category: 'seo',
+    services: ['seo-aeo', 'web-design-development'],
     title: 'QualifiedLeadsX',
     tags: 'Lead Generation Agency · SEO & Web Development',
     description:
@@ -94,6 +102,7 @@ export const projects = [
   {
     id: 9,
     category: 'seo',
+    services: ['seo-aeo', 'web-design-development'],
     title: 'Seven Figure Studio',
     tags: 'UGC Content Agency · SEO & Performance',
     description:
@@ -109,6 +118,7 @@ export const projects = [
   {
     id: 7,
     category: 'seo',
+    services: ['seo-aeo', 'web-design-development'],
     title: 'RBO Accounting & Audit',
     tags: 'Accounting Firm, UAE · Technical SEO',
     description:
@@ -124,6 +134,7 @@ export const projects = [
   {
     id: 2,
     category: 'development',
+    services: ['web-design-development'],
     title: 'Fluix Automation',
     tags: 'AI Automation · Full Stack Website',
     description:
@@ -139,6 +150,7 @@ export const projects = [
   {
     id: 4,
     category: 'development',
+    services: ['custom-crm-pos', 'web-app-development'],
     title: 'Custom CRM System',
     tags: 'CRM · Dashboard · Full Stack App',
     description:

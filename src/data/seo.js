@@ -1,5 +1,8 @@
 import { faqs } from './faq';
 import { seoAeo } from './seoAeo';
+import { webDesignDevelopment } from './webDesignDevelopment';
+import { webAppDevelopment } from './webAppDevelopment';
+import { customBusinessSystems } from './customBusinessSystems';
 
 export const SITE = {
   url: 'https://nukt.agency',
@@ -23,6 +26,30 @@ export const defaultMeta = {
 /** Static per-route metadata. Case studies derive theirs from caseStudies.js. */
 export const pageMeta = {
   '/': { ...defaultMeta, faqs },
+  '/services/web-design-development': {
+    title: 'Web Design & Development Services | Nukt',
+    description:
+      'Responsive business websites and landing pages, designed in Figma and built in React, with an SEO-ready foundation. Starting from $399.',
+    breadcrumb: 'Web Design & Development',
+    service: webDesignDevelopment.schema,
+    faqs: webDesignDevelopment.faqs,
+  },
+  '/services/web-app-development': {
+    title: 'Full-Stack Web App Development | Nukt',
+    description:
+      'Dashboards, portals, and platforms with a React frontend, Laravel backend, REST APIs, authentication, and a structured database. From $1,199.',
+    breadcrumb: 'Full-Stack Web Apps',
+    service: webAppDevelopment.schema,
+    faqs: webAppDevelopment.faqs,
+  },
+  '/services/custom-crm-pos': {
+    title: 'Custom CRM, POS & Business Systems | Nukt',
+    description:
+      'Custom CRM, POS, inventory, billing, and reporting systems built around how your business works and delivered in phases. From $2,499.',
+    breadcrumb: 'Custom Business Systems',
+    service: customBusinessSystems.schema,
+    faqs: customBusinessSystems.faqs,
+  },
   '/services/seo-aeo': {
     title: 'SEO & AEO Services – Answer Engine Optimization | Nukt',
     description:

@@ -9,6 +9,7 @@ export const seoAeo = {
     title: 'SEO & Answer Engine Optimization',
     intro:
       'We make websites easy for search engines and AI assistants to crawl, understand, and cite, so the right people find you on Google, ChatGPT, Perplexity, and Google AI Overviews.',
+    ctaLabel: 'Request an audit',
   },
 
   problem: {
@@ -110,6 +111,7 @@ export const seoAeo = {
   },
 
   work: {
+    service: 'seo-aeo',
     title: 'Recent SEO & AEO work.',
     subtitle: 'Live sites we have optimized for search engines and AI assistants.',
   },
@@ -130,6 +132,8 @@ export const seoAeo = {
       },
     ],
   },
+
+  faqTitle: 'SEO & AEO questions',
 
   faqs: [
     ...faqs.filter((faq) => sharedFaqIds.includes(faq.id)),

@@ -1,5 +1,6 @@
 import { SITE } from '../data/seo';
 import { publishedTestimonials } from '../data/testimonials';
+import { getPricingPlan, PRICING_CURRENCY } from '../data/pricing';
 
 const ORGANIZATION_ID = `${SITE.url}/#organization`;
 const MIN_RATINGS_FOR_AGGREGATE = 2;
@@ -69,6 +70,25 @@ const offer = ({ name, price, currency, perMonth }) => ({
   }),
 });
 
+/** A pricing.js plan as an Offer; its amount is a starting price. */
+const planOffer = (plan) => ({
+  '@type': 'Offer',
+  name: plan.label,
+  price: String(plan.amount),
+  priceCurrency: PRICING_CURRENCY,
+  priceSpecification: {
+    '@type': 'PriceSpecification',
+    minPrice: String(plan.amount),
+    priceCurrency: PRICING_CURRENCY,
+  },
+});
+
+const serviceOffers = (schema) => {
+  if (schema.offers) return schema.offers.map(offer);
+  const plan = schema.planId && getPricingPlan(schema.planId);
+  return plan ? [planOffer(plan)] : undefined;
+};
+
 const service = (meta, schema) => ({
   '@type': 'Service',
   name: schema.name,
@@ -77,7 +97,7 @@ const service = (meta, schema) => ({
   url: meta.canonical,
   provider: { '@id': ORGANIZATION_ID },
   areaServed: 'Worldwide',
-  ...(schema.offers && { offers: schema.offers.map(offer) }),
+  ...(serviceOffers(schema) && { offers: serviceOffers(schema) }),
 });
 
 const faqPage = (meta, faqs) => ({

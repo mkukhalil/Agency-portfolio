@@ -14,11 +14,8 @@ export const aboutStats = [
 ];
 
 export const aboutCapabilities = [
-  'Business websites',
-  'CRM dashboards',
-  'POS systems',
-  'Full-stack apps',
-  'APIs & databases',
-  'Deployment support',
+  'Web design & development',
+  'Full-stack web apps',
+  'Custom CRM, POS & business systems',
   'SEO & AEO',
 ];
