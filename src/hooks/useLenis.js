@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { setActiveLenis } from '../lib/smoothScroll';
 
 const LENIS_OPTIONS = {
   duration: 1.2,
@@ -25,6 +26,7 @@ export function useLenis() {
       if (cancelled) return;
 
       lenis = new Lenis(LENIS_OPTIONS);
+      setActiveLenis(lenis);
 
       const raf = (time) => {
         lenis.raf(time);
@@ -37,6 +39,7 @@ export function useLenis() {
     return () => {
       cancelled = true;
       if (frameId) cancelAnimationFrame(frameId);
+      setActiveLenis(null);
       lenis?.destroy();
     };
   }, []);

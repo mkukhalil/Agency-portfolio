@@ -329,6 +329,13 @@
   display: none;
 }
 
+/* "See more projects" toggle, pulled close to the grid like the filter above it. */
+.projects-more {
+  display: flex;
+  justify-content: center;
+  margin-top: calc(3rem - var(--projects-gap));
+}
+
 /* =========================================
    Project Text
    ========================================= */

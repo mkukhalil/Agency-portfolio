@@ -1,3 +1,5 @@
+import { scrollToY } from '../lib/smoothScroll';
+
 const DEFAULT_NAVBAR_OFFSET = 88;
 const NAVBAR_OFFSET_GAP = 16;
 
@@ -32,10 +34,7 @@ export const cleanUrlHash = () => {
 export const scrollToTop = ({ onComplete } = {}) => {
   if (typeof window === 'undefined') return;
 
-  window.scrollTo({
-    top: 0,
-    behavior: getScrollBehavior(),
-  });
+  scrollToY(0, getScrollBehavior());
 
   cleanUrlHash();
   onComplete?.();
@@ -64,10 +63,7 @@ export const scrollToTarget = (target, { onComplete, offset = getNavbarOffset() 
 
   const targetTop = section.getBoundingClientRect().top + window.scrollY - offset;
 
-  window.scrollTo({
-    top: targetTop,
-    behavior: getScrollBehavior(),
-  });
+  scrollToY(targetTop, getScrollBehavior());
 
   cleanUrlHash();
   onComplete?.();
