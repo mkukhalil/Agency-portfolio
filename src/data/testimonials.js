@@ -13,15 +13,44 @@
  */
 export const testimonials = [
   {
+    id: 5,
+    quote:
+      'The Nukt team was very professional with their work. They did technical SEO and AEO for my website, and it really increased my interaction and impressions.',
+    name: 'Gaurav Kapoor',
+    role: 'Founder',
+    company: 'Brand Scaling',
+    projectId: 5,
+    published: true,
+  },
+  {
+    id: 6,
+    quote:
+      "We're very impressed with the Nukt team's work. Our website was invisible to people on Google, and they helped us get found. They're still handling our SEO and AEO.",
+    name: 'Abdullah',
+    role: 'Operations Manager',
+    company: 'Islamabad Best Furniture',
+    projectId: 6,
+    published: true,
+  },
+  {
     id: 1,
     quote:
       'We needed the website to explain our automation services in a simple way. The final result felt clean, organized, and much easier to present to potential clients.',
-    // TODO: real name and role of the person at Fluix Automation who gave this quote.
-    name: null,
-    role: null,
+    name: 'Khalil',
+    role: 'Founder',
     company: 'Fluix Automation',
     projectId: 2,
-    published: false,
+    published: true,
+  },
+  {
+    id: 4,
+    quote:
+      'The POS system made daily billing and product management easier for our shop. It was built around the way we actually work, not just as a generic system.',
+    name: 'Sohail Anwar',
+    role: 'Owner',
+    company: 'Sohail Traders',
+    projectId: 3,
+    published: true,
   },
   {
     id: 2,
@@ -32,29 +61,6 @@ export const testimonials = [
     role: null,
     company: null,
     projectId: 1,
-    published: false,
-  },
-  {
-    id: 3,
-    quote:
-      'The dashboard was structured in a practical way. It made the data easier to manage and gave the project a cleaner direction compared to where it started.',
-    // TODO: verify the source. projects.js describes the CRM as self-built, so this
-    // may not be a client quote. Do not publish unless a real client said it.
-    name: null,
-    role: null,
-    company: null,
-    projectId: 4,
-    published: false,
-  },
-  {
-    id: 4,
-    quote:
-      'The POS system made daily billing and product management easier for our shop. It was built around the way we actually work, not just as a generic system.',
-    // TODO: real name of the Sohail Traders owner who gave this quote.
-    name: null,
-    role: 'Business owner',
-    company: 'Sohail Traders',
-    projectId: 3,
     published: false,
   },
 ];
