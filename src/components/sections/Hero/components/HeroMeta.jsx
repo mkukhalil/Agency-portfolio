@@ -102,7 +102,7 @@ export const HeroMeta = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.1 }}
     >
-      <span className="hero__tagline">Designer &amp; Full Stack Agency</span>
+      <h1 className="hero__tagline">Web Design, Development &amp; SEO/AEO Agency</h1>
 
       <div className="hero__availability">
         <AvailabilityIcon isNight={isNight} />

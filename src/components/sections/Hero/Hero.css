@@ -111,9 +111,12 @@
   letter-spacing: -0.02em;
 }
 
+/* The page's h1: reads as the small meta line, so it inherits the row's type. */
 .hero__tagline {
   justify-self: start;
   white-space: nowrap;
+  font: inherit;
+  letter-spacing: inherit;
 }
 
 .hero__availability {
@@ -163,6 +166,7 @@
 
 .hero__title {
   grid-column: 2 / 3;
+  font-family: var(--font-heading);
   max-width: 450px;
   font-size: clamp(2.05rem, 2.5vw, 3.3rem);
   line-height: 0.97;

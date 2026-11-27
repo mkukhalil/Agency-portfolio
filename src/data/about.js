@@ -20,4 +20,5 @@ export const aboutCapabilities = [
   'Full-stack apps',
   'APIs & databases',
   'Deployment support',
+  'SEO & AEO',
 ];

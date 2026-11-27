@@ -16,10 +16,14 @@ export function getHeadTags(meta) {
     { tag: 'meta', attrs: { property: 'og:title', content: meta.title } },
     { tag: 'meta', attrs: { property: 'og:description', content: meta.description } },
     { tag: 'meta', attrs: { property: 'og:image', content: meta.image } },
+    { tag: 'meta', attrs: { property: 'og:image:width', content: String(SITE.imageWidth) } },
+    { tag: 'meta', attrs: { property: 'og:image:height', content: String(SITE.imageHeight) } },
+    { tag: 'meta', attrs: { property: 'og:image:alt', content: SITE.imageAlt } },
     { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
     { tag: 'meta', attrs: { name: 'twitter:title', content: meta.title } },
     { tag: 'meta', attrs: { name: 'twitter:description', content: meta.description } },
     { tag: 'meta', attrs: { name: 'twitter:image', content: meta.image } },
+    { tag: 'meta', attrs: { name: 'twitter:image:alt', content: SITE.imageAlt } },
   ];
 
   if (meta.canonical) {

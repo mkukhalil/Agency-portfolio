@@ -6,8 +6,10 @@ export const SITE = {
   name: 'Nukt Agency',
   shortName: 'Nukt',
   locale: 'en_US',
-  // TODO: replace with a 1200×630 social preview image.
-  image: '/nukt.png',
+  image: '/og-image.jpg',
+  imageWidth: 1200,
+  imageHeight: 630,
+  imageAlt: 'Nukt — Web Development & SEO/AEO',
   logo: '/nukt.png',
   email: 'contact.nukt@gmail.com',
 };

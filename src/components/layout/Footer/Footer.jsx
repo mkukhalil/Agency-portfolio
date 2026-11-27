@@ -23,8 +23,8 @@ const Footer = () => {
           custom={{ y: 30 }}
         >
           <h2 className="footer-title">
-            Design, development, and business software for ambitious digital
-            products.
+            Design, development, SEO &amp; AEO, and business software for
+            ambitious digital products.
           </h2>
 
           <div className="footer-links-container">

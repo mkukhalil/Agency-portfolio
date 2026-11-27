@@ -58,6 +58,20 @@
   }
 }
 
+/* No published testimonials: the stat card stands alone, centered. */
+.trust-cards.trust-cards-single {
+  grid-template-columns: minmax(0, 420px);
+  justify-content: center;
+}
+
+.testimonial-slide[hidden] {
+  display: none;
+}
+
+img.testimonial-avatar {
+  object-fit: cover;
+}
+
 /* =========================================
    Left stat card
    ========================================= */

@@ -26,7 +26,7 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
           <div className="nav-drawer-top">
             <div>
 
-              <h2 className="nav-drawer-brand">NUKT</h2>
+              <p className="nav-drawer-brand">NUKT</p>
             </div>
 
             <button

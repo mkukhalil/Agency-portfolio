@@ -30,7 +30,7 @@ const About = () => {
             custom={{ delay: 0.05, y: 24 }}
           >
             A small full-stack studio building clean websites, dashboards, and
-            business systems.
+            business systems that get found on search and AI.
           </motion.h2>
 
           <div className="about-grid">
@@ -45,7 +45,9 @@ const About = () => {
               <p className="about-subtext about-subtext-primary">
                 We help businesses turn ideas into useful digital products,
                 from service websites and landing pages to CRM tools, POS
-                systems, dashboards, APIs, and custom web applications.
+                systems, dashboards, APIs, and custom web applications, with
+                SEO and AEO built in so they rank on Google and get cited by AI
+                assistants.
               </p>
 
               <p className="about-subtext">

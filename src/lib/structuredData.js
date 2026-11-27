@@ -1,6 +1,43 @@
 import { SITE } from '../data/seo';
+import { publishedTestimonials } from '../data/testimonials';
 
 const ORGANIZATION_ID = `${SITE.url}/#organization`;
+const MIN_RATINGS_FOR_AGGREGATE = 2;
+
+const review = (testimonial) => ({
+  '@type': 'Review',
+  reviewBody: testimonial.quote,
+  author: {
+    '@type': 'Person',
+    name: testimonial.name,
+    ...(testimonial.role && { jobTitle: testimonial.role }),
+    ...(testimonial.company && { worksFor: { '@type': 'Organization', name: testimonial.company } }),
+  },
+  ...(testimonial.rating && {
+    reviewRating: { '@type': 'Rating', ratingValue: testimonial.rating, bestRating: 5, worstRating: 1 },
+  }),
+});
+
+/** Published testimonials only; AggregateRating needs at least two real ratings. */
+const reviewData = () => {
+  if (!publishedTestimonials.length) return {};
+
+  const ratings = publishedTestimonials.map((t) => t.rating).filter(Boolean);
+  const average = ratings.reduce((sum, value) => sum + value, 0) / ratings.length;
+
+  return {
+    review: publishedTestimonials.map(review),
+    ...(ratings.length >= MIN_RATINGS_FOR_AGGREGATE && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number(average.toFixed(1)),
+        reviewCount: ratings.length,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+  };
+};
 
 const organization = () => ({
   '@type': 'Organization',
@@ -13,6 +50,7 @@ const organization = () => ({
   description:
     'Design, full-stack development, and SEO & AEO agency building websites, web apps, and business software.',
   // TODO: add sameAs with the real LinkedIn / Behance / GitHub / X profile URLs.
+  ...reviewData(),
 });
 
 /** schema.org Offer; monthly offers carry a per-month unit price. */
