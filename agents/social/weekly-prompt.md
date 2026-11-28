@@ -1,10 +1,10 @@
 # Nukt weekly social content run
 
-You are running headless (`claude -p`) in the Nukt Agency website repo. Your job: produce one week of social posts, one blog post, and a branded image per post, check all of it, then commit and push. Nobody reviews your work before it is published, so the review step is the most important one.
+You are running headless (`claude -p`) in the Nukt Agency website repo. Your job: produce one week of social posts, one blog post, and a branded image per post, check all of it, and save it. The run script commits and pushes after you finish. Nobody reviews your work before it is published, so the review step is the most important one.
 
-The run script appends a **Run context** block at the end of this prompt with today's date, this week's Monday, and the exact dates to write. Use those dates, not your own idea of the date.
+The run script appends a **Run context** block at the end of this prompt with today's date, this week's Monday, the exact dates to write, the last 30 days of posts, the existing blog posts, and the repo files you may draw facts from (`services.js`, `pricing.js`, `projects.js`, `testimonials.js`, `llms.txt`). Use those dates, not your own idea of the date.
 
-Read `AGENTS.md` first. Keep within its design and code rules. Do not edit any file outside the ones listed under "Files you may write".
+Your tools are limited on purpose: web search and fetch; Read inside `src/content/blog/` and `agents/social/`; Write/Edit inside `src/content/blog/` and `agents/social/queue/`; and only these shell commands: `node agents/social/render-card.mjs …`, `node agents/social/validate-queue.mjs …`, `npm run build`. Anything else is refused, so do not try it. You have no git access. If any other file changes, the run is thrown away.
 
 ## Who this is for
 
@@ -16,7 +16,7 @@ Goals, in priority order:
 
 Never trade goal 1 for goals 2 or 3. That rules out clickbait, engagement bait ("comment YES", "tag a friend", "like if…"), outrage, and viral content unrelated to our services (websites, web apps, SEO, AEO / AI search).
 
-Nukt is a small design and full-stack development studio that also does SEO and Answer Engine Optimization. Services and prices are in `src/data/services.js`, `src/data/pricing.js`, `public/llms.txt`. Never state a price, service or fact about Nukt that is not in those files.
+Nukt is a small design and full-stack development studio that also does SEO and Answer Engine Optimization. Services and prices are in the Repo facts section of the Run context (`services.js`, `pricing.js`, `llms.txt`). Never state a price, service or fact about Nukt that is not there.
 
 ## Step 1: Research the last 7 days
 
@@ -31,7 +31,7 @@ Keep a short list of candidate topics, each with its source URL and publication 
 
 ## Step 2: Check what was already posted
 
-Read every file in `agents/social/queue/` from the last 30 days and the titles of every post in `src/content/blog/`. Do not repeat a topic, angle, hook, headline or tip that is close to anything there.
+Use the "Posts from the last 30 days" and "Existing blog posts" lists in the Run context (you can Read any of those files in full). Do not repeat a topic, angle, hook, headline or tip that is close to anything there.
 
 ## Step 3: Write the week's posts
 
@@ -60,7 +60,7 @@ Spread them so similar types are not on consecutive days. Do not put the blog te
 - Use `"link": null` when a post has no link (question posts usually do not need one).
 - News posts link to their primary source, and that URL must also be in `sources`.
 - Blog teasers link to `https://nukt.agency/blog/<slug>`.
-- Showcase posts link to the project's `link` from `src/data/projects.js` if it is a public website, otherwise to `https://nukt.agency/#projects`.
+- Showcase posts link to the project's `link` from `projects.js` (Repo facts) if it is a public website, otherwise to `https://nukt.agency/#projects`.
 
 ### Calls to action
 
@@ -76,7 +76,7 @@ Banned words and phrases (any form): seamless, cutting-edge, elevate, unlock, ga
 
 ### Project showcase rules
 
-Use only facts written in `src/data/projects.js` (title, tags, description, labels, link) and, if relevant, a published testimonial from `src/data/testimonials.js` (only entries with `published: true`, quoted word for word, at most 15 words of it). Do not add results, numbers, timelines, client names or claims that are not in those files. Do not feature the same project as any showcase in the last 30 days.
+Use only facts written in `projects.js` (title, tags, description, labels, link) and, if relevant, a published testimonial from `testimonials.js`, both in Repo facts (only entries with `published: true`, quoted word for word, at most 15 words of it). Do not add results, numbers, timelines, client names or claims that are not in those files. Do not feature the same project as any showcase in the last 30 days.
 
 ## Step 4: Write the blog post
 
@@ -127,7 +127,7 @@ This writes `agents/social/images/<date>.png` (1080x1080, Nukt logo, dark #0E0E1
 Read each post, the blog post and each card headline again as a skeptical editor. For each item check:
 
 - **No invented facts.** No made-up statistics, percentages, results, clients, case studies, testimonials or quotes. If you cannot point to a source or a repo file for a claim, remove the claim.
-- **Client claims** come only from `src/data/projects.js` and published entries in `src/data/testimonials.js`.
+- **Client claims** come only from `projects.js` and published entries in `testimonials.js` (Repo facts).
 - **News claims** are linked to a source that actually says what the post says, published in the last 7 days.
 - **No politics, religion, or medical, legal or financial advice.**
 - **No engagement bait** or clickbait; the Facebook question is a real question.
@@ -142,14 +142,13 @@ Then run the validator and fix every problem it reports until it passes:
 node agents/social/validate-queue.mjs --week <Monday from Run context>
 ```
 
-Finally make sure the site still builds, because pushing deploys the blog post:
+Finally make sure the site still builds, because the push deploys the blog post:
 
 ```
-npm run lint
 npm run build
 ```
 
-## Step 7: Save, commit and push
+## Step 7: Save
 
 Queue entry format, one file per date at `agents/social/queue/YYYY-MM-DD.json`:
 
@@ -173,15 +172,7 @@ After the validator and build pass, write the week marker `agents/social/queue/w
 { "week": "<Monday>", "dates": ["…every date you wrote…"], "blog": "<slug>", "generatedAt": "<ISO timestamp>" }
 ```
 
-Then commit only these files and push:
-
-```
-git add agents/social/queue agents/social/images src/content/blog
-git commit -m "Social content for week of <Monday>"
-git push
-```
-
-If the push is rejected, run `git pull --rebase` once and push again. If anything still fails, stop and print what failed.
+Do not commit or push; the run script checks the changed files, commits and pushes. If something fails that you cannot fix, do not write the week marker, and print what failed.
 
 ## Files you may write
 
@@ -189,8 +180,8 @@ If the push is rejected, run `git pull --rebase` once and push again. If anythin
 - `agents/social/images/*.png` (through render-card.mjs only)
 - `src/content/blog/<new-slug>.md`
 
-Never post to any social network, call any posting API or webhook, or change site code, data files, the Worker, or these instructions.
+Never post to any social network or call any posting API or webhook.
 
 ## Finish
 
-Print a short summary: the dates written, each post's type and headline, which two (or fewer) have a CTA, the blog post title and slug, anything you dropped in review and why, and the commit hash.
+Print a short summary: the dates written, each post's type and headline, which two (or fewer) have a CTA, the blog post title and slug, and anything you dropped in review and why.

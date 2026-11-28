@@ -3,9 +3,9 @@
 Fully automatic social content and posting for Nukt, at $0 running cost.
 
 ```
-Monday 12:30 PKT  Windows laptop ─ run-weekly.ps1 ─ claude -p weekly-prompt.md
+Monday 12:30 PKT  Windows laptop ─ run-weekly.ps1 ─ claude -p weekly-prompt.md (path-scoped tools)
                   research → 8 days of posts + blog post + image cards → review → validator → build
-                  → git push  (queue/*.json, images/*.png, src/content/blog/*.md)
+                  → script guard (only content files changed) → script commits and git push  (queue/*.json, images/*.png, src/content/blog/*.md)
                                    │
 Every day         Cloudflare Worker (cron 14:00 UTC)
 14:00 UTC         reads today's queue entry + image from GitHub (read-only token)
@@ -62,9 +62,23 @@ git -C G:\Khalil\portfolio-new push --dry-run
 
 If it asks for a passphrase, either start the Windows `ssh-agent` service (Services → OpenSSH Authentication Agent → Startup type: Automatic → Start) and run `ssh-add` once, or use a key without a passphrase for this repo.
 
-Keep the working tree clean on `main`: the script starts with `git pull --ff-only` and stops if that fails.
+Keep the working tree clean on `main`, including untracked files (for example the `nukt-logo/` folder and `nukt-logo.zip` in the repo root: move them out or delete them). The script refuses to start on a dirty tree, because its guard treats any change outside the content folders as a reason to abort.
 
-### 1.3 Task Scheduler
+### 1.3 Failure alerts from the laptop
+
+The Worker's alerts cover daily posting. For the weekly run, the script emails you through Resend on any failure (including the guard blocking a push) if these two user environment variables exist. Set them once (use the Resend key from step 5):
+
+```powershell
+[Environment]::SetEnvironmentVariable('NUKT_RESEND_API_KEY', 'PASTE_KEY', 'User')
+```
+
+```powershell
+[Environment]::SetEnvironmentVariable('NUKT_ALERT_EMAIL', 'you@example.com', 'User')
+```
+
+Without them, failures are only written to the log and to Task Scheduler's Last Run Result.
+
+### 1.4 Task Scheduler
 
 **Quick way:** run once from PowerShell:
 
@@ -113,8 +127,17 @@ To test it now: right-click the task → **Run**. Logs go to `agents\social\logs
 
 - Skips if `agents/social/queue/week-<Monday>.json` exists.
 - Writes posts for today through next Monday (the 8th day is a buffer in case next week's run is late). If today's file already exists from last week's buffer, it is kept.
-- Claude researches, writes, renders cards, reviews and rewrites, then must pass `validate-queue.mjs` (lengths, hashtags, banned words, engagement bait, CTA count, links, image size) and `npm run build` before it commits.
-- The script then re-checks: marker written, validator passing, nothing uncommitted, nothing unpushed. Anything wrong → exit code 1.
+- Runs Claude Code headless with a minimal tool list (no `--dangerously-skip-permissions`; anything unlisted is refused because headless mode cannot ask):
+  - `WebSearch`, `WebFetch`
+  - `Read` only in `src/content/blog/` and `agents/social/`
+  - `Write`/`Edit` only in `src/content/blog/` and `agents/social/queue/`
+  - shell only for `node agents/social/render-card.mjs`, `node agents/social/validate-queue.mjs` and `npm run build`
+
+  Claude has no git access. The repo facts it may cite (services, pricing, projects, testimonials, llms.txt) and the last 30 days of posts are pasted into its prompt by the script.
+- **Guard:** after Claude finishes, the script (not Claude) lists every changed, added, deleted and untracked file. Only `src/content/blog/<slug>.md`, `agents/social/queue/<name>.json` and `agents/social/images/<date>.png` may change, nothing may be deleted, and no commit may have been made. Anything else aborts the run with nothing committed or pushed, and sends the failure alert.
+- The script then runs the validator and the build, commits only those folders, re-checks the commit's file list, and pushes. Any failure → exit code 1 and an alert.
+
+To test the guard yourself: change any other file, then run `powershell -ExecutionPolicy Bypass -File agentssocialun-weekly.ps1 -GuardOnly`. It should block and list the file.
 - Pushing to `main` also deploys the new blog post through Cloudflare Pages.
 
 ---
