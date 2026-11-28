@@ -31,3 +31,7 @@ dist-ssr
 agents/social/worker/node_modules
 agents/social/worker/.wrangler
 agents/social/worker/.dev.vars
+
+# Brand asset source files (kept outside the repo)
+nukt-logo/
+nukt-logo.zip
