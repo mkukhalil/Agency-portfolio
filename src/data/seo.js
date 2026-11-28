@@ -13,7 +13,7 @@ export const SITE = {
   imageWidth: 1200,
   imageHeight: 630,
   imageAlt: 'Nukt — Web Development & SEO/AEO',
-  logo: '/nukt.png',
+  logo: '/brand/nukt-app-icon-512.png',
   email: 'contact.nukt@gmail.com',
 };
 

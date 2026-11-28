@@ -144,22 +144,33 @@
 }
 
 .logo-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
   padding: 0;
   color: inherit;
 }
 
-.logo-mark {
-  width: 24px;
+/* Light artwork on dark sections; the dark variant fades in over light ones. */
+.logo-image {
+  display: block;
+  width: auto;
   height: 24px;
-  fill: currentColor;
-  flex-shrink: 0;
+  transition: opacity 0.24s ease;
 }
 
-.logo-wordmark {
-  line-height: 1;
+.logo-image-dark {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.logo.contrast .logo-image-light {
+  opacity: 0;
+}
+
+.logo.contrast .logo-image-dark {
+  opacity: 1;
 }
 
 /* =========================================
