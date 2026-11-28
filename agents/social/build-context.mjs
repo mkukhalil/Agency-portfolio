@@ -62,7 +62,7 @@ console.log(`
 - Today: ${today} (${DAY_NAMES[weekdayOf(today)]})
 - Write one queue file for each of these dates:
 ${dateLines.join('\n')}
-- Weekly blog post: ${blogDay ? `REQUIRED today. Set "blog" in the ${today} file to its slug.` : 'not today (Monday only). Do not write one.'}
+- Weekly blog post: ${blogDay ? 'REQUIRED today: this ISO week has no blog post yet (this is the first successful run of the week, or an earlier attempt failed).' : 'not today: this week already has its blog post. Do not write one.'}
 
 ### Rolling 7-day mix (limits apply to every 7-day window)
 

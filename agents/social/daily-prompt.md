@@ -1,6 +1,6 @@
 # Nukt daily social content run
 
-You are running headless (`claude -p`) in the Nukt Agency website repo. Your job: decide what is worth posting today, write it, make an image card for each post, check all of it, and save it. On Monday you also write the weekly blog post. The run script schedules post times, checks the changed files, commits and pushes after you finish. Nobody reviews your work before it is published, so the review step is the most important one.
+You are running headless (`claude -p`) in the Nukt Agency website repo. Your job: decide what is worth posting today, write it, make an image card for each post, check all of it, and save it. When the Run context says so (the first successful run of each week), you also write the weekly blog post. The run script schedules post times, checks the changed files, commits and pushes after you finish. Nobody reviews your work before it is published, so the review step is the most important one.
 
 The run script appends a **Run context** block at the end of this prompt: today's date, the dates to write (Friday's run also writes Saturday and Sunday), whether today needs the blog post, how much of the rolling 7-day mix is already used, the last 30 days of posts, the existing blog posts, and the repo files you may draw facts from (`services.js`, `pricing.js`, `projects.js`, `testimonials.js`, `llms.txt`). Use those dates, not your own idea of the date.
 
@@ -83,9 +83,11 @@ Banned words and phrases (any form): seamless, cutting-edge, elevate, unlock, ga
 
 Use only facts written in `projects.js` (title, tags, description, labels, link) and, if relevant, a published testimonial from `testimonials.js` (only `published: true`, quoted word for word, at most 15 words of it). Do not add results, numbers, timelines, client names or claims that are not there. Do not feature a project showcased in the last 30 days.
 
-## Step 5: The weekly blog post (Monday only)
+## Step 5: The weekly blog post (when required)
 
-Only when the Run context says it is required. Write one original post, 800–1,200 words (not counting Sources), at `src/content/blog/<slug>.md`. The slug is lowercase-hyphenated, describes the topic, and must not match an existing file. Set `"blog": "<slug>"` in today's queue file.
+Only when the Run context says it is required; otherwise never write or edit a blog post. Write one original post, 800–1,200 words (not counting Sources), at `src/content/blog/<slug>.md`. The slug is lowercase-hyphenated, describes the topic, and must not match an existing file.
+
+The blog is checked separately from the posts. Finish and save the day's posts first; if you then cannot finish a blog post that passes every rule below, do not save a half-done one. The script publishes the posts anyway, alerts the owner, and asks again on the next weekday run.
 
 Format, exactly:
 
@@ -120,7 +122,6 @@ One file per date at `agents/social/queue/YYYY-MM-DD.json`. Do **not** add times
 ```json
 {
   "date": "YYYY-MM-DD",
-  "blog": null,
   "note": "Optional: why there are 0 or 2 posts today",
   "posts": [
     {
@@ -168,7 +169,12 @@ The validator needs times, which you do not write, so run it to catch everything
 node agents/social/validate-queue.mjs --dates <comma-separated dates>
 ```
 
-On Monday also make sure the site builds, because the push deploys the blog post:
+If you wrote a blog post, check it separately and make sure the site builds, because the push deploys it:
+
+```
+node agents/social/validate-queue.mjs --blog <slug> --blog-date <today>
+```
+
 
 ```
 npm run build
@@ -178,4 +184,4 @@ Do not commit or push. If something fails that you cannot fix, leave today's fil
 
 ## Finish
 
-Print a short summary: each date with its posts (type, headline, CTA or not), or why it has none; the blog post title and slug on Monday; and anything you dropped in review and why.
+Print a short summary: each date with its posts (type, headline, CTA or not), or why it has none; the blog post title and slug if you wrote one (or why not, if it was required); and anything you dropped in review and why.

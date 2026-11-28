@@ -2,16 +2,19 @@
  * Deterministic guardrails for daily social content. The run script runs this
  * after scheduling and before committing; anything failing blocks the push.
  *
- *   node agents/social/validate-queue.mjs --dates 2026-12-04,2026-12-05 [--require-blog] [--root <dir>]
+ *   node agents/social/validate-queue.mjs --dates 2026-12-04,2026-12-05 [--root <dir>]
+ *   node agents/social/validate-queue.mjs --blog <slug> --blog-date 2026-12-08
  *
- * Checks each day file, its posts and schedule, the rolling 7-day mix (read
- * from every queue file in the window), and the day's blog post if it has one.
+ * --dates checks each day file, its posts and schedule, and the rolling 7-day
+ * mix (read from every queue file in the window). --blog checks a new blog
+ * post: dated --blog-date, the only blog post in its ISO week, content rules.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { POST_WINDOW, addDays, easternParts, weekdayOf } from './worker/src/time.js';
+import { POST_WINDOW, addDays, easternParts, isoWeek, weekdayOf } from './worker/src/time.js';
 import { RULES } from './schedule.mjs';
+import { blogsInWeek } from './blog-week.mjs';
 
 const args = process.argv.slice(2);
 const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -134,11 +137,15 @@ function checkPost(where, date, post, index) {
   return checkSchedule(where, date, post);
 }
 
+/** A new blog post: dated `date`, the only post in its ISO week, and passing the content rules. */
 function checkBlog(date, slug) {
   const where = `blog/${slug}.md`;
   const file = join(BLOG, `${slug}.md`);
-  if (weekdayOf(date) !== 1) return fail(where, 'blog posts are written on Monday only');
   if (!existsSync(file)) return fail(where, 'missing');
+
+  const week = isoWeek(date);
+  const others = blogsInWeek(week, ROOT).filter((post) => post.slug !== slug);
+  if (others.length) fail(where, `${week} already has a blog post (${others.map((post) => post.slug).join(', ')}); max one per ISO week`);
 
   const source = readFileSync(file, 'utf8');
   const body = source.replace(/^---[\s\S]*?---/, '');
@@ -184,7 +191,6 @@ function checkDay(date) {
     }
   }
 
-  if (day.blog) checkBlog(date, day.blog);
   return day;
 }
 
@@ -202,19 +208,23 @@ function checkRolling(date) {
   }
 }
 
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const dates = (option('--dates') ?? '').split(',').filter(Boolean);
-if (!dates.length || !dates.every((date) => /^\d{4}-\d{2}-\d{2}$/.test(date))) {
-  console.error('Usage: node agents/social/validate-queue.mjs --dates YYYY-MM-DD[,YYYY-MM-DD…] [--require-blog]');
+const blog = option('--blog');
+const blogDate = option('--blog-date');
+if ((!dates.length && !blog) || !dates.every((date) => DATE.test(date)) || (blog && !DATE.test(blogDate ?? ''))) {
+  console.error('Usage: node agents/social/validate-queue.mjs [--dates YYYY-MM-DD[,…]] [--blog <slug> --blog-date YYYY-MM-DD]');
   process.exit(2);
 }
 
+// Blog and posts are validated independently, so a failing blog never blocks the day's posts.
 const days = dates.map(checkDay);
 dates.forEach(checkRolling);
-if (args.includes('--require-blog') && !days.some((day) => day?.blog)) fail('blog', "Monday's run must write the weekly blog post");
+if (blog) checkBlog(blogDate, blog);
 
 if (errors.length) {
   console.error(`✗ ${errors.length} problem(s):\n${errors.map((error) => `  - ${error}`).join('\n')}`);
   process.exit(1);
 }
 const total = days.reduce((sum, day) => sum + (day?.posts.length ?? 0), 0);
-console.log(`✓ ${dates.join(', ')}: ${total} post(s) passed`);
+console.log(`✓ ${[dates.length && `${dates.join(', ')}: ${total} post(s)`, blog && `blog ${blog}`].filter(Boolean).join('; ')} passed`);

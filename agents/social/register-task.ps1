@@ -1,6 +1,6 @@
 <#
   Registers the "nukt-social daily" Windows scheduled task for the current user:
-  - Monday–Friday at 12:30 (local time = PKT on this laptop), run as soon as
+  - Monday-Friday at 12:30 (local time = PKT on this laptop), run as soon as
     possible after a missed start.
   - At logon (5-minute delay); the script skips Saturday/Sunday and any day
     whose run already completed.

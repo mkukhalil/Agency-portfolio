@@ -1,15 +1,21 @@
 <#
-  Daily nukt-social content run (Claude Code headless), Monday–Friday.
+  Daily nukt-social content run (Claude Code headless), Monday-Friday.
 
   1. Skips (exit 0) when today's queue file is already committed.
   2. Runs `claude -p` with daily-prompt.md and a minimal, path-scoped tool list.
      Claude writes files only; it has no git access. It writes today's file
-     (Friday: also Saturday and Sunday) and, on Monday, the weekly blog post.
+     (Friday: also Saturday and Sunday) and, on the first successful run of the
+     ISO week, the weekly blog post.
   3. Guard: the script checks that only allowed content files changed and no
      commit was made. Otherwise it aborts (nothing pushed) and alerts.
-  4. The script schedules post times, validates, builds, commits and pushes.
+  4. The script checks the blog post on its own, then schedules post times,
+     validates, builds, commits and pushes.
 
-  If Claude fails or hits a usage limit, or any check fails, nothing is
+  The blog never blocks the day's posts: if it is missing or fails its checks
+  or the build, it is set aside (saved to the log folder), the posts still go
+  out, an alert is sent, and the next weekday run that week tries again.
+
+  If Claude fails or hits a usage limit, or a posts check fails, nothing is
   committed (so nothing is posted), the run's files are saved to the log
   folder and removed, and an alert is emailed through Resend when the user
   environment variables NUKT_RESEND_API_KEY and NUKT_ALERT_EMAIL are set.
@@ -38,7 +44,6 @@ $TodayFile = "agents/social/queue/$TodayText.json"
 $Dates = @($TodayText)
 if ($Now.DayOfWeek -eq 'Friday') { $Dates += $Now.AddDays(1).ToString('yyyy-MM-dd'), $Now.AddDays(2).ToString('yyyy-MM-dd') }
 $DayFiles = @($Dates | ForEach-Object { "agents/social/queue/$_.json" })
-$IsMonday = $Now.DayOfWeek -eq 'Monday'
 
 # The only paths a run may change. Everything else aborts the push.
 $ContentPaths = @('src/content/blog', 'agents/social/queue', 'agents/social/images')
@@ -55,7 +60,7 @@ function Write-Log([string] $Message) {
   Write-Output $line
 }
 
-function Send-FailureAlert([string] $Message) {
+function Send-Alert([string] $Subject, [string] $Message) {
   $apiKey = [Environment]::GetEnvironmentVariable('NUKT_RESEND_API_KEY', 'User')
   $to = [Environment]::GetEnvironmentVariable('NUKT_ALERT_EMAIL', 'User')
   if (-not $apiKey -or -not $to) {
@@ -65,15 +70,15 @@ function Send-FailureAlert([string] $Message) {
   $body = @{
     from    = 'Nukt Social <onboarding@resend.dev>'
     to      = @($to)
-    subject = "[nukt-social] Daily run failed ($TodayText): nothing will be posted"
-    text    = "$Message`n`nNothing was committed, so the poster has nothing new to publish for: $($Dates -join ', ').`nLog: $Log"
+    subject = "[nukt-social] $Subject"
+    text    = "$Message`n`nLog: $Log"
   } | ConvertTo-Json
   try {
     Invoke-RestMethod -Method Post -Uri 'https://api.resend.com/emails' -ContentType 'application/json' `
       -Headers @{ Authorization = "Bearer $apiKey" } -Body ([Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
-    Write-Log "Failure alert sent to $to."
+    Write-Log "Alert sent to $to."
   } catch {
-    Write-Log "Failure alert could not be sent: $($_.Exception.Message)"
+    Write-Log "Alert could not be sent: $($_.Exception.Message)"
   }
 }
 
@@ -115,7 +120,7 @@ function Exit-Run([int] $Code, [string] $Message, [switch] $KeepFiles) {
   if ($Code -ne 0) {
     # Guard failures keep everything in place for inspection; other failures clean up.
     if (-not $KeepFiles) { Remove-RunOutput }
-    Send-FailureAlert $Message
+    Send-Alert "Daily run failed ($TodayText): nothing will be posted" "$Message`n`nNothing was committed, so the poster has nothing new to publish for: $($Dates -join ', ')."
   }
   exit $Code
 }
@@ -157,13 +162,33 @@ $Claude = Find-Claude
 $CommandLine = "Get-Content prompt | & `"$(if ($Claude) { $Claude } else { 'claude' })`" " +
   (($ClaudeArgs | ForEach-Object { if ($_ -match '[\s,()*]') { "`"$_`"" } else { $_ } }) -join ' ')
 
-$ContextArgs = @('agents/social/build-context.mjs', '--today', $TodayText, '--dates', ($Dates -join ','))
-if ($IsMonday) { $ContextArgs += '--blog' }
-
 function Test-Done { git cat-file -e "HEAD:$TodayFile" 2>$null; return $LASTEXITCODE -eq 0 }
 
+# The blog is due on the first successful run of each ISO week (any weekday).
+function Get-BlogStatus { (node agents/social/blog-week.mjs --today $TodayText) -join '' }
+function Get-ContextArgs([bool] $BlogNeeded) {
+  $contextArgs = @('agents/social/build-context.mjs', '--today', $TodayText, '--dates', ($Dates -join ','))
+  if ($BlogNeeded) { $contextArgs += '--blog' }
+  return $contextArgs
+}
+
+<# Moves blog files out of the commit (saved to the log folder). Posts are unaffected. #>
+function Set-BlogAside([string[]] $Paths) {
+  $keep = Join-Path $LogDir "blog-failed-$Stamp"
+  foreach ($path in $Paths) {
+    $target = Join-Path $keep $path
+    New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
+    Copy-Item -LiteralPath $path -Destination $target -Force
+    git ls-files --error-unmatch -- $path *> $null
+    if ($LASTEXITCODE -eq 0) { git checkout -- $path } else { Remove-Item -LiteralPath $path -Force }
+  }
+  Write-Log "Blog set aside to $keep; the day's posts continue without it."
+}
+
 if ($Preview) {
-  Write-Output "Today: $TodayText ($($Now.DayOfWeek)); dates: $($Dates -join ', '); blog: $IsMonday"
+  $BlogStatus = Get-BlogStatus
+  $ContextArgs = Get-ContextArgs ($BlogStatus -eq 'needed')
+  Write-Output "Today: $TodayText ($($Now.DayOfWeek)); dates: $($Dates -join ', '); blog this week: $BlogStatus"
   Write-Output "Already completed: $(Test-Done)"
   (node @ContextArgs | Select-Object -First 16) -join "`n"
   Write-Output "Claude CLI: $(if ($Claude) { $Claude } else { 'NOT FOUND' })"
@@ -180,6 +205,10 @@ git pull --ff-only *>> $Log
 if ($LASTEXITCODE -ne 0) { Exit-Run 1 'git pull --ff-only failed (diverged branch). Fix the repo and re-run.' -KeepFiles }
 if (Test-Done) { Exit-Run 0 "Today's run ($TodayText) was completed elsewhere. Skipping." }
 
+$BlogStatus = Get-BlogStatus
+$BlogNeeded = $BlogStatus -eq 'needed'
+Write-Log "Weekly blog: $BlogStatus"
+$ContextArgs = Get-ContextArgs $BlogNeeded
 $Context = (node @ContextArgs) -join "`n"
 if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Could not build the run context.' -KeepFiles }
 $Prompt = (Get-Content -Raw -Encoding UTF8 (Join-Path $PSScriptRoot 'daily-prompt.md')) + "`n" + $Context
@@ -206,19 +235,47 @@ if ($ClaudeExit -ne 0 -or -not $Result -or $Result.is_error -or $Result.subtype 
 $Missing = $DayFiles | Where-Object { -not (Test-Path $_) }
 if ($Missing) { Exit-Run 1 "Claude did not write: $($Missing -join ', '). Its summary: $($Result.result)" }
 
+# Blog first, on its own: a problem here sets the blog aside but never stops the posts.
+$BlogProblem = $null
+$BlogChanges = @(Get-ChangedPaths | Where-Object { $_.Path -like 'src/content/blog/*' })
+$EditedOld = @($BlogChanges | Where-Object { $_.Status -ne '??' } | ForEach-Object { $_.Path })
+$NewBlogs = @($BlogChanges | Where-Object { $_.Status -eq '??' } | ForEach-Object { $_.Path })
+if ($EditedOld) { Set-BlogAside $EditedOld; $BlogProblem = "Existing blog posts were edited (changes reverted): $($EditedOld -join ', ')." }
+if (-not $BlogNeeded -and $NewBlogs) {
+  Set-BlogAside $NewBlogs; $NewBlogs = @()
+  $BlogProblem = 'A blog post was written although this week already has one; it was not published.'
+} elseif ($BlogNeeded -and $NewBlogs.Count -eq 0) {
+  $BlogProblem = 'Claude did not write the weekly blog post.'
+} elseif ($BlogNeeded -and $NewBlogs.Count -gt 1) {
+  Set-BlogAside $NewBlogs; $NewBlogs = @()
+  $BlogProblem = 'Claude wrote more than one blog post; none were published.'
+} elseif ($BlogNeeded) {
+  $Slug = [IO.Path]::GetFileNameWithoutExtension($NewBlogs[0])
+  node agents/social/validate-queue.mjs --blog $Slug --blog-date $TodayText *>> $Log
+  if ($LASTEXITCODE -ne 0) { Set-BlogAside $NewBlogs; $NewBlogs = @(); $BlogProblem = "Blog post '$Slug' failed validation (see log); it was not published." }
+}
+
 node agents/social/schedule.mjs @DayFiles *>> $Log
 if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Scheduling failed (see log); nothing was committed.' }
 
-$ValidateArgs = @('agents/social/validate-queue.mjs', '--dates', ($Dates -join ','))
-if ($IsMonday) { $ValidateArgs += '--require-blog' }
-node @ValidateArgs *>> $Log
-if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Validator failed (see log); nothing was committed.' }
+# Posts are validated after the blog decision, so a teaser can never point at a blog that was set aside.
+node agents/social/validate-queue.mjs --dates ($Dates -join ',') *>> $Log
+if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Validator failed for the posts (see log); nothing was committed.' }
 
 npm run build *>> $Log
+if ($LASTEXITCODE -ne 0 -and $NewBlogs) {
+  Set-BlogAside $NewBlogs; $NewBlogs = @()
+  $BlogProblem = 'The site build failed with the new blog post; it was not published.'
+  node agents/social/validate-queue.mjs --dates ($Dates -join ',') *>> $Log
+  if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Validator failed for the posts after removing the blog (see log); nothing was committed.' }
+  npm run build *>> $Log
+}
 if ($LASTEXITCODE -ne 0) { Exit-Run 1 'Site build failed; nothing was committed.' }
 
+$Message = "Social content for $($Dates -join ', ')"
+if ($NewBlogs) { $Message += " + blog $([IO.Path]::GetFileNameWithoutExtension($NewBlogs[0]))" }
 git add -- @ContentPaths *>> $Log
-git commit -m "Social content for $($Dates -join ', ')" *>> $Log
+git commit -m $Message *>> $Log
 if ($LASTEXITCODE -ne 0) { Exit-Run 1 'git commit failed.' }
 
 # Re-check the commit itself before it leaves the machine.
@@ -236,4 +293,9 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $Count = ($DayFiles | ForEach-Object { (Get-Content -Raw $_ | ConvertFrom-Json).posts.Count } | Measure-Object -Sum).Sum
-Exit-Run 0 "Run $TodayText done: $Count post(s) for $($Dates -join ', ') queued and pushed."
+if ($BlogProblem) {
+  $retry = if ($Now.DayOfWeek -eq 'Friday') { 'This was the last weekday run of the week, so there is no blog post this week.' } else { 'The next weekday run this week will try again.' }
+  Write-Log "Blog problem: $BlogProblem"
+  Send-Alert "Weekly blog post not published ($TodayText)" "$BlogProblem`n`nThe day's social posts were still committed and scheduled ($Count post(s) for $($Dates -join ', ')).`n$retry"
+}
+Exit-Run 0 "Run $TodayText done: $Count post(s) for $($Dates -join ', ') queued and pushed$(if ($NewBlogs) { ', plus the weekly blog post' })."

@@ -5,7 +5,7 @@ Fully automatic social content and posting for Nukt, at $0 running cost.
 ```
 Mon–Fri 12:30 PKT  Windows laptop ─ run-daily.ps1 ─ claude -p daily-prompt.md (path-scoped tools)
 (+ logon, Mon–Fri) research → today's posts (0, 1, or 2 for big news) + image cards → review
-                   Friday also writes Saturday + Sunday (evergreen only); Monday also writes the blog post
+                   Friday also writes Saturday + Sunday (evergreen only); first successful run of the week writes the blog
                    → script guard (only content files changed) → schedule.mjs picks post times
                    → validator → build → script commits and git push
                                    │
@@ -52,7 +52,7 @@ Check that the run script can see it:
 powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\run-daily.ps1 -Preview
 ```
 
-It prints today's dates, the start of the run context, `Claude CLI: C:\Users\…\claude.exe` and the exact command. `-Preview` never calls Claude or touches git. Add `-Today 2026-12-04` to see what a Friday (weekend files) or Monday (blog post) run would do.
+It prints today's dates, the start of the run context, `Claude CLI: C:\Users\…\claude.exe` and the exact command. `-Preview` never calls Claude or touches git. Add `-Today 2026-12-04` to see what a Friday (weekend files) run would do; it also shows whether this week still needs its blog post.
 
 ### 1.2 Make sure `git push` works without a prompt
 
@@ -128,7 +128,8 @@ To test it now: right-click the task → **Run**. Logs go to `agents\social\logs
 ### What a run does
 
 - **Skips** if today's queue file (`agents/social/queue/<today>.json`) is already committed.
-- **Dates:** today only. Friday's run also writes Saturday and Sunday, with evergreen formats only (tip, question, checklist), no news, at most 1 post each. Monday's run also writes the weekly blog post.
+- **Dates:** today only. Friday's run also writes Saturday and Sunday, with evergreen formats only (tip, question, checklist), no news, at most 1 post each. 
+- **Weekly blog:** written on the first successful run of each ISO week (Monday–Friday), so a missed Monday just moves it to Tuesday. At most one blog post per ISO week. The blog is checked on its own: if it is missing, fails the validator, or breaks the build, it is set aside to `agents/social/logs/blog-failed-<time>/`, the day's posts are still committed and scheduled, you get a "weekly blog post not published" alert, and the next weekday run that week tries again (after Friday, that week has no blog post).
 - **Volume:** 1 post per day by default. A 2nd post only for genuinely significant news in SEO, AI search or AI for small business (the 2nd must be a news post). Hard maximum 2. A day can have 0 posts (`"posts": []` with a note) when there is nothing worth saying.
 - **Rolling mix:** at most 2 CTA posts, 1 project showcase and 1 blog teaser in any 7-day window, checked against the queue files of the previous days.
 - **Claude** runs headless with a minimal tool list (no `--dangerously-skip-permissions`; anything unlisted is refused because headless mode cannot ask):
@@ -358,7 +359,15 @@ It runs every 15-minute tick of whole days and checks: a day with 0 posts; a day
 node G:\Khalil\portfolio-new\agents\social\test\daily-test.mjs
 ```
 
-It checks Eastern time conversion in winter, summer and across both DST changes; 500 random scheduled days against every timing rule; late runs; days with 0, 1 and 2 posts; Friday's weekend files (evergreen passes, news or showcase rejected); the rolling 7-day limits; tampered times; and the Monday blog rule.
+It checks Eastern time conversion in winter, summer and across both DST changes; 500 random scheduled days against every timing rule; late runs; days with 0, 1 and 2 posts; Friday's weekend files (evergreen passes, news or showcase rejected); the rolling 7-day limits; tampered times; ISO weeks; and the one-blog-per-ISO-week rule.
+
+**Full run with a fake Claude (missed Monday, blog failure):**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\test\run-daily-e2e.ps1
+```
+
+It copies the repo into a throwaway worktree that pushes to a local test remote (never GitHub), puts a fake `claude` on the PATH, and runs `run-daily.ps1` for: a Tuesday with no blog yet that week (blog requested and published with the posts); Wednesday (blog not requested); the next week with a blog that fails validation (posts still committed and pushed, blog set aside, alert logged); the next day retrying the blog; a usage limit (nothing committed); and a second trigger the same day (skipped).
 
 **With wrangler dev (real secrets, forced dry run):** create `agents/social/worker/.dev.vars` (git-ignored) with the same names as the secrets, then:
 

@@ -57,3 +57,12 @@ export const weekdayOf = (date) => new Date(`${date}T12:00:00Z`).getUTCDay(); //
 
 export const addDays = (date, days) =>
   new Date(Date.parse(`${date}T12:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
+
+/** ISO 8601 week of a date, e.g. "2026-W50" (weeks start Monday; week 1 holds the first Thursday). */
+export function isoWeek(date) {
+  const day = new Date(`${date}T12:00:00Z`);
+  day.setUTCDate(day.getUTCDate() + 3 - ((day.getUTCDay() + 6) % 7)); // Thursday of this week
+  const year = day.getUTCFullYear();
+  const week = 1 + Math.floor((day - Date.UTC(year, 0, 1, 12)) / (7 * 86_400_000));
+  return `${year}-W${String(week).padStart(2, '0')}`;
+}

@@ -1,7 +1,8 @@
 /**
  * Tests for the laptop side of the daily run: DST-aware Eastern time
  * conversion, the post-time scheduler, and the validator's daily rules
- * (0/1/2 posts, Friday's weekend entries, rolling 7-day limits).
+ * (0/1/2 posts, Friday's weekend entries, rolling 7-day limits) and the
+ * one-blog-per-ISO-week rule.
  *
  *   node agents/social/test/daily-test.mjs
  */
@@ -11,12 +12,14 @@ import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSy
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { easternParts, easternToUtc } from '../worker/src/time.js';
+import { easternParts, easternToUtc, isoWeek } from '../worker/src/time.js';
 import { RULES, scheduleDay, seededRandom } from '../schedule.mjs';
+import { blogSource } from './blog-fixture.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FIXTURES = join(HERE, '../worker/test/fixtures');
 const VALIDATOR = join(HERE, '../validate-queue.mjs');
+const BLOG_WEEK = join(HERE, '../blog-week.mjs');
 const fixturePost = (kind) => JSON.parse(readFileSync(join(FIXTURES, `queue/sample-${kind}.json`), 'utf8'));
 
 const steps = [];
@@ -216,16 +219,57 @@ step('validator: tampered schedule (round minute, outside window, platforms too 
   assert.match(result.output, /10 min apart/);
 });
 
-step('validator: Monday requires the blog post; blog posts only on Monday', () => {
+// ---- Weekly blog -----------------------------------------------------------
+
+const writeBlog = (root, slug, date, words) => writeFileSync(join(root, `src/content/blog/${slug}.md`), blogSource(date, words));
+
+step('ISO weeks: Monday–Sunday, including year boundaries', () => {
+  assert.equal(isoWeek('2026-12-07'), '2026-W50');
+  assert.equal(isoWeek('2026-12-13'), '2026-W50');
+  assert.equal(isoWeek('2026-12-14'), '2026-W51');
+  assert.equal(isoWeek('2027-01-01'), '2026-W53');
+  assert.equal(isoWeek('2025-12-29'), '2026-W01');
+});
+
+step('missed Monday: the blog is still needed on Tuesday, then done for the rest of the week', () => {
   const root = makeRepo();
-  writeDay(root, '2026-12-07', [['tip']]);
-  const monday = validate(root, ['2026-12-07'], ['--require-blog']);
-  const day = JSON.parse(readFileSync(join(root, 'agents/social/queue/2026-12-07.json'), 'utf8'));
-  writeFileSync(join(root, 'agents/social/queue/2026-12-08.json'), JSON.stringify({ ...day, date: '2026-12-08', posts: [], blog: 'some-post' }));
-  const tuesday = validate(root, ['2026-12-08']);
+  const status = (today) =>
+    execFileSync('node', [BLOG_WEEK, '--today', today, '--root', root], { encoding: 'utf8' }).trim();
+  writeBlog(root, 'last-week', '2026-12-02'); // previous ISO week
+  const tuesdayBefore = status('2026-12-08');
+  writeBlog(root, 'this-week', '2026-12-08'); // written on Tuesday
+  const wednesday = status('2026-12-09');
+  const nextMonday = status('2026-12-14');
   rmSync(root, { recursive: true, force: true });
-  assert.match(monday.output, /Monday's run must write the weekly blog post/);
-  assert.match(tuesday.output, /blog posts are written on Monday only/);
+  assert.equal(tuesdayBefore, 'needed');
+  assert.equal(wednesday, 'done this-week');
+  assert.equal(nextMonday, 'needed');
+});
+
+step('validator: a blog on any weekday passes; a 2nd in the same ISO week fails; next week passes', () => {
+  const root = makeRepo();
+  writeBlog(root, 'wednesday-post', '2026-12-09');
+  const wednesday = validate(root, [], ['--blog', 'wednesday-post', '--blog-date', '2026-12-09']);
+  writeBlog(root, 'friday-post', '2026-12-11');
+  const second = validate(root, [], ['--blog', 'friday-post', '--blog-date', '2026-12-11']);
+  writeBlog(root, 'next-week-post', '2026-12-14');
+  const nextWeek = validate(root, [], ['--blog', 'next-week-post', '--blog-date', '2026-12-14']);
+  rmSync(root, { recursive: true, force: true });
+  assert.ok(wednesday.ok, wednesday.output);
+  assert.match(second.output, /2026-W50 already has a blog post \(wednesday-post\); max one per ISO week/);
+  assert.ok(nextWeek.ok, nextWeek.output);
+});
+
+step('validator: blog and posts are independent (a bad blog does not fail the posts)', () => {
+  const root = makeRepo();
+  writeDay(root, '2026-12-09', [['tip']]);
+  writeBlog(root, 'too-short', '2026-12-09', 200);
+  const blog = validate(root, [], ['--blog', 'too-short', '--blog-date', '2026-12-09']);
+  const posts = validate(root, ['2026-12-09']);
+  rmSync(root, { recursive: true, force: true });
+  assert.equal(blog.ok, false);
+  assert.match(blog.output, /words before Sources; needs 800–1,200/);
+  assert.ok(posts.ok, posts.output);
 });
 
 let failed = 0;
