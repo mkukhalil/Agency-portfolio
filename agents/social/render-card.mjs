@@ -1,11 +1,11 @@
 /**
- * Renders the 1080x1080 brand card for one or more queue entries with local
- * headless Chrome/Edge (free, no extra dependencies).
+ * Renders the 1080x1080 brand card for every post in one or more queue day
+ * files with local headless Chrome/Edge (free, no extra dependencies).
  *
  *   node agents/social/render-card.mjs agents/social/queue/2026-12-01.json [...more.json]
  *
- * Each entry needs `date` and `card: { kicker, headline }`. The PNG is written
- * to agents/social/images/<date>.png (the entry's `image` path).
+ * Each post needs `card: { kicker, headline }` and `image`
+ * (agents/social/images/<date>-<n>.png), where the PNG is written.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -14,7 +14,6 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const IMAGES_DIR = join(ROOT, 'agents/social/images');
 const LOGO = pathToFileURL(join(ROOT, 'public/brand/nukt-logo-horizontal-light.svg')).href;
 const SIZE = 1080;
 const MAX_HEADLINE = 90;
@@ -67,18 +66,17 @@ function findBrowser() {
   return browser;
 }
 
-function renderEntry(browser, entryPath) {
-  const entry = JSON.parse(readFileSync(entryPath, 'utf8'));
-  const { date, card } = entry;
+const IMAGE_PATH = /^agents\/social\/images\/\d{4}-\d{2}-\d{2}-[12]\.png$/;
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '')) throw new Error(`${entryPath}: invalid date`);
-  if (!card?.headline || !card?.kicker) throw new Error(`${entryPath}: card.kicker and card.headline are required`);
-  if (card.headline.length > MAX_HEADLINE) throw new Error(`${entryPath}: headline over ${MAX_HEADLINE} characters`);
+function renderCard(browser, where, { card, image }) {
+  if (!card?.headline || !card?.kicker) throw new Error(`${where}: card.kicker and card.headline are required`);
+  if (card.headline.length > MAX_HEADLINE) throw new Error(`${where}: headline over ${MAX_HEADLINE} characters`);
+  if (!IMAGE_PATH.test(image ?? '')) throw new Error(`${where}: image must be agents/social/images/<date>-<n>.png`);
 
   // A fresh profile per render avoids Chrome's profile lock failing silently.
   const workDir = mkdtempSync(join(tmpdir(), 'nukt-card-'));
   const htmlPath = join(workDir, 'card.html');
-  const output = join(IMAGES_DIR, `${date}.png`);
+  const output = join(ROOT, image);
   writeFileSync(htmlPath, cardHtml(card));
 
   try {
@@ -92,13 +90,19 @@ function renderEntry(browser, entryPath) {
     rmSync(workDir, { recursive: true, force: true });
   }
 
-  if (!existsSync(output) || statSync(output).size < 10_000) throw new Error(`${entryPath}: render failed`);
-  console.log(`card ${date} → agents/social/images/${date}.png`);
+  if (!existsSync(output) || statSync(output).size < 10_000) throw new Error(`${where}: render failed`);
+  console.log(`card ${where} → ${image}`);
+}
+
+function renderDay(browser, dayPath) {
+  const day = JSON.parse(readFileSync(dayPath, 'utf8'));
+  if (!Array.isArray(day.posts)) throw new Error(`${dayPath}: posts must be an array`);
+  day.posts.forEach((post, index) => renderCard(browser, `${day.date} post ${index + 1}`, post));
 }
 
 const entries = process.argv.slice(2);
 if (!entries.length) {
-  console.error('Usage: node agents/social/render-card.mjs <queue-entry.json> [...]');
+  console.error('Usage: node agents/social/render-card.mjs <queue-day.json> [...]');
   process.exit(1);
 }
 
@@ -106,7 +110,7 @@ const browser = findBrowser();
 let failed = 0;
 for (const entryPath of entries) {
   try {
-    renderEntry(browser, resolve(entryPath));
+    renderDay(browser, resolve(entryPath));
   } catch (error) {
     failed += 1;
     console.error(error.message);

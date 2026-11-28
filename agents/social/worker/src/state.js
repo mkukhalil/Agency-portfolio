@@ -1,4 +1,4 @@
-import { addDays } from './util.js';
+import { addDays } from './time.js';
 
 const LOG_TTL_SECONDS = 60 * 86_400;
 export const DRY_RUN_DAYS = 3;
@@ -7,8 +7,8 @@ export const DRY_RUN_DAYS = 3;
 export const isEnabled = async (kv) => (await kv.get('enabled')) === 'true';
 
 /**
- * The first enabled run starts the clock; the first DRY_RUN_DAYS calendar
- * days only log what would be posted. "force_dry_run" = "true" keeps it dry.
+ * The first enabled tick starts the clock; the first DRY_RUN_DAYS Eastern
+ * calendar days only log what would be posted. "force_dry_run" = "true" keeps it dry.
  */
 export async function isDryRun(kv, date) {
   if ((await kv.get('force_dry_run')) === 'true') return true;
@@ -21,11 +21,22 @@ export async function isDryRun(kv, date) {
   return date < addDays(firstRun, DRY_RUN_DAYS);
 }
 
-const postedKey = (date, platform) => `posted:${date}:${platform}`;
+/**
+ * One record per post and platform. It is written before the platform call
+ * ("claimed"), so even a crash mid-request can never lead to a second post.
+ */
+const itemKey = (postId, platform) => `item:${postId}:${platform}`;
 
-export const getPosted = (kv, date, platform) => kv.get(postedKey(date, platform), 'json');
+export const getItem = (kv, postId, platform) => kv.get(itemKey(postId, platform), 'json');
 
-export const markPosted = (kv, date, platform, record) => kv.put(postedKey(date, platform), JSON.stringify(record));
+export const setItem = (kv, postId, platform, record) => kv.put(itemKey(postId, platform), JSON.stringify(record));
+
+/** Sets a once-per-key flag; returns false if it was already set. */
+export async function once(kv, key) {
+  if (await kv.get(key)) return false;
+  await kv.put(key, '1', { expirationTtl: LOG_TTL_SECONDS });
+  return true;
+}
 
 export const getLog = async (kv, date) => (await kv.get(`log:${date}`, 'json')) ?? [];
 

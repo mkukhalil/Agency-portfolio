@@ -3,25 +3,27 @@
 Fully automatic social content and posting for Nukt, at $0 running cost.
 
 ```
-Monday 12:30 PKT  Windows laptop ─ run-weekly.ps1 ─ claude -p weekly-prompt.md (path-scoped tools)
-                  research → 8 days of posts + blog post + image cards → review → validator → build
-                  → script guard (only content files changed) → script commits and git push  (queue/*.json, images/*.png, src/content/blog/*.md)
+Mon–Fri 12:30 PKT  Windows laptop ─ run-daily.ps1 ─ claude -p daily-prompt.md (path-scoped tools)
+(+ logon, Mon–Fri) research → today's posts (0, 1, or 2 for big news) + image cards → review
+                   Friday also writes Saturday + Sunday (evergreen only); Monday also writes the blog post
+                   → script guard (only content files changed) → schedule.mjs picks post times
+                   → validator → build → script commits and git push
                                    │
-Every day         Cloudflare Worker (cron 14:00 UTC)
-14:00 UTC         reads today's queue entry + image from GitHub (read-only token)
-                  ├─ Facebook Page  ← Graph API photo post (long-lived Page token)
-                  └─ LinkedIn page  ← Make.com webhook → LinkedIn company image post
-                  KV: posted dates (never twice), kill switch, logs
-                  Resend: alert on any failure, digest every Monday
+Every 15 minutes   Cloudflare Worker reads today's queue file (US Eastern date) from GitHub
+                   posts each item whose scheduled time has passed and has no record yet
+                   ├─ Facebook Page  ← Graph API photo post (long-lived Page token)
+                   └─ LinkedIn page  ← Make.com webhook → LinkedIn company image post
+                   KV: one record per post and platform (never twice), kill switch, logs
+                   Resend: alert on any failure, digest every Monday with scheduled times
 ```
 
 The first 3 days after you switch it on are a dry run: the Worker logs what it would post (you see it in the Monday digest) and then goes live by itself.
 
-**About the $0:** Cloudflare Workers + KV, Make.com, Resend and the Meta Graph API are used within their free tiers (see [Free-tier limits](#free-tier-limits)). The weekly content run uses Claude Code with your existing Claude subscription; it does not use paid API credits unless you sign Claude Code in with an API key.
+**About the $0:** Cloudflare Workers + KV, Make.com, Resend and the Meta Graph API are used within their free tiers (see [Free-tier limits](#free-tier-limits)). The daily content run uses Claude Code with your existing Claude subscription; it does not use paid API credits unless you sign Claude Code in with an API key.
 
 Contents:
 
-1. [Weekly content run on your laptop](#1-weekly-content-run-on-your-laptop)
+1. [Daily content run on your laptop](#1-daily-content-run-on-your-laptop)
 2. [GitHub read-only token](#2-github-read-only-token)
 3. [Meta app and long-lived Page token](#3-meta-app-and-long-lived-page-token)
 4. [Make.com scenario for LinkedIn](#4-makecom-scenario-for-linkedin)
@@ -32,7 +34,7 @@ Contents:
 
 ---
 
-## 1. Weekly content run on your laptop
+## 1. Daily content run on your laptop
 
 ### 1.1 Install and sign in to Claude Code CLI
 
@@ -47,10 +49,10 @@ Open a new PowerShell window, run `claude`, and sign in with your Claude account
 Check that the run script can see it:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\run-weekly.ps1 -Preview
+powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\run-daily.ps1 -Preview
 ```
 
-It prints the dates it would write and `Claude CLI: C:\Users\…\claude.exe`. `-Preview` never calls Claude or touches git.
+It prints today's dates, the start of the run context, `Claude CLI: C:\Users\…\claude.exe` and the exact command. `-Preview` never calls Claude or touches git. Add `-Today 2026-12-04` to see what a Friday (weekend files) or Monday (blog post) run would do.
 
 ### 1.2 Make sure `git push` works without a prompt
 
@@ -62,11 +64,11 @@ git -C G:\Khalil\portfolio-new push --dry-run
 
 If it asks for a passphrase, either start the Windows `ssh-agent` service (Services → OpenSSH Authentication Agent → Startup type: Automatic → Start) and run `ssh-add` once, or use a key without a passphrase for this repo.
 
-Keep the working tree clean on `main`, including untracked files (for example the `nukt-logo/` folder and `nukt-logo.zip` in the repo root: move them out or delete them). The script refuses to start on a dirty tree, because its guard treats any change outside the content folders as a reason to abort.
+Keep the working tree clean on `main`, including untracked files. The script refuses to start on a dirty tree, because its guard treats any change outside the content folders as a reason to abort.
 
 ### 1.3 Failure alerts from the laptop
 
-The Worker's alerts cover daily posting. For the weekly run, the script emails you through Resend on any failure (including the guard blocking a push) if these two user environment variables exist. Set them once (use the Resend key from step 5):
+The Worker alerts cover posting. For the daily run, the script emails you through Resend on any failure (Claude failing or hitting a usage limit, the guard blocking a push, the validator or build failing) if these two user environment variables exist. Set them once (use the Resend key from step 5):
 
 ```powershell
 [Environment]::SetEnvironmentVariable('NUKT_RESEND_API_KEY', 'PASTE_KEY', 'User')
@@ -76,11 +78,11 @@ The Worker's alerts cover daily posting. For the weekly run, the script emails y
 [Environment]::SetEnvironmentVariable('NUKT_ALERT_EMAIL', 'you@example.com', 'User')
 ```
 
-Without them, failures are only written to the log and to Task Scheduler's Last Run Result.
+Without them, failures are only written to the log and to Task Scheduler's Last Run Result. Either way a failed run commits nothing, so nothing is posted, and the Worker also emails you at 08:00 ET if there is no queue file for the day.
 
 ### 1.4 Task Scheduler
 
-**Quick way:** run once from PowerShell:
+**Quick way:** run once from PowerShell (it also removes the old weekly task if you registered it):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\register-task.ps1
@@ -88,28 +90,28 @@ powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\r
 
 **Manual way (same result):**
 
-1. Press Start, type **Task Scheduler**, open it.
+1. Press Start, type **Task Scheduler**, open it. If an old `nukt-social weekly` task exists, right-click it → **Delete**.
 2. Right panel → **Create Task…** (not "Create Basic Task").
 3. **General** tab
-   - Name: `nukt-social weekly`
+   - Name: `nukt-social daily`
    - Select **Run only when user is logged on** (Claude Code and your SSH key live in your user session).
    - Leave "Run with highest privileges" unchecked.
 4. **Triggers** tab → **New…**
    - Begin the task: **On a schedule** → **Weekly**
-   - Start: today's date, **12:30:00 PM** (your laptop is on PKT, so this is 12:30 PKT)
-   - Recur every **1** weeks on: **Monday**
+   - Start: today's date, **12:30:00 PM** (your laptop is on PKT, so this is 12:30 PKT, about 2:30–3:30 AM US Eastern)
+   - Recur every **1** weeks on: **Monday, Tuesday, Wednesday, Thursday, Friday**
    - Enabled ✓ → OK
 5. **Triggers** tab → **New…** again
    - Begin the task: **At log on** → Specific user: you
    - Advanced settings: **Delay task for: 5 minutes**
    - Enabled ✓ → OK
 
-   Task Scheduler cannot limit a logon trigger to Monday–Friday, so the action passes `-WeekdaysOnly` and the script exits straight away on Saturday and Sunday. On weekdays it exits straight away if this week's posts already exist, so extra triggers never create duplicates.
+   Task Scheduler cannot limit a logon trigger to Monday–Friday, so the action passes `-WeekdaysOnly` and the script exits straight away on Saturday and Sunday. On weekdays it exits straight away if today's queue file is already committed, so extra triggers never create duplicates.
 6. **Actions** tab → **New…**
    - Action: **Start a program**
    - Program/script: `powershell.exe`
    - Add arguments:
-     `-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "G:\Khalil\portfolio-new\agents\social\run-weekly.ps1" -WeekdaysOnly`
+     `-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "G:\Khalil\portfolio-new\agents\social\run-daily.ps1" -WeekdaysOnly`
    - Start in: `G:\Khalil\portfolio-new`
 7. **Conditions** tab
    - Uncheck **Start the task only if the computer is on AC power**.
@@ -117,28 +119,31 @@ powershell -ExecutionPolicy Bypass -File G:\Khalil\portfolio-new\agents\social\r
 8. **Settings** tab
    - ✓ **Allow task to be run on demand**
    - ✓ **Run task as soon as possible after a scheduled start is missed**
-   - ✓ **Stop the task if it runs longer than: 2 hours**
+   - ✓ **Stop the task if it runs longer than: 1 hour**
    - If the task is already running: **Do not start a new instance**
 9. OK.
 
-To test it now: right-click the task → **Run**. Logs go to `agents\social\logs\weekly-<time>.log` (not committed). "Last Run Result" `0x0` means success or a clean skip; `0x1` means it failed, and the log says why.
+To test it now: right-click the task → **Run**. Logs go to `agents\social\logs\daily-<time>.log` (not committed). "Last Run Result" `0x0` means success or a clean skip; `0x1` means it failed, and the log says why.
 
 ### What a run does
 
-- Skips if `agents/social/queue/week-<Monday>.json` exists.
-- Writes posts for today through next Monday (the 8th day is a buffer in case next week's run is late). If today's file already exists from last week's buffer, it is kept.
-- Runs Claude Code headless with a minimal tool list (no `--dangerously-skip-permissions`; anything unlisted is refused because headless mode cannot ask):
+- **Skips** if today's queue file (`agents/social/queue/<today>.json`) is already committed.
+- **Dates:** today only. Friday's run also writes Saturday and Sunday, with evergreen formats only (tip, question, checklist), no news, at most 1 post each. Monday's run also writes the weekly blog post.
+- **Volume:** 1 post per day by default. A 2nd post only for genuinely significant news in SEO, AI search or AI for small business (the 2nd must be a news post). Hard maximum 2. A day can have 0 posts (`"posts": []` with a note) when there is nothing worth saying.
+- **Rolling mix:** at most 2 CTA posts, 1 project showcase and 1 blog teaser in any 7-day window, checked against the queue files of the previous days.
+- **Claude** runs headless with a minimal tool list (no `--dangerously-skip-permissions`; anything unlisted is refused because headless mode cannot ask):
   - `WebSearch`, `WebFetch`
   - `Read` only in `src/content/blog/` and `agents/social/`
   - `Write`/`Edit` only in `src/content/blog/` and `agents/social/queue/`
   - shell only for `node agents/social/render-card.mjs`, `node agents/social/validate-queue.mjs` and `npm run build`
 
-  Claude has no git access. The repo facts it may cite (services, pricing, projects, testimonials, llms.txt) and the last 30 days of posts are pasted into its prompt by the script.
-- **Guard:** after Claude finishes, the script (not Claude) lists every changed, added, deleted and untracked file. Only `src/content/blog/<slug>.md`, `agents/social/queue/<name>.json` and `agents/social/images/<date>.png` may change, nothing may be deleted, and no commit may have been made. Anything else aborts the run with nothing committed or pushed, and sends the failure alert.
-- The script then runs the validator and the build, commits only those folders, re-checks the commit's file list, and pushes. Any failure → exit code 1 and an alert.
+  Claude has no git access. The script pastes the repo facts it may cite (services, pricing, projects, testimonials, llms.txt), the rolling 7-day usage and the last 30 days of posts into its prompt.
+- **If Claude fails or hits a usage limit:** the run stops, the files it wrote are copied to `agents/social/logs/failed-<time>/` and removed, the alert is sent, and nothing is committed, so nothing is posted. The next trigger that day (for example at logon) tries again.
+- **Guard:** the script (not Claude) lists every changed, added, deleted and untracked file. Only `src/content/blog/<slug>.md`, `agents/social/queue/<date>.json` and `agents/social/images/<date>-<n>.png` may change, nothing may be deleted, and no commit may have been made. Anything else aborts with nothing committed or pushed, leaves the files in place for you to inspect, and sends the alert.
+- **Times:** `schedule.mjs` (not Claude) gives every post a random time between 08:00 and 18:00 US Eastern (DST-aware), never on a round minute, never earlier than 20 minutes from now. The Facebook and LinkedIn versions go out 30–120 minutes apart, in random order. Two posts on one day are at least 3 hours apart on each platform. If a late run leaves no room for a second post, that post is dropped; if nothing fits, the run fails and posts nothing.
+- Then the validator, the build, a commit of only those folders, a re-check of the commit's file list, and the push. Pushing to `main` also deploys a new blog post through Cloudflare Pages.
 
-To test the guard yourself: change any other file, then run `powershell -ExecutionPolicy Bypass -File agentssocialun-weekly.ps1 -GuardOnly`. It should block and list the file.
-- Pushing to `main` also deploys the new blog post through Cloudflare Pages.
+To test the guard yourself: change any other file, then run `powershell -ExecutionPolicy Bypass -File agents\social\run-daily.ps1 -GuardOnly`. It should block and list the file.
 
 ---
 
@@ -327,7 +332,7 @@ Nothing posts until the kill switch is set to `true`:
 npx wrangler kv key put enabled true --binding SOCIAL_KV --remote
 ```
 
-From the first enabled run, the next 3 calendar days are dry runs (logged only, shown in the Monday digest and in `npx wrangler tail`), and day 4 posts for real. The cron runs at 14:00 UTC, which is 9:00 US Eastern in winter and 10:00 during daylight saving time (19:00 PKT).
+The cron runs every 15 minutes and posts whatever is due, so a post goes out within 15 minutes of its scheduled time. From the first post that falls due, the next 3 calendar days (US Eastern) are dry runs, logged only and shown in the Monday digest and in `npx wrangler tail`; day 4 posts for real.
 
 Watch a run live:
 
@@ -345,7 +350,15 @@ npx wrangler tail
 node G:\Khalil\portfolio-new\agents\social\worker\test\local-test.mjs
 ```
 
-It checks the kill switch, the 3 dry-run days, going live on day 4 with the right UTM tags, never posting twice, a missing entry (nothing posted, alert sent), one platform failing, the Monday digest, and the signed image URL.
+It runs every 15-minute tick of whole days and checks: a day with 0 posts; a day with 1 post (each platform published at the first tick after its own time, with the right UTM tags); a day with 2 posts (4 publishes, 3+ hours apart); never posting twice; the 3 dry-run days then going live; a missing day file (one alert); a platform failing (one alert, no retry); the kill switch; the Monday digest showing scheduled times; and the signed image URL.
+
+**Scheduler, DST and validator tests:**
+
+```powershell
+node G:\Khalil\portfolio-new\agents\social\test\daily-test.mjs
+```
+
+It checks Eastern time conversion in winter, summer and across both DST changes; 500 random scheduled days against every timing rule; late runs; days with 0, 1 and 2 posts; Friday's weekend files (evergreen passes, news or showcase rejected); the rolling 7-day limits; tampered times; and the Monday blog rule.
 
 **With wrangler dev (real secrets, forced dry run):** create `agents/social/worker/.dev.vars` (git-ignored) with the same names as the secrets, then:
 
@@ -364,10 +377,10 @@ npx wrangler dev --test-scheduled
 In another window trigger the cron:
 
 ```powershell
-Invoke-RestMethod "http://localhost:8787/__scheduled?cron=0+14+*+*+*"
+Invoke-RestMethod "http://localhost:8787/__scheduled?cron=*/15+*+*+*+*"
 ```
 
-With `force_dry_run` set it reads the real queue from GitHub and logs the exact text it would post, without posting. It can still send real alert and digest emails.
+With `force_dry_run` set it reads today's real queue file from GitHub and logs the exact text of anything already due, without posting. It can still send real alert and digest emails.
 
 ---
 
@@ -379,19 +392,22 @@ With `force_dry_run` set it reads the real queue from GitHub and logs the exact 
 | Resume posting | same command with `true` |
 | Keep it running but post nothing | `npx wrangler kv key put force_dry_run true --binding SOCIAL_KV --remote`; delete the key (`npx wrangler kv key delete force_dry_run --binding SOCIAL_KV --remote`) to go live again |
 | Restart the 3-day dry run | `npx wrangler kv key delete first_run --binding SOCIAL_KV --remote` |
-| Stop generating new content | Task Scheduler → right-click `nukt-social weekly` → **Disable** |
-| Skip or change one day's post | Edit or delete `agents/social/queue/<date>.json`, commit and push before 14:00 UTC. A deleted day posts nothing and sends a "missing entry" alert. |
-| Regenerate this week | Delete `agents/social/queue/week-<Monday>.json` (and the dated files you want replaced), push, then run the task. |
-| Retry a failed platform | The Worker never retries on its own. Post that one manually, or wait for the next day. A platform that succeeded is never posted again for that date. |
-| See what happened | Monday digest email, `npx wrangler tail`, or the KV keys `log:<date>` and `posted:<date>:<platform>` |
+| Stop generating new content | Task Scheduler → right-click `nukt-social daily` → **Disable** |
+| Skip one post | Remove it from `posts` in `agents/social/queue/<date>.json` (or set `"posts": []`), commit and push before its scheduled time |
+| Change a post's time | Edit its `schedule` (UTC ISO times) in the day file and push. Keep `scheduleEastern` in sync for your own reference |
+| Redo today's posts | Before the first scheduled time: delete today's day file and images, push, then right-click the task → **Run** |
+| See today's times | Open `agents/social/queue/<date>.json`: each post has `scheduleEastern` |
+| Retry a failed platform | The Worker never retries on its own. Post that one manually. To let the Worker try again, delete the KV key `item:<post id>:<platform>` (only if you are sure it did not post). |
+| See what happened | Monday digest email, `npx wrangler tail`, or the KV keys `log:<date>` and `item:<post id>:<platform>` |
 
 ### Free-tier limits
 
 | Service | Free tier | nukt-social use |
 | --- | --- | --- |
-| Cloudflare Workers | 100,000 requests/day | 1 cron run + a few image requests a day |
-| Workers KV | 100,000 reads, 1,000 writes/day | under 20 writes a day |
-| Make.com | 1,000 operations/month | about 120/month |
+| Cloudflare Workers | 100,000 requests/day | 96 cron ticks + a few image requests a day |
+| Workers KV | 100,000 reads, 1,000 writes/day | a few hundred reads, under 20 writes a day |
+| Make.com | 1,000 operations/month | about 120–240/month |
 | Resend | 100 emails/day, 3,000/month | 1 digest a week, plus alerts |
-| Meta Graph API | free | 1 post/day |
-| Claude Code | your existing Claude plan | 1 run/week |
+| Meta Graph API | free | 1–2 posts/day |
+| Claude Code | your existing Claude plan | 1 run per weekday |
+| GitHub API | 5,000 requests/hour per token | about 100 a day |

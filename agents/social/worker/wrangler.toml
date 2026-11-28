@@ -2,9 +2,9 @@ name = "nukt-social"
 main = "src/index.js"
 compatibility_date = "2026-11-01"
 
-# 14:00 UTC daily = 9:00 US Eastern (standard time; 10:00 during daylight saving).
+# Every 15 minutes: posts whatever is due. Post times live in the queue files (US Eastern).
 [triggers]
-crons = ["0 14 * * *"]
+crons = ["*/15 * * * *"]
 
 # Create with: npx wrangler kv namespace create SOCIAL_KV  → paste the id below.
 [[kv_namespaces]]

@@ -1,11 +1,12 @@
 {
-  "date": "SAMPLE",
   "type": "checklist",
   "cta": true,
   "linkedin": "5 signs your website is invisible to ChatGPT:\n\n1. Your pages only show content after JavaScript runs.\n2. There is no structured data describing your business.\n3. Your service pages never answer a plain question.\n4. Your business name, address and phone differ across sites.\n5. Your robots.txt blocks AI crawlers you did not mean to block.\n\nNot sure where you stand? Free AI visibility check: we'll check if ChatGPT and Google mention your business. {link}\n\n#AEO #SEO #SmallBusiness",
   "facebook": "Does ChatGPT know your business exists? We're offering a free AI visibility check: we'll check if ChatGPT and Google mention your business. {link}\n\nHave you ever asked ChatGPT about your own business?",
   "link": "https://nukt.agency/services/seo-aeo",
-  "image": "agents/social/images/SAMPLE.png",
-  "card": { "kicker": "Checklist", "headline": "5 signs your website is invisible to ChatGPT" },
+  "card": {
+    "kicker": "Checklist",
+    "headline": "5 signs your website is invisible to ChatGPT"
+  },
   "sources": []
 }

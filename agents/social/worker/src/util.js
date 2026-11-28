@@ -1,13 +1,4 @@
-export const DAY_MS = 86_400_000;
-export const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 export const PLATFORMS = ['facebook', 'linkedin'];
-
-/** UTC calendar date (YYYY-MM-DD) for a timestamp. The cron runs at 14:00 UTC. */
-export const utcDate = (time) => new Date(time).toISOString().slice(0, 10);
-
-export const addDays = (date, days) => utcDate(Date.parse(`${date}T00:00:00Z`) + days * DAY_MS);
-
-export const isMonday = (date) => new Date(`${date}T00:00:00Z`).getUTCDay() === 1;
 
 /** Adds the campaign tags every outbound link carries. */
 export function withUtm(link, platform, date) {
