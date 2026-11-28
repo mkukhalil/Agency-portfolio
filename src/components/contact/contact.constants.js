@@ -12,6 +12,7 @@ export const PROJECT_TYPES = [
   'Website / Landing Page',
   'Web App / SaaS',
   'E-commerce',
+  'SEO & AEO',
   'UI/UX Design',
   'Maintenance / Redesign',
   'Custom Software',

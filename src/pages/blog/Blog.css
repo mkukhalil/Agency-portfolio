@@ -1,0 +1,66 @@
+/* Article body: reuses the legal document card and its prose rhythm. */
+.blog-article-inner {
+  max-width: 760px;
+  padding: clamp(2rem, 6vw, 5rem);
+}
+
+.blog-article-inner h2,
+.blog-article-inner h3,
+.blog-article-inner h4 {
+  margin-top: clamp(2.2rem, 4vw, 3rem);
+}
+
+.blog-article-inner h3,
+.blog-article-inner h4 {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  letter-spacing: -0.04em;
+}
+
+.blog-article-inner > :first-child {
+  margin-top: 0;
+}
+
+.blog-article-inner p + p,
+.blog-article-inner ul + p,
+.blog-article-inner ol + p {
+  margin-top: 1rem;
+}
+
+.blog-article-inner ol {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-left: 1.1rem;
+  list-style: decimal;
+}
+
+.blog-article-inner ol li {
+  color: rgba(255, 255, 255, 0.54);
+  line-height: 1.6;
+}
+
+.blog-article-inner ul {
+  list-style: disc;
+}
+
+.blog-article-inner a {
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.blog-article-inner blockquote {
+  margin-top: 1.5rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid rgba(255, 80, 48, 0.6);
+}
+
+.blog-article-inner code {
+  padding: 0.1em 0.35em;
+  border-radius: 0.35em;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.9em;
+}
+

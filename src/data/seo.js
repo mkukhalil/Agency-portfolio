@@ -58,6 +58,12 @@ export const pageMeta = {
     service: seoAeo.schema,
     faqs: seoAeo.faqs,
   },
+  '/blog': {
+    title: 'Blog – SEO, AI Search & Website Insights | Nukt',
+    description:
+      'Plain-English articles for small business owners on SEO, AI search (ChatGPT, Google AI Overviews), and websites that bring in customers.',
+    breadcrumb: 'Blog',
+  },
   '/terms': {
     title: 'Terms and Conditions | Nukt',
     description: 'The terms that apply when you use the Nukt website or work with Nukt on a project.',

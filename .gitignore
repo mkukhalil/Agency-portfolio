@@ -26,3 +26,8 @@ dist-ssr
 # Local/agent files
 .agent/
 *.lnk
+
+# nukt-social worker
+agents/social/worker/node_modules
+agents/social/worker/.wrangler
+agents/social/worker/.dev.vars

@@ -31,6 +31,14 @@ export const PRIMARY_NAV_ITEMS = [
     target: 'pricing',
     href: '#pricing',
   },
+  {
+    id: 'blog',
+    label: 'Blog',
+    desktopDesc: 'Notes on SEO and AI search',
+    mobileDesc: 'Articles',
+    path: '/blog',
+    href: '/blog',
+  },
 ];
 
 export const SOCIAL_LINKS = [

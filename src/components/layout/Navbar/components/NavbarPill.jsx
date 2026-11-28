@@ -1,11 +1,12 @@
 import { PRIMARY_NAV_ITEMS } from '../../../../data/navigation';
-import { scrollToTarget } from '../../../../utils/scroll';
+import { useNavItemSelect } from '../../../../hooks/useNavItemSelect';
 import { cn } from '../../../../utils/cn';
 
 export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
   const closeMenu = () => {
     setOpen(false);
   };
+  const selectNavItem = useNavItemSelect(closeMenu);
 
   const openDesktopMenu = (event) => {
     if (isMobileNav) return;
@@ -84,7 +85,7 @@ export const NavbarPill = ({ isOpen, setOpen, menuRef, isMobileNav }) => {
                 key={item.id}
                 type="button"
                 className="menu-item"
-                onClick={() => scrollToTarget(item.target, { onComplete: closeMenu })}
+                onClick={() => selectNavItem(item)}
               >
                 <span className="menu-item-index">
                   {String(index + 1).padStart(2, '0')}

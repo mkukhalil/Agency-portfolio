@@ -33,7 +33,15 @@ export const useContactModal = () => {
     setOpenDropdown((current) => (current === dropdownName ? null : dropdownName));
   }, []);
 
-  const openModal = useCallback(() => {
+  const openModal = useCallback((preset) => {
+    if (preset) {
+      // Only fill fields the visitor has not already typed into.
+      setFormData((prev) => ({
+        ...prev,
+        ...Object.fromEntries(Object.entries(preset).filter(([field]) => !prev[field])),
+      }));
+    }
+
     setIsOpen(true);
     setOpenDropdown(null);
     setStatus('idle');
@@ -108,7 +116,7 @@ export const useContactModal = () => {
   );
 
   useEffect(() => {
-    const handleCustomOpen = () => openModal();
+    const handleCustomOpen = (event) => openModal(event.detail);
 
     const handleContactClick = (event) => {
       const trigger = event.target.closest(CONTACT_TRIGGER_SELECTOR);

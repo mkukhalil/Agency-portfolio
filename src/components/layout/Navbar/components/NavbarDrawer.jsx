@@ -1,8 +1,10 @@
 import { PRIMARY_NAV_ITEMS } from '../../../../data/navigation';
+import { useNavItemSelect } from '../../../../hooks/useNavItemSelect';
 import { scrollToTarget } from '../../../../utils/scroll';
 import { cn } from '../../../../utils/cn';
 
 export const NavbarDrawer = ({ isOpen, onClose }) => {
+  const selectNavItem = useNavItemSelect(onClose);
   return (
     <>
       <button
@@ -53,7 +55,7 @@ export const NavbarDrawer = ({ isOpen, onClose }) => {
                 key={item.id}
                 type="button"
                 className="nav-drawer-link"
-                onClick={() => scrollToTarget(item.target, { onComplete: onClose })}
+                onClick={() => selectNavItem(item)}
               >
                 <span className="nav-drawer-link-index">
                   {String(index + 1).padStart(2, '0')}

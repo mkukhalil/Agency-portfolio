@@ -14,6 +14,7 @@ Clients work directly with the people building their product. Typical projects: 
 ## Main pages
 
 - [Home](https://nukt.agency/): Selected work, services, pricing, testimonials, and FAQ.
+- [Blog](https://nukt.agency/blog): Plain-English articles on SEO, AI search, and websites for small business owners.
 - Each service page above covers what we do, process, deliverables, relevant projects, pricing, and FAQ.
 
 ## Stack

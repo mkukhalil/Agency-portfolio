@@ -10,7 +10,7 @@ export function getHeadTags(meta) {
   const tags = [
     { tag: 'meta', attrs: { name: 'description', content: meta.description } },
     { tag: 'meta', attrs: { name: 'robots', content: meta.noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large' } },
-    { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
+    { tag: 'meta', attrs: { property: 'og:type', content: meta.article ? 'article' : 'website' } },
     { tag: 'meta', attrs: { property: 'og:site_name', content: SITE.name } },
     { tag: 'meta', attrs: { property: 'og:locale', content: SITE.locale } },
     { tag: 'meta', attrs: { property: 'og:title', content: meta.title } },
@@ -30,6 +30,13 @@ export function getHeadTags(meta) {
     tags.push(
       { tag: 'link', attrs: { rel: 'canonical', href: meta.canonical } },
       { tag: 'meta', attrs: { property: 'og:url', content: meta.canonical } },
+    );
+  }
+
+  if (meta.article) {
+    tags.push(
+      { tag: 'meta', attrs: { property: 'article:published_time', content: meta.article.datePublished } },
+      { tag: 'meta', attrs: { property: 'article:modified_time', content: meta.article.dateModified } },
     );
   }
 

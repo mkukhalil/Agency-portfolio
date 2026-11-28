@@ -6,8 +6,8 @@ import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import { openContactModal } from '../../../utils/contact';
 import './PageCta.css';
 
-/** Closing call-to-action that opens the shared contact modal. */
-const PageCta = ({ title, text, label = 'Start a project' }) => (
+/** Closing call-to-action that opens the shared contact modal, optionally prefilled. */
+const PageCta = ({ title, text, label = 'Start a project', preset }) => (
   <Container as="section" className="section-tight">
     <motion.div
       className="surface-card page-cta"
@@ -19,7 +19,7 @@ const PageCta = ({ title, text, label = 'Start a project' }) => (
     >
       <h2>{title}</h2>
       {text && <p>{text}</p>}
-      <Button as="a" href="#contact" onClick={openContactModal}>
+      <Button as="a" href="#contact" onClick={(event) => openContactModal(event, preset)}>
         {label}
         <ArrowRight size={18} aria-hidden />
       </Button>

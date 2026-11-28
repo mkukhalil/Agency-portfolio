@@ -47,3 +47,7 @@
   line-height: 1.45;
   letter-spacing: -0.025em;
 }
+
+.detail-action {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}

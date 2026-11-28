@@ -111,12 +111,31 @@ const faqPage = (meta, faqs) => ({
   })),
 });
 
-const breadcrumbList = (meta) => ({
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
-    { '@type': 'ListItem', position: 2, name: meta.breadcrumb, item: meta.canonical },
-  ],
+const breadcrumbList = (meta) => {
+  const trail = [
+    { name: 'Home', item: `${SITE.url}/` },
+    ...(meta.parents ?? []).map((parent) => ({ name: parent.name, item: `${SITE.url}${parent.path}` })),
+    { name: meta.breadcrumb, item: meta.canonical },
+  ];
+
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((crumb, index) => ({ '@type': 'ListItem', position: index + 1, ...crumb })),
+  };
+};
+
+const article = (meta) => ({
+  '@type': 'BlogPosting',
+  headline: meta.article.headline,
+  description: meta.description,
+  datePublished: meta.article.datePublished,
+  dateModified: meta.article.dateModified,
+  url: meta.canonical,
+  mainEntityOfPage: meta.canonical,
+  image: meta.image,
+  inLanguage: 'en',
+  author: { '@id': ORGANIZATION_ID },
+  publisher: { '@id': ORGANIZATION_ID },
 });
 
 /** JSON-LD graph for a resolved page: Organization always, the rest when relevant. */
@@ -125,6 +144,7 @@ export function getStructuredData(meta) {
 
   if (meta.canonical) {
     if (meta.service) graph.push(service(meta, meta.service));
+    if (meta.article) graph.push(article(meta));
     if (meta.faqs?.length) graph.push(faqPage(meta, meta.faqs));
     if (meta.breadcrumb) graph.push(breadcrumbList(meta));
   }

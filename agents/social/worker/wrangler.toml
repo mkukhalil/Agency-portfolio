@@ -1,0 +1,29 @@
+name = "nukt-social"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# 14:00 UTC daily = 9:00 US Eastern (standard time; 10:00 during daylight saving).
+[triggers]
+crons = ["0 14 * * *"]
+
+# Create with: npx wrangler kv namespace create SOCIAL_KV  → paste the id below.
+[[kv_namespaces]]
+binding = "SOCIAL_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+GITHUB_REPO = "mkukhalil/Agency-portfolio"
+GITHUB_BRANCH = "main"
+GRAPH_API_VERSION = "v21.0"
+# Your workers.dev URL, used for the signed image link sent to Make.com.
+PUBLIC_URL = "https://nukt-social.REPLACE_WITH_SUBDOMAIN.workers.dev"
+ALERT_FROM = "Nukt Social <onboarding@resend.dev>"
+
+# Secrets (never commit): set each with `npx wrangler secret put NAME`
+#   GITHUB_TOKEN        fine-grained token, this repo only, Contents: read-only
+#   FB_PAGE_ID          numeric Facebook Page ID
+#   FB_PAGE_TOKEN       long-lived Page access token
+#   MAKE_WEBHOOK_URL    Make.com custom webhook URL
+#   RESEND_API_KEY      Resend API key
+#   ALERT_EMAIL         where alerts and the Monday digest go
+#   IMAGE_SIGNING_KEY   any long random string

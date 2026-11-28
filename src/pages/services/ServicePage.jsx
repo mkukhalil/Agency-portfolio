@@ -4,6 +4,7 @@ import DetailSection from '../../components/sections/DetailSection/DetailSection
 import PageCta from '../../components/sections/PageCta/PageCta';
 import FAQ from '../../components/sections/FAQ/FAQ';
 import Projects from '../../components/sections/Projects/Projects';
+import FreeCheck from '../../components/sections/FreeCheck/FreeCheck';
 import PlanSection from '../../components/sections/Pricing/PlanSection';
 import { Button } from '../../components/ui/Button';
 import { openContactModal } from '../../utils/contact';
@@ -13,7 +14,7 @@ import { openContactModal } from '../../utils/contact';
  * optional sections (design) render only when the page defines them.
  */
 const ServicePage = ({ content }) => {
-  const { hero, problem, services, design, process, deliverables, work, pricing, faqs, faqTitle, cta } =
+  const { hero, problem, freeCheck, services, design, process, deliverables, work, pricing, faqs, faqTitle, cta } =
     content;
 
   return (
@@ -28,6 +29,7 @@ const ServicePage = ({ content }) => {
       </PageHero>
 
       <DetailSection id="problem" {...problem} />
+      {freeCheck && <FreeCheck {...freeCheck} />}
       <DetailSection id="what-we-do" {...services} />
       {design && <DetailSection id="design" {...design} />}
       <DetailSection id="process" {...process} numbered />

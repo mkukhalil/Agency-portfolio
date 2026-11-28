@@ -45,7 +45,7 @@ await writePage('/404', '404.html');
 const sitemapUrls = routes
   .map((route) => getPageMeta(route))
   .filter((meta) => meta.canonical && !meta.noindex)
-  .map((meta) => `  <url><loc>${meta.canonical}</loc></url>`);
+  .map((meta) => `  <url><loc>${meta.canonical}</loc>${meta.lastmod ? `<lastmod>${meta.lastmod}</lastmod>` : ''}</url>`);
 
 await writeFile(
   join(DIST, 'sitemap.xml'),

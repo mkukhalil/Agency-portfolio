@@ -7,9 +7,10 @@ import './DetailSection.css';
 
 /**
  * Titled grid of short content cards. `numbered` prefixes each card with its
- * step index, which turns the same layout into a process timeline.
+ * step index, which turns the same layout into a process timeline. Optional
+ * `children` render below the grid (e.g. a call-to-action).
  */
-const DetailSection = ({ id, title, subtitle, items, numbered = false }) => (
+const DetailSection = ({ id, title, subtitle, items, numbered = false, children }) => (
   <Container as="section" id={id} className="section-tight detail-section">
     <SectionHeading className="detail-heading" title={title} subtitle={subtitle} custom={{ y: 18 }} />
 
@@ -31,6 +32,8 @@ const DetailSection = ({ id, title, subtitle, items, numbered = false }) => (
         </Card>
       ))}
     </div>
+
+    {children}
   </Container>
 );
 

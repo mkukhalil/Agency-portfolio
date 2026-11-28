@@ -35,6 +35,33 @@ export const seoAeo = {
     ],
   },
 
+  freeCheck: {
+    title: 'Free AI visibility check.',
+    subtitle:
+      "We'll check if ChatGPT and Google mention your business, and tell you plainly what to fix first. No cost, no obligation.",
+    items: [
+      {
+        title: 'AI answers',
+        description:
+          'We ask ChatGPT, Perplexity, and Google AI Overviews the questions your customers ask, and note whether your business comes up.',
+      },
+      {
+        title: 'Search basics',
+        description:
+          'We look at whether Google can crawl and index your key pages, and whether your structured data is in place.',
+      },
+      {
+        title: 'Short summary',
+        description: 'You get a short written list of the issues we found, ordered by what to fix first.',
+      },
+    ],
+    ctaLabel: 'Get the free check',
+    preset: {
+      projectType: 'SEO & AEO',
+      message: "I'd like the free AI visibility check. My website is: ",
+    },
+  },
+
   services: {
     title: 'What we do.',
     subtitle: 'Hands-on technical and content work, implemented in your codebase or CMS.',

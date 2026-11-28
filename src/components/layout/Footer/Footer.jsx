@@ -76,6 +76,10 @@ const Footer = () => {
                   Pricing
                 </a>
 
+                <Link to="/blog" className="footer-link">
+                  Blog
+                </Link>
+
                 {services.map((service) => (
                   <Link key={service.slug} to={`/services/${service.slug}`} className="footer-link">
                     {service.title}

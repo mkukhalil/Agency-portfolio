@@ -5,6 +5,7 @@ import Services from '../components/sections/Services/Services';
 import ToolsTicker from '../components/sections/ToolsTicker/ToolsTicker';
 import Trust from '../components/sections/Trust/Trust';
 import Pricing from '../components/sections/Pricing/Pricing';
+import LatestInsights from '../components/sections/LatestInsights/LatestInsights';
 import FAQ from '../components/sections/FAQ/FAQ';
 
 const Home = () => (
@@ -16,6 +17,7 @@ const Home = () => (
     <ToolsTicker />
     <Services />
     <Pricing />
+    <LatestInsights />
     <FAQ />
   </main>
 );
