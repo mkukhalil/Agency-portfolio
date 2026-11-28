@@ -24,6 +24,8 @@ React, Vite, Laravel, PHP, JavaScript, MySQL, PostgreSQL, Tailwind CSS, Docker, 
 
 - Email: contact.nukt@gmail.com
 - Use the contact form on https://nukt.agency/ to start a project.
+- Facebook: https://www.facebook.com/nuktagency
+- LinkedIn: https://www.linkedin.com/company/nuktagency
 
 ## Optional
 

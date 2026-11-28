@@ -7,6 +7,7 @@ import { FADE_UP, VIEWPORT_CONFIG } from '../../../lib/animations';
 import { openContactModal } from '../../../utils/contact';
 import { handleSectionLinkClick } from '../../../utils/scroll';
 import { services } from '../../../data/services';
+import { SOCIAL_LINKS } from '../../../data/navigation';
 import './Footer.css';
 
 const Footer = () => {
@@ -100,6 +101,22 @@ const Footer = () => {
                 >
                   Contact
                 </a>
+              </div>
+
+              <div className="footer-col">
+                <p className="footer-col-label">Follow</p>
+
+                {SOCIAL_LINKS.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    className="footer-link"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {social.name}
+                  </a>
+                ))}
               </div>
             </div>
           </div>

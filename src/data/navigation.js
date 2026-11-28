@@ -34,8 +34,6 @@ export const PRIMARY_NAV_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { name: 'Behance', href: 'https://www.behance.net/' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/' },
-  { name: 'GitHub', href: 'https://github.com/' },
-  { name: 'The X', href: 'https://x.com/' },
+  { name: 'Facebook', href: 'https://www.facebook.com/nuktagency' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/nuktagency' },
 ];

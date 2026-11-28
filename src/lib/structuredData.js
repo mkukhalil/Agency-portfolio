@@ -1,4 +1,5 @@
 import { SITE } from '../data/seo';
+import { SOCIAL_LINKS } from '../data/navigation';
 import { publishedTestimonials } from '../data/testimonials';
 import { getPricingPlan, PRICING_CURRENCY } from '../data/pricing';
 
@@ -50,7 +51,7 @@ const organization = () => ({
   email: SITE.email,
   description:
     'Design, full-stack development, and SEO & AEO agency building websites, web apps, and business software.',
-  // TODO: add sameAs with the real LinkedIn / Behance / GitHub / X profile URLs.
+  sameAs: SOCIAL_LINKS.map((link) => link.href),
   ...reviewData(),
 });
 
